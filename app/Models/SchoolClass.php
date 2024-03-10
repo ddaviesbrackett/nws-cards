@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class SchoolClass extends Model
 {
@@ -20,6 +22,14 @@ class SchoolClass extends Model
 	public static function choosable() : Collection
     {
 		return SchoolClass::where('displayorder', '>', 0)->orderBy('displayorder', 'asc')->get();
+	}
+
+	public static function profitSince( Carbon $since) : float
+	{
+		return DB::scalar("
+			select sum(co.profit) from classes_orders co
+			inner join orders o on o.id = co.order_id
+			where o.created_at > '1979-01-01 00:00:00'", $since);
 	}
 
 	public function expenses() : HasMany
