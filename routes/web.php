@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //main
-Route::get('/', [HomeController::class, 'home']);
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
 //ultra-special login-and-resume from an email link
 Route::get('/email-resume', [OrderController::class, 'emailResume']);
@@ -70,9 +70,6 @@ Route::middleware([
         ->name('admin-')
         ->group(function(){
             Route::controller(AdminController::class)->group(function(){
-                Route::model('dateforprofit', 'CutoffDate');
-                Route::model('expense', 'Expense');
-                Route::model('sale', 'Pointsale');
 
                 Route::get('/caft/{id}', 'caft');
                 Route::get('/orders', 'orders');
