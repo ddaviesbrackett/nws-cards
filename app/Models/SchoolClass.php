@@ -29,7 +29,7 @@ class SchoolClass extends Model
 		return DB::scalar("
 			select sum(co.profit) from classes_orders co
 			inner join orders o on o.id = co.order_id
-			where o.created_at > '1979-01-01 00:00:00'", $since);
+			where o.created_at > ?", [$since]);
 	}
 
 	public function expenses() : HasMany

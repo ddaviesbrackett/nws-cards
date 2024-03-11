@@ -9,13 +9,18 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
+use NumberFormatter;
 
 class HomeController extends Controller
 {
     public function home() : View
     {
-        return view('home', ['total'=>SchoolClass::profitSince(new Carbon('2010-01-01')),
-                             'totalThisYear'=>SchoolClass::profitSince(new Carbon('2023-09-01'))]);
+        $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
+        return view('home', [
+                                'total'=>$nf->format(SchoolClass::profitSince(new Carbon('2010-01-01'))),
+                                'totalThisYear'=>$nf->format(SchoolClass::profitSince(new Carbon('2023-09-01'))),
+                                'isBlackout'=>OrderController::IsBlackoutPeriod()
+                            ]);
     }
 
     public function contact(Request $request) : JsonResponse
