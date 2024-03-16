@@ -23,7 +23,7 @@ class Pointsale extends Model
 
 	public function schoolclasses() : BelongsToMany
     {
-		return $this->belongsToMany('SchoolClass', 'classes_pointsales', 'pointsale_id', 'class_id')->withPivot('profit');
+		return $this->belongsToMany(SchoolClass::class, 'classes_pointsales', 'pointsale_id', 'class_id')->withPivot('profit');
 	}
 
 	public function isCreditcard() :bool

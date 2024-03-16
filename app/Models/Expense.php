@@ -20,7 +20,7 @@ class Expense extends Model
 
 	public function schoolclass() : BelongsTo
     {
-		return $this->belongsTo('SchoolClass', 'class_id');
+		return $this->belongsTo(SchoolClass::class, 'class_id');
 	}
 
 	public function getDates()

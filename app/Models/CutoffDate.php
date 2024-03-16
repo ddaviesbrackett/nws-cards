@@ -39,12 +39,12 @@ class CutoffDate extends Model
 
 	public function orders() : HasMany
     {
-		return $this->hasMany('Order');
+		return $this->hasMany(Order::class);
 	}
 
 	public function users() : BelongsToMany
     {
-		return $this->belongsToMany('User', 'orders');
+		return $this->belongsToMany(User::class, 'orders');
 	}
 
 	public function cutoffdate() : Carbon

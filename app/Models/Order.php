@@ -24,17 +24,17 @@ class Order extends Model
 
 	public function user() : BelongsTo
     {
-		return $this->belongsTo('User');
+		return $this->belongsTo(User::class);
 	}
 
 	public function cutoffdate() : BelongsTo
     {
-		return $this->belongsTo('CutoffDate', 'cutoff_date_id');
+		return $this->belongsTo(CutoffDate::class, 'cutoff_date_id');
 	}
 
 	public function schoolclasses() : BelongsToMany
     {
-		return $this->belongsToMany('SchoolClass', 'classes_orders', 'order_id', 'class_id')->withPivot('profit')->orderBy('displayorder');
+		return $this->belongsToMany(SchoolClass::class, 'classes_orders', 'order_id', 'class_id')->withPivot('profit')->orderBy('displayorder');
 	}
 
 	public function isCreditcard() : bool

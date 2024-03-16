@@ -60,17 +60,17 @@ class User extends Authenticatable
 
     public function orders() : HasMany
     {
-        return $this->hasMany('Order')->orderBy('created_at', 'desc');
+        return $this->hasMany(Order::class)->orderBy('created_at', 'desc');
     }
 
     public function cutoffDates() : BelongsToMany
     {
-        return $this->belongsToMany('CutoffDate', 'orders');
+        return $this->belongsToMany(CutoffDate::class, 'orders');
     }
 
     public function schoolclasses() : BelongsToMany
     {
-        return $this->belongsToMany('SchoolClass', 'classes_users', 'user_id', 'class_id')->orderBy('displayorder');
+        return $this->belongsToMany(SchoolClass::class, 'classes_users', 'user_id', 'class_id')->orderBy('displayorder');
     }
 
     public function isAdmin() : bool

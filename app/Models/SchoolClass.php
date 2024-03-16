@@ -34,21 +34,21 @@ class SchoolClass extends Model
 
 	public function expenses() : HasMany
     {
-		return $this->hasMany('Expense', 'class_id');
+		return $this->hasMany(Expense::class, 'class_id');
 	}
 
 	public function pointsales() : BelongsToMany
     {
-		return $this->belongsToMany('Pointsale', 'classes_pointsales', 'class_id', 'pointsale_id')->withPivot('profit');
+		return $this->belongsToMany(Pointsale::class, 'classes_pointsales', 'class_id', 'pointsale_id')->withPivot('profit');
 	}
 
 	public function orders() : BelongsToMany
     {
-		return $this->belongsToMany('Order', 'classes_orders', 'class_id', 'order_id')->withPivot('profit');
+		return $this->belongsToMany(Order::class, 'classes_orders', 'class_id', 'order_id')->withPivot('profit');
 	}
 
 	public function users() : BelongsToMany
     {
-		return $this->belongsToMany('User', 'classes_users', 'class_id', 'user_id');
+		return $this->belongsToMany(User::class, 'classes_users', 'class_id', 'user_id');
 	}
 }
