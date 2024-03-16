@@ -60,4 +60,13 @@ class CutoffDate extends Model
     {
 		return new Carbon($this->delivery, 'America/Los_Angeles');
 	}
+
+    public function dates() : Array
+    {
+        return [
+            'cutoff' => $this->cutoffdate(),
+            'charge' => $this->chargedate(),
+            'delivery' => $this->deliverydate()
+        ];
+    }
 }

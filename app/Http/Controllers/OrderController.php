@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\CutoffDate;
 use App\Models\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use NumberFormatter;
 
 class OrderController extends Controller
 {
@@ -22,11 +24,14 @@ class OrderController extends Controller
 		return ((new Carbon('America/Los_Angeles')) < OrderController::GetBlackoutEndDate());
 	}
 
-	public function account(Request $request) : View
+	public function account(Request $req) : View
 	{
+		$user = $req->user();
+		$nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
 		return view('account', [
-			'user' => $request->user(),
-			'mostRecentOrder' => $request->user()->orders()->first()
+			'user' => $user,
+			'mostRecentOrder' => $user->orders()->first(),
+			'profit' => $nf->format($user->orders->sum('profit'))
 		]);
 	}
 }

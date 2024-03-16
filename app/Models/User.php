@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -58,43 +59,60 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function orders() : HasMany
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class)->orderBy('created_at', 'desc');
     }
 
-    public function cutoffDates() : BelongsToMany
+    public function cutoffDates(): BelongsToMany
     {
         return $this->belongsToMany(CutoffDate::class, 'orders');
     }
 
-    public function schoolclasses() : BelongsToMany
+    public function schoolclasses(): BelongsToMany
     {
         return $this->belongsToMany(SchoolClass::class, 'classes_users', 'user_id', 'class_id')->orderBy('displayorder');
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return true; //TODO update with isAdmin flag in Users rather than using Sentry groups
     }
 
-    public function address() : string
+    public function address(): string
     {
-		return implode(' ', [$this->address1, $this->address2, $this->city, $this->province, $this->postal_code]);
-	}
+        return implode(' ', [$this->address1, $this->address2, $this->city, $this->province, $this->postal_code]);
+    }
 
-	public function getPhone() : string
+    public function getPhone(): string
     {
-		return sprintf('(%s) %s-%s', substr($this->phone, 0, 3),substr($this->phone, 3, 3), substr($this->phone, 6)) ;
-	}
+        return sprintf('(%s) %s-%s', substr($this->phone, 0, 3), substr($this->phone, 3, 3), substr($this->phone, 6));
+    }
 
-    public function isMail() :bool
+    public function isMail(): bool
     {
-		return $this->deliverymethod == 1;
-	}
+        return $this->deliverymethod == 1;
+    }
 
-    public function isCreditcard() : bool
+    public function isCreditcard(): bool
     {
         return $this->payment == 1;
+    }
+
+    public function getFriendlySchedule(): string
+    {
+        switch ($this->schedule) {
+            /*case 'biweekly':
+                return 'Bi-weekly';*/
+            case 'monthly':
+                return 'Monthly';
+            /*case 'monthly-second':
+                return 'Monthly';*/
+            case 'none':
+                return 'Never';
+            default:
+                throw new Exception("Invalid schedule");
+                break;
+        }
     }
 }
