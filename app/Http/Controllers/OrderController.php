@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\CutoffDate;
 use App\Models\Order;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    
 	// Blackout period is from cutoff wednesday just before midnight until card pickup wednesday morning.
     public static function GetBlackoutEndDate() : Carbon
 	{
@@ -20,5 +20,13 @@ class OrderController extends Controller
 	public static function IsBlackoutPeriod() : bool
 	{
 		return ((new Carbon('America/Los_Angeles')) < OrderController::GetBlackoutEndDate());
+	}
+
+	public function account(Request $request) : View
+	{
+		return view('account', [
+			'user' => $request->user(),
+			'mostRecentOrder' => $request->user()->orders()->first()
+		]);
 	}
 }
