@@ -47,9 +47,27 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    mailpit:
+        image: axllent/mailpit
+        container_name: mailpit
+        restart: always
+        volumes:
+            - sail-mailpit:/data
+        ports:
+            - 8025:8025
+            - 1025:1025
+        networks:
+            - sail
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATA_FILE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
 networks:
     sail:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-mailpit:
         driver: local
