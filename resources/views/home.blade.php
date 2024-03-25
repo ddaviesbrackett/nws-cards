@@ -8,11 +8,6 @@
         <x-nav-link href="#about">About</x-nav-link>
         <x-nav-link href="#faq">FAQ</x-nav-link>
         <x-nav-link href="#contact">Contact</x-nav-link>
-        <x-slot:drop>
-            <x-dropdown-link href="#about">About</x-dropdown-link>
-            <x-dropdown-link href="#faq">FAQ</x-dropdown-link>
-            <x-dropdown-link href="#contact">Contact</x-dropdown-link>
-        </x-slot:drop>
         <x-slot:responsive>
             <x-responsive-nav-link href="#about">About</x-responsive-nav-link>
             <x-responsive-nav-link href="#faq">FAQ</x-responsive-nav-link>

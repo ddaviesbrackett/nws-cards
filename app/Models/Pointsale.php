@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,5 +30,10 @@ class Pointsale extends Model
 	public function isCreditcard() :bool
     {
 		return $this->payment == 1;
+	}
+
+	public function newCollection(array $models = []): Collection
+	{
+		return new Pointsales($models);
 	}
 }

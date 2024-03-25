@@ -40,8 +40,8 @@ Route::post('/stripe/webhook', [StripeWebHookController::class, 'handle']);
 
 //profit tracking
 Route::controller(TrackingController::class)->group(function(){
+    Route::get('/tracking','toLeaderboard')->name('to-leaderboard');
     Route::get('/tracking/leaderboard', 'leaderboard')->name('leaderboard');
-    Route::get('/tracking/','leaderboard')->name('leaderboard');
     Route::get('tracking/{bucketname}', 'bucket')->name('tracking-bucket');
 });
 
