@@ -4,7 +4,7 @@
             Leaderboard
         </h2>
     </x-slot>
-    <h1>We've raised {{{$total}}} so far</h1>
+    <h1>We've raised {{$total}} so far</h1>
     <table class='table'>
         <tr>
             <th></th>
@@ -15,11 +15,11 @@
         </tr>
         @foreach($buckets as $name => $vals)
             <tr>
-                <td><a href="/tracking/{{$name}}">{{{$vals['nm']}}}</a></td>
-                <td>{{{$vals['raised']}}}</td>
-                <td>{{{$vals['count']}}}</td>
-                <td>{{{$vals['spent']}}}</td>
-                <td>{{{$vals['available']}}}</td>
+                <td><a href="/tracking/{{$name}}">{{$vals['nm']}}</a></td>
+                <td>{{$vals['raised']}}</td>
+                <td>{{$vals['count']}}</td>
+                <td>{{$vals['spent']}}</td>
+                <td>{{$vals['available']}}</td>
             </tr>
         @endforeach
     </table>
