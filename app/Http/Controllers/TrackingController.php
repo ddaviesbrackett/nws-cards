@@ -11,17 +11,19 @@ use NumberFormatter;
 
 class TrackingController extends Controller
 {
-    function toLeaderboard() : RedirectResponse
+    function toLeaderboard(): RedirectResponse
     {
         return redirect('/tracking/leaderboard');
     }
 
-    function leaderboard() : View
+    function leaderboard(): View
     {
         $buckets = [];
         $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
-        foreach(SchoolClass::where('displayorder', '>=', '-1')->orderby('displayorder', 'asc')->get() as $class)
-		{
+        foreach (SchoolClass::where('displayorder', '>=', '-1')
+            ->orderby('displayorder', 'asc')
+            ->with('orders', 'pointsales', 'expenses', 'users')
+            ->get() as $class) {
             $raised = $class->orders->getTotalProfit() + $class->pointsales->getTotalProfit();
             $spent = $class->expenses->sum('amount');
             $buckets[$class->bucketname] = [
@@ -34,7 +36,30 @@ class TrackingController extends Controller
         }
         return view('tracking.leaderboard', [
             'total' => $nf->format(SchoolClass::profitSince(new Carbon('2010-01-01'))),
-            'buckets' => $buckets]);
+            'buckets' => $buckets
+        ]);
     }
-    
+
+    function bucket($bucketname)
+    {
+        $sc = SchoolClass::where('bucketname', '=', $bucketname)
+            ->with('orders', 'expenses', 'pointsales')
+            ->withCount('users')
+            ->first();
+        if (is_null($sc)) {
+            return redirect('/tracking');
+        }
+
+        $expenses = $sc->expenses->sortByDesc('expense_date');
+        $pointsales = $sc->pointsales->sortByDesc('saledate');
+
+        return view('tracking.bucket', [
+            'name' => $sc->name,
+            'byCutoff' => $sc->profitByCutoff(),
+            'expenses' => $expenses,
+            'pointsales' => $pointsales,
+            'sum' => $sc->orders->getTotalProfit() + $sc->pointsales->getTotalProfit(),
+            'supporters' => $sc->users_count,
+        ]);
+    }
 }

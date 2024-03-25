@@ -32,6 +32,23 @@ class SchoolClass extends Model
 			where o.created_at > ?", [$since]);
 	}
 
+	public function profitByCutoff()
+	{
+		return array_map(function($row){
+			return [
+				'date' => new Carbon($row->delivery),
+				'profit' => $row->profit
+			];
+		}, DB::select('
+			select cd.delivery as delivery, sum(co.profit) as profit
+			from cutoffdates cd
+			inner join orders o on o.cutoff_date_id = cd.id
+			inner join classes_orders co on co.order_id = o.id
+			where co.class_id = ?
+			group by cd.delivery
+			order by cd.delivery desc', [$this->id]));
+	}
+
 	public function expenses() : HasMany
     {
 		return $this->hasMany(Expense::class, 'class_id');
