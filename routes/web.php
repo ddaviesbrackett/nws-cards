@@ -71,33 +71,33 @@ Route::middleware([
         ->group(function(){
             Route::controller(AdminController::class)->group(function(){
 
-                Route::get('/caft/{id}', 'caft');
-                Route::get('/orders', 'orders');
-                Route::get('/order/{id}', 'order');
+                Route::get('/caft/{id}', 'caft')->name('caft');
+                Route::get('/orders', 'orders')->name('orders');
+                Route::get('/order/{id}', 'order')->name('order');
 
-                Route::get('/impersonate', 'impersonate');
-                Route::get('/impersonate/{id}', 'doImpersonate');
-                Route::get('/impersonate/unimpersonate', 'unImpersonate');
+                Route::get('/impersonate', 'impersonate')->name('impersonate');
+                Route::get('/impersonate/{id}', 'doImpersonate')->name('doimpersonate');
+                Route::get('/impersonate/unimpersonate', 'unImpersonate')->name('unimpersonate');
 
-                Route::get('/orderprofits/{dateforprofit}', 'profitSettingForm')->name('getprofit');
+                Route::get('/orderprofits/{dateforprofit}', 'profitSettingForm')->name('profit');
                 Route::post('/orderprofits/{dateforprofit}', 'postProfitSettingForm')->name('postprofit');
 
-                Route::get('/pointsale', 'newSale')->name('getnewsale');
+                Route::get('/pointsale', 'newSale')->name('newsale');
                 Route::post('/pointsale', 'postNewSale')->name('postnewsale');
-                Route::get('/pointsale/{sale}/delete', 'deletePointSale')->name('getdeletesale');
+                Route::get('/pointsale/{sale}/delete', 'deletePointSale')->name('deletesale');
                 Route::post('/pointsale/{sale}/delete', 'postDeletePointSale')->name('postdeletesale');
             });
 
             Route::controller(ExpenseController::class)
                 ->prefix('/expenses')
                 ->group(function(){
-                    Route::get('/', 'expenses')->name('getexpenses');
+                    Route::get('/', 'expenses')->name('expenses');
                     Route::post('/', 'postExpenses')->name('postExpense');
 
-                    Route::get('{expense}/edit', 'editExpense')->name('geteditexpense');
+                    Route::get('{expense}/edit', 'editExpense')->name('editexpense');
                     Route::post('{expense}/edit', 'postEditExpense')->name('posteditexpense');
                     
-                    Route::get('{expense}/delete', 'deleteExpense')->name('getdeleteexpense');
+                    Route::get('{expense}/delete', 'deleteExpense')->name('deleteexpense');
                     Route::post('{expense}/delete', 'postDeleteExpense')->name('postdeleteexpense');
                 });
 

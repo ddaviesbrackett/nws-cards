@@ -76,7 +76,7 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return true; //TODO update with isAdmin flag in Users rather than using Sentry groups
+        return $this->isadmin == 1;
     }
 
     public function address(): string

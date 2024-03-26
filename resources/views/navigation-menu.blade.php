@@ -48,22 +48,34 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            @if (request()->user()->isadmin())
+                                <!-- Administration -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    Administration
+                                </div>
+                                <x-dropdown-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
+                                    Orders
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('admin-impersonate') }}" :active="request()->routeIs('admin-impersonate')">
+                                    Change Another User
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
+                                    Expenses
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
+                                    Pointsales
+                                </x-dropdown-link>
+                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                            @endif
+                            
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
+                                Manage Account
                             </div>
 
                             <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                Profile
                             </x-dropdown-link>
-
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('API Tokens') }}
-                                </x-dropdown-link>
-                            @endif
-
-                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}" x-data>
@@ -71,7 +83,7 @@
 
                                 <x-dropdown-link href="{{ route('logout') }}"
                                          @click.prevent="$root.submit();">
-                                    {{ __('Log Out') }}
+                                    Log Out
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
@@ -104,16 +116,26 @@
                 Leaderboard
             </x-responsive-nav-link>
         </div>
-
+        @if (request()->user()->isadmin())
+            <!-- Administration -->
+            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                <x-responsive-nav-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
+                    Orders
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('admin-impersonate') }}" :active="request()->routeIs('admin-impersonate')">
+                    Change Another User
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
+                    Expenses
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
+                    Pointsales
+                </x-responsive-nav-link>
+            </div>
+        @endif
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="flex items-center px-4">
-                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                    <div class="shrink-0 me-3">
-                        <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                    </div>
-                @endif
-
                 <div>
                     <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
@@ -123,14 +145,8 @@
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
                 <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
+                    Profile
                 </x-responsive-nav-link>
-
-                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
-                        {{ __('API Tokens') }}
-                    </x-responsive-nav-link>
-                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
@@ -138,7 +154,7 @@
 
                     <x-responsive-nav-link href="{{ route('logout') }}"
                                    @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}
+                        Log Out
                     </x-responsive-nav-link>
                 </form>
             </div>
