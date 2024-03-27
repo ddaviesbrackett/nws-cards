@@ -16,16 +16,12 @@ class ExpenseController extends Controller
 
     function postExpenses(): View
     {
-        return view('admin.expenses.show)');
+        return $this->result();
     }
 
     private function result($extra = [])
     {
-        $expenses = Expense::orderby('expense_date', 'desc')->with('schoolclass')->get();
-        $schoolclasses = [];
-        foreach (SchoolClass::all() as $sc) {
-            $schoolclasses[$sc->id] = $sc->name;
-        }
-        return view('admin.expenses.show', array_merge(['model' => $expenses, 'schoolclasses' => $schoolclasses], $extra));
+        $expenses = Expense::orderby('expense_date', 'desc')->get();
+        return view('admin.expenses.show', array_merge(['model' => $expenses], $extra));
     }
 }
