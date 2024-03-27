@@ -13,7 +13,7 @@ class TrackingController extends Controller
 {
     function toLeaderboard(): RedirectResponse
     {
-        return redirect('/tracking/leaderboard');
+        return redirect()->route('leaderboard');
     }
 
     function leaderboard(): View
@@ -47,7 +47,7 @@ class TrackingController extends Controller
             ->withCount('users')
             ->first();
         if (is_null($sc)) {
-            return redirect('/tracking');
+            return $this->toLeaderboard();
         }
 
         $expenses = $sc->expenses->sortByDesc('expense_date');

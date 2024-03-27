@@ -70,11 +70,13 @@ Route::middleware([
 
                 Route::get('/orderprofits/{dateforprofit}', 'profitSettingForm')->name('profit');
                 Route::post('/orderprofits/{dateforprofit}', 'postProfitSettingForm')->name('postprofit');
-
+                /*
+                //a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                 Route::get('/pointsale', 'newSale')->name('newsale');
                 Route::post('/pointsale', 'postNewSale')->name('postnewsale');
                 Route::get('/pointsale/{sale}/delete', 'deletePointSale')->name('deletesale');
                 Route::post('/pointsale/{sale}/delete', 'postDeletePointSale')->name('postdeletesale');
+                */
             });
 
             Route::controller(ExpenseController::class)

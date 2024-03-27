@@ -62,9 +62,11 @@
                                 <x-dropdown-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
                                     Expenses
                                 </x-dropdown-link>
+                                {{--
+                                a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                                 <x-dropdown-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
                                     Pointsales
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
                                 <div class="border-t border-gray-200 dark:border-gray-600"></div>
                             @endif
                             
@@ -128,8 +130,14 @@
                 <x-responsive-nav-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
                     Expenses
                 </x-responsive-nav-link>
+                {{--
+                a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                 <x-responsive-nav-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
                     Pointsales
+                </x-responsive-nav-link>
+                --}}
+                <x-responsive-nav-link href="{{ route('admin-unimpersonate') }}">
+                    Stop Impersonating
                 </x-responsive-nav-link>
             </div>
         @endif

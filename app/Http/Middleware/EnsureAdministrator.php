@@ -19,6 +19,6 @@ class EnsureAdministrator
         {
             return $next($request);
         }
-        return redirect('/account');
+        return redirect()->route('account');
     }
 }

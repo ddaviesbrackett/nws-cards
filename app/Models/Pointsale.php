@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+//a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
 class Pointsale extends Model
 {
     use HasFactory;
