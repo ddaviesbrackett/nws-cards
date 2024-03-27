@@ -18,6 +18,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use \Lab404\Impersonate\Models\Impersonate;
 
     /**
      * The attributes that are mass assignable.
@@ -75,6 +76,14 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->isadmin == 1;
+    }
+    public function canImpersonate()
+    {
+        return $this->isAdmin();
+    }
+    public function canBeImpersonated()
+    {
+        return !$this->isAdmin();
     }
 
     public function address(): string

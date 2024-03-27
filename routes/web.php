@@ -53,6 +53,8 @@ Route::middleware([
         Route::post('/account/onetime', 'postOnetime');
     });
 
+    Route::impersonate();
+
     //Administrator treehouse
     Route::middleware('admin')
         ->prefix(('/admin'))
@@ -64,9 +66,7 @@ Route::middleware([
                 Route::get('/orders', 'orders')->name('orders');
                 Route::get('/order/{id}', 'order')->name('order');
 
-                Route::get('/impersonate', 'impersonate')->name('impersonate');
-                Route::get('/impersonate/{id}', 'doImpersonate')->name('doimpersonate');
-                Route::get('/impersonate/unimpersonate', 'unImpersonate')->name('unimpersonate');
+                Route::get('/impersonate', 'impersonate')->name('impersonateList');
 
                 Route::get('/orderprofits/{dateforprofit}', 'profitSettingForm')->name('profit');
                 Route::post('/orderprofits/{dateforprofit}', 'postProfitSettingForm')->name('postprofit');

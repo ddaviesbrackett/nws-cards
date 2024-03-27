@@ -31,45 +31,45 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                    <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                                </button>
+                            <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                                <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                            </button>
                             @else
-                                <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
-                                        {{ Auth::user()->name }}
+                            <span class="inline-flex rounded-md">
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
+                                    {{ Auth::user()->name }}
 
-                                        <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    </button>
-                                </span>
+                                    <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+                            </span>
                             @endif
                         </x-slot>
 
                         <x-slot name="content">
                             @if (request()->user()->isadmin())
-                                <!-- Administration -->
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Administration
-                                </div>
-                                <x-dropdown-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
-                                    Orders
-                                </x-dropdown-link>
-                                <x-dropdown-link href="{{ route('admin-impersonate') }}" :active="request()->routeIs('admin-impersonate')">
-                                    Change Another User
-                                </x-dropdown-link>
-                                <x-dropdown-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
-                                    Expenses
-                                </x-dropdown-link>
-                                {{--
+                            <!-- Administration -->
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                Administration
+                            </div>
+                            <x-dropdown-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
+                                Orders
+                            </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin-impersonateList') }}" :active="request()->routeIs('admin-impersonateList')">
+                                Change Another User
+                            </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
+                                Expenses
+                            </x-dropdown-link>
+                            {{--
                                 a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                                 <x-dropdown-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
-                                    Pointsales
-                                </x-dropdown-link> --}}
-                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                            Pointsales
+                            </x-dropdown-link> --}}
+                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
                             @endif
-                            
+
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 Manage Account
@@ -83,11 +83,15 @@
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
 
-                                <x-dropdown-link href="{{ route('logout') }}"
-                                         @click.prevent="$root.submit();">
+                                <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                                     Log Out
                                 </x-dropdown-link>
                             </form>
+                            @impersonating
+                            <x-dropdown-link href="{{ route('impersonate.leave') }}">
+                                Stop Impersonating
+                            </x-dropdown-link>
+                            @endImpersonating
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -119,27 +123,24 @@
             </x-responsive-nav-link>
         </div>
         @if (request()->user()->isadmin())
-            <!-- Administration -->
-            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                <x-responsive-nav-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
-                    Orders
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('admin-impersonate') }}" :active="request()->routeIs('admin-impersonate')">
-                    Change Another User
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
-                    Expenses
-                </x-responsive-nav-link>
-                {{--
+        <!-- Administration -->
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <x-responsive-nav-link href="{{ route('admin-orders') }}" :active="request()->routeIs('admin-orders')">
+                Orders
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('admin-impersonateList') }}" :active="request()->routeIs('admin-impersonateList')">
+                Change Another User
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
+                Expenses
+            </x-responsive-nav-link>
+            {{--
                 a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                 <x-responsive-nav-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
-                    Pointsales
-                </x-responsive-nav-link>
-                --}}
-                <x-responsive-nav-link href="{{ route('admin-unimpersonate') }}">
-                    Stop Impersonating
-                </x-responsive-nav-link>
-            </div>
+            Pointsales
+            </x-responsive-nav-link>
+            --}}
+        </div>
         @endif
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
@@ -160,11 +161,15 @@
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
-                    <x-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
+                    <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
                         Log Out
                     </x-responsive-nav-link>
                 </form>
+                @impersonating
+                <x-responsive-nav-link href="{{ route('impersonate.leave') }}">
+                    Stop Impersonating
+                </x-responsive-nav-link>
+                @endImpersonating
             </div>
         </div>
     </div>

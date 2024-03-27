@@ -13,7 +13,7 @@
         @foreach( $users as $user)
             <tr>
                 <td>{{{$user->name}}}</td>
-                <td><a class="btn btn-default" href="{{route('admin-doimpersonate', ['id'=>$user->id])}}">Impersonate</a></td>
+                <td><a class="btn btn-default" href="{{route('impersonate', $user->id )}}">Impersonate</a></td>
             </tr>
         @endforeach
         </div>

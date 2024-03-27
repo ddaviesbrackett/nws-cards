@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\CutoffDate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades;
+use Illuminate\Support\Facades\Event;
 use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,5 +39,19 @@ class AppServiceProvider extends ServiceProvider
         Facades\View::composer('*', function (View $view) {
             $view->with('dates', $this->getDates());
         });
+
+        //fix up impersonation to work with Sanctum
+        Event::listen(
+            \Lab404\Impersonate\Events\TakeImpersonation::class,
+            function (\Lab404\Impersonate\Events\TakeImpersonation $event) {
+                session()->put('password_hash_sanctum', $event->impersonated->getAuthPassword());
+            }
+        );
+        Event::listen(
+            \Lab404\Impersonate\Events\LeaveImpersonation::class,
+            function (\Lab404\Impersonate\Events\LeaveImpersonation $event) {
+                session()->put('password_hash_sanctum', $event->impersonator->getAuthPassword());
+            }
+        );
     }
 }
