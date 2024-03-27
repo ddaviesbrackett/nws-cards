@@ -29,6 +29,7 @@
 	<script>
 		let expenseDialog = document.querySelector('dialog#expense-dialog');
 		document.querySelector('button#add').addEventListener('click', function(el, ev) {
+			Livewire.dispatch('populate', {id: null});
 			expenseDialog.showModal();
 		});
 		document.querySelectorAll('button[name="edit"]').forEach(function(btn) {

@@ -23,21 +23,28 @@ class ExpenseForm extends Component
         $this->dialogId = $dialogId;
     }
 
-    #[On('populate')] 
+    #[On('populate')]
     public function load(int $id = null)
     {
-        $exp = Expense::find($id);
-        $this->id = $exp->id;
-        $this->expense_date = $exp->expense_date->format('Y-m-d');
-        $this->description = $exp->description;
-        $this->amount = $exp->amount;
-        $this->class_id = $exp->class_id;
+        if (!is_null($id)) {
+            $exp = Expense::find($id);
+            $this->id = $exp->id;
+            $this->expense_date = $exp->expense_date->format('Y-m-d');
+            $this->description = $exp->description;
+            $this->amount = $exp->amount;
+            $this->class_id = $exp->class_id;
+        } else {
+            unset($this->id);
+            unset($this->expense_date);
+            unset($this->description);
+            unset($this->amount);
+            unset($this->class_id);
+        }
     }
 
     public function save()
     {
-        if(isset($this->id))
-        {
+        if (isset($this->id)) {
             $exp = Expense::find($this->id);
             $exp->expense_date = new Carbon($this->expense_date);
             $exp->description = $this->description;
@@ -46,9 +53,7 @@ class ExpenseForm extends Component
             $exp->save();
 
             session()->flash('status',  'Expense added.'); //TODO implement notifications
-        }
-        else
-        {
+        } else {
             $values = $this->only(['expense_date', 'description', 'amount', 'class_id']);
             $values['expense_date'] = new Carbon($values['expense_date']);
             Expense::create($values);
