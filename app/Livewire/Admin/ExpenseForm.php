@@ -11,7 +11,7 @@ use Livewire\Component;
 class ExpenseForm extends Component
 {
     public int $id;
-    public Carbon $expense_date;
+    public string $expense_date;
     public string $description;
     public float $amount;
     public int $class_id;
@@ -28,7 +28,7 @@ class ExpenseForm extends Component
     {
         $exp = Expense::find($id);
         $this->id = $exp->id;
-        $this->expense_date = $exp->expense_date;
+        $this->expense_date = $exp->expense_date->format('Y-m-d');
         $this->description = $exp->description;
         $this->amount = $exp->amount;
         $this->class_id = $exp->class_id;
@@ -36,9 +36,26 @@ class ExpenseForm extends Component
 
     public function save()
     {
-        Expense::create($this->only(['expense_date', 'description', 'amount', 'class_id']));
+        if(isset($this->id))
+        {
+            $exp = Expense::find($this->id);
+            $exp->expense_date = new Carbon($this->expense_date);
+            $exp->description = $this->description;
+            $exp->amount = $this->amount;
+            $exp->class_id = $this->class_id;
+            $exp->save();
 
-        session()->flash('status',  'Expense added.'); //TODO implement notifications
+            session()->flash('status',  'Expense added.'); //TODO implement notifications
+        }
+        else
+        {
+            $values = $this->only(['expense_date', 'description', 'amount', 'class_id']);
+            $values['expense_date'] = new Carbon($values['expense_date']);
+            Expense::create($values);
+
+            session()->flash('status',  'Expense added.'); //TODO implement notifications
+        }
+        $this->reset();
         return $this->redirectRoute('admin-expenses');
     }
 
