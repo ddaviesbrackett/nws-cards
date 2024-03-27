@@ -21,7 +21,7 @@ class ExpenseController extends Controller
 
     private function result($extra = [])
     {
-        $expenses = Expense::orderby('expense_date', 'desc')->get();
+        $expenses = Expense::orderby('expense_date', 'desc')->with('schoolclass')->get();
         return view('admin.expenses.show', array_merge(['model' => $expenses], $extra));
     }
 }

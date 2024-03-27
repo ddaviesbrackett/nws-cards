@@ -10,10 +10,10 @@ use Livewire\Component;
 class ExpenseForm extends Component
 {
     public int $id;
-    public Carbon $date;
+    public Carbon $expense_date;
     public string $description;
     public float $amount;
-    public int $account;
+    public int $class_id;
 
     public string $dialogId;
 
@@ -25,7 +25,10 @@ class ExpenseForm extends Component
 
     public function save()
     {
+        Expense::create($this->only(['expense_date', 'description', 'amount', 'class_id']));
 
+        session()->flash('status',  'Expense added.'); //TODO implement notifications
+        return $this->redirectRoute('admin-expenses');
     }
 
     public function render()

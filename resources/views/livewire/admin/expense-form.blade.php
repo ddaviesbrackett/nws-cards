@@ -6,7 +6,7 @@
             <input type="hidden" id="id" name="id" wire:model="id" />
             <x-label>
                 Date:
-                <x-input id="date" name="date" type="date" wire:model="date" required autofocus />
+                <x-input id="expense_date" name="expense_date" type="date" wire:model="expense_date" required autofocus />
             </x-label>
             <x-label>
                 Description:
@@ -18,16 +18,16 @@
             </x-label>
             <x-label>
                 Account:
-                <select id="acount" name="account" wire:model="state">
+                <select id="class_id" name="class_id" wire:model="class_id">
                     @foreach( $schoolclasses as $name => $id)
-                    <option value="$id">{{$name}}</option>
+                    <option value="{{$id}}">{{$name}}</option>
                     @endforeach
                 </select>
             </x-label>
             <x-button type="submit">
                 Submit
             </x-button>
-            <x-button type="submit" button value="cancel" formmethod="dialog">
+            <x-button onclick="document.querySelector('dialog#{{$dialogId}}').close();event.preventDefault();">{{-- ew. --}}
                 Cancel
             </x-button>
         </form>

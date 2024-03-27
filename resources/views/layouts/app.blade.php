@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('scripts')
     </head>
     <body class="font-sans antialiased">
         <x-banner />
@@ -37,6 +38,7 @@
 
         @stack('modals')
 
+        @stack('latescripts')
         @livewireScripts
     </body>
 </html>
