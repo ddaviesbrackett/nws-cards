@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Expense;
 use App\Models\SchoolClass;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ExpenseForm extends Component
@@ -17,10 +18,20 @@ class ExpenseForm extends Component
 
     public string $dialogId;
 
-    public function mount(Expense $expense = null, $dialogId = "exp-dialog")
+    public function mount($dialogId = "exp-dialog")
     {
-        //TODO populate from db model
         $this->dialogId = $dialogId;
+    }
+
+    #[On('populate')] 
+    public function load(int $id = null)
+    {
+        $exp = Expense::find($id);
+        $this->id = $exp->id;
+        $this->expense_date = $exp->expense_date;
+        $this->description = $exp->description;
+        $this->amount = $exp->amount;
+        $this->class_id = $exp->class_id;
     }
 
     public function save()
