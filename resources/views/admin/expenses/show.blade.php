@@ -21,7 +21,13 @@
 			<td>{{{$exp->amount}}}</td>
 			<td>{{{$exp->schoolclass->name}}}</td>
 			<td><x-button name="edit" data-id="{{$exp->id}}">Edit</x-button></td>
-			<td><x-button name="delete" data-id="{{$exp->id}}">Delete</x-button></td>
+			<td>
+			<form method="POST" action="{{ route('admin-deleteexpense', [$exp->id]) }}" x-data>
+                    @csrf
+					@method('DELETE')
+				<x-button name="delete" type="submit" onclick="return confirm('really delete this expense?');">Delete</x-button>
+			</form>
+			</td>
 		</tr>
 		@endforeach
 	</table>
@@ -35,12 +41,6 @@
 		document.querySelectorAll('button[name="edit"]').forEach(function(btn) {
 			btn.addEventListener('click', function(el, ev) {
 				Livewire.dispatch('populate', {id: btn.dataset.id});
-				expenseDialog.showModal();
-			});
-		});
-		document.querySelectorAll('button[name="delete"]').forEach(function(btn) {
-			btn.addEventListener('click', function(el, ev) {
-				Livewire.dispatch('delete', {id: btn.dataset.id});
 				expenseDialog.showModal();
 			});
 		});

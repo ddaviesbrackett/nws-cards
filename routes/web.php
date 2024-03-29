@@ -64,12 +64,11 @@ Route::middleware([
 
                 Route::get('/caft/{id}', 'caft')->name('caft');
                 Route::get('/orders', 'orders')->name('orders');
+                //order profit add/edit done with a livewire component
                 Route::get('/order/{id}', 'order')->name('order');
 
                 Route::get('/impersonate', 'impersonate')->name('impersonateList');
 
-                Route::get('/orderprofits/{dateforprofit}', 'profitSettingForm')->name('profit');
-                Route::post('/orderprofits/{dateforprofit}', 'postProfitSettingForm')->name('postprofit');
                 /*
                 //a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                 Route::get('/pointsale', 'newSale')->name('newsale');
@@ -83,13 +82,9 @@ Route::middleware([
                 ->prefix('/expenses')
                 ->group(function(){
                     Route::get('/', 'expenses')->name('expenses');
-                    Route::post('/', 'postExpenses')->name('postExpense');
-
-                    Route::get('{expense}/edit', 'editExpense')->name('editexpense');
-                    Route::post('{expense}/edit', 'postEditExpense')->name('posteditexpense');
+                    //expense add/edit done with a livewire component
                     
-                    Route::get('{expense}/delete', 'deleteExpense')->name('deleteexpense');
-                    Route::post('{expense}/delete', 'postDeleteExpense')->name('postdeleteexpense');
+                    Route::delete('{id}/delete', 'deleteExpense')->name('deleteexpense');
                 });
 
             Route::get('/caftfile/{dateforprofit}', [CAFTGenerationController::class, 'result'])->name('getcaftfile');

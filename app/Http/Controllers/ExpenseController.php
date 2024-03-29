@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use App\Models\SchoolClass;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
-    function expenses(): View
+    public function expenses(): View
     {
         return $this->result();
     }
 
-    function postExpenses(): View
+    public function deleteExpense(int $id): RedirectResponse
     {
-        return $this->result();
+        Expense::find($id)->delete();
+        return redirect()->route('admin-expenses');
     }
 
     private function result($extra = [])
