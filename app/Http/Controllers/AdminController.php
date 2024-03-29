@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CutoffDate;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Stripe\StripeClient;
 
 class AdminController extends Controller implements HasMiddleware
 {
@@ -57,6 +59,53 @@ class AdminController extends Controller implements HasMiddleware
 
         return view('admin.orders', ['model' => $viewmodel]);
     }
+
+	public function caft(StripeClient $stripeClient, $cutoffId)
+	{
+		$orders = Order::join('users as u', 'u.id', '=', 'orders.user_id')
+			->where('orders.cutoff_date_id','=',$cutoffId) //only this cutoff
+			->where('orders.payment', '=', 0) //only debit
+			->orderby('u.updated_at', 'desc') //sort by date
+			->select('orders.*') //only select orders, so that the users columns don't confuse eloquent (sigh)
+			->with('user') //eagerload user
+			->get();
+		
+
+		$viewmodel = [
+			'New' => [],
+			'Updated' => [],
+			'Unchanged' => [],
+		];
+		$total = 0;
+		$bicutoff = null;
+		$mcutoff = null;
+		if($cutoffId > 2) {
+			$bicutoff = CutoffDate::find($cutoffId - 1)->cutoffdate()->tz('UTC');
+			$mcutoff = CutoffDate::find($cutoffId - 2)->cutoffdate()->tz('UTC');
+		}
+		foreach($orders as $order) {
+			$user = $order->user;	
+			$stripeCustomer = $stripeClient->customers->retrieve($user->stripe_id);
+			$total += $order->totalCards();
+			if($cutoffId > 2) {
+				$cutoff = $user->schedule == 'biweekly' ? $bicutoff : $mcutoff;
+				$bucket = ($cutoff->lt($user->created_at) ? 'New' : ($cutoff->lt($user->updated_at) ? 'Updated' : 'Unchanged'));
+			}
+			else {
+				$bucket = 'New';
+			}
+
+			$viewmodel[$bucket][] = [
+				'order' => $order,
+				'acct' =>$stripeCustomer->metadata['debit-account'],
+				'transit' =>$stripeCustomer->metadata['debit-transit'],
+				'institution' =>$stripeCustomer->metadata['debit-institution'],
+			];
+		}
+
+		return view('admin.caft', ['model'=>$viewmodel, 'total' => $total, 'cutoff'=>$cutoffId]); 
+
+	}
 
     public function order(int $id)// :View
     {

@@ -49,6 +49,7 @@ Route::middleware([
         Route::post('/account/onetime', 'postOnetime');
     });
 
+    //impersonation (restricted to admins by rules on User)
     Route::impersonate();
 
     //Administrator treehouse
@@ -83,7 +84,7 @@ Route::middleware([
                     Route::delete('{id}/delete', 'deleteExpense')->name('deleteexpense');
                 });
 
-            Route::get('/caftfile/{dateforprofit}', [CAFTGenerationController::class, 'result'])->name('getcaftfile');
+            Route::get('/caftfile/{cutoffId}', [CAFTGenerationController::class, 'result'])->name('getcaftfile');
 
         });
 });
