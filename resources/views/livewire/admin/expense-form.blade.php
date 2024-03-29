@@ -26,7 +26,7 @@
         <x-button type="submit">
             Submit
         </x-button>
-        <x-button onclick="document.querySelector('dialog#{{$dialogId}}').close();event.preventDefault();">{{-- ew. --}}
+        <x-button @click.prevent="document.querySelector('dialog#{{$dialogId}}').close()">{{-- ew. --}}
             Cancel
         </x-button>
     </form>
