@@ -39,7 +39,6 @@ Route::middleware([
     Route::controller(OrderController::class)->group(function(){
         Route::get('/account', 'account')->name('account');
         Route::get('/account/extracards', 'account'); //with onetime form showing
-        Route::post('/account', 'postAccount');
 
         Route::get('/edit', 'edit');
         Route::post('/edit', 'postEdit');
