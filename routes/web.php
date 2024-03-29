@@ -5,7 +5,6 @@ use App\Http\Controllers\CAFTGenerationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\StripeWebHookController;
 use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +22,6 @@ Route::controller(OrderController::class)->group(function(){
 
 //contact form
 Route::post('/contact', [HomeController::class, 'contact']);
-
-//stripe webhook
-Route::post('/stripe/webhook', [StripeWebHookController::class, 'handle']);
 
 //profit tracking
 Route::controller(TrackingController::class)->group(function(){

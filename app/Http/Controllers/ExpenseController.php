@@ -6,9 +6,15 @@ use App\Models\Expense;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ExpenseController extends Controller
+class ExpenseController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return ['admin'];
+    }
+    
     public function expenses(): View
     {
         return $this->result();

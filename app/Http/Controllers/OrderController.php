@@ -8,10 +8,16 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use NumberFormatter;
 
-class OrderController extends Controller
+class OrderController extends Controller implements HasMiddleware
 {
+	public static function middleware(): array
+    {
+        return ['auth:sanctum'];
+    }
+    
 	// Blackout period is from cutoff wednesday just before midnight until card pickup wednesday morning.
     public static function GetBlackoutEndDate() : Carbon
 	{

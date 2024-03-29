@@ -6,9 +6,15 @@ use App\Models\CutoffDate;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class AdminController extends Controller
+class AdminController extends Controller implements HasMiddleware
 {
+	public static function middleware(): array
+    {
+        return ['admin'];
+    }
+    
     public function impersonate(): View
     {
         $users = User::orderBy('name')->get();
