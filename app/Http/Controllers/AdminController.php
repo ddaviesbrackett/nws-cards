@@ -60,6 +60,19 @@ class AdminController extends Controller implements HasMiddleware
         return view('admin.orders', ['model' => $viewmodel]);
     }
 
+	public function order(int $id) :View
+    {
+		$orders = Order::where('cutoff_date_id', '=', $id)
+			->select('orders.*')
+			->join('users', 'users.id', '=', 'orders.user_id')
+			->orderBy('users.name', 'asc')
+			->with('user')
+			->get();
+		$pickup = $orders->filter(function($order){ return ! $order->deliverymethod;});
+		$mail = $orders->filter(function($order){ return $order->deliverymethod;});
+		return view('admin.order', ['pickup'=>$pickup, 'mail'=>$mail, 'date' =>CutoffDate::find($id)->deliverydate()->format('F jS Y')]);
+    }
+
 	public function caft(StripeClient $stripeClient, $cutoffId)
 	{
 		$orders = Order::join('users as u', 'u.id', '=', 'orders.user_id')
@@ -106,9 +119,4 @@ class AdminController extends Controller implements HasMiddleware
 		return view('admin.caft', ['model'=>$viewmodel, 'total' => $total, 'cutoff'=>$cutoffId]); 
 
 	}
-
-    public function order(int $id)// :View
-    {
-
-    }
 }
