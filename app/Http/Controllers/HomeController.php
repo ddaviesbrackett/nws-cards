@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Contact;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\SchoolClass;
@@ -28,13 +29,9 @@ class HomeController extends Controller
         $status = 'failure';
         $email = $request->input('em');
         $name = $request->input('nm');
-		$data = $request->input()->only('msg', 'nm', 'em');
-		Mail::send('emails.contact', $data, function($message) use ($email, $name){
-			$message->subject('Home Page contact request');
-			$message->to('nwsgrocerycards@gmail.com', 'Nelson Waldorf School Grocery Cards');
-			$message->from($email, $name);
-		});
+        $message = $request->input('msg');
+        Mail::to("nwsgrocerycards@gmail.com", "Nelson Waldorf School Grocery Cards")->send(new Contact($email, $name, $message));
 		$status = 'success';
-		return Response::json(['r' =>['status' => $status]]);
+		return response()->json(['r' =>['status' => $status]]);
     }
 }

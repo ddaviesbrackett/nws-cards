@@ -41,4 +41,38 @@
             <br><span><b>Unfortunately, you can't order now while we process orders.<br>You will be able to make changes again from the next pick-up Wednesday until the following order deadline.</b></span>
             @endif 
     </div>
+    <a name="about"></a>
+    <a name="faq"></a>
+    <a name="contact"></a>
+    <h2>Got another question? We've got answers</h2>
+	<p>
+		We'd love to hear from you.
+	</p>
+	<p>
+		If you have a question or a concern about your order, you can reach us at nwsgrocerycards{AT}gmail.com or use the form below.
+	</p>
+    <form action="/contact" method="POST">
+        @csrf
+        <label>
+            Name
+            <x-input type="text" name="nm" id="nm" placeholder="your name"/>
+        </label>
+        <label>
+            Email Address
+            <x-input type="text" name="em" id="em" placeholder="your email address"/>
+        </label>
+        <label>
+            Message
+            <textarea name="msg" placeholder="your message" rows="6"></textarea>
+        </label>
+        <x-button type="submit">Send</x-button>
+    </form>
+    <p>	We will get back to you as soon as possible – usually the same day, but definitely within two business days.</p>
+	<p>
+		Please do not phone the Nelson Waldorf School unless it has been much longer than that. 
+		This fundraiser is being run by the Parent Council, not the school administration.
+	</p>
+	<p>
+		Thanks for your understanding. 
+	</p>
 </x-guest-layout>
