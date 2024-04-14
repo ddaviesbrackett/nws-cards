@@ -19,14 +19,14 @@
         <h1>Buy Grocery Cards<br/>Raise Money</h1>
             
         <h3>
-                This year we've raised {{$totalThisYear}}<br/>
-                From July 2014 we've raised {{$total}}<br/>
-                Help us raise more &mdash; <em>without spending any extra!</em>
-            </h3>
-            <br>
-            <img src="https://grocerycards.nelsonwaldorf.org/images/saveon-coop.png" title="Save On Foods and Coop">
-            
-            <br>
+            This year we've raised {{$totalThisYear}}<br/>
+            From July 2014 we've raised {{$total}}<br/>
+            Help us raise more &mdash; <em>without spending any extra!</em>
+        </h3>
+        <br>
+        <img src="https://grocerycards.nelsonwaldorf.org/images/saveon-coop.png" title="Save On Foods and Coop">
+        
+        <br>
             
         <p>Generously supported by our store partners The Kootenay Co-Op and Save-On Foods</p>
         
