@@ -1,8 +1,8 @@
 <x-app-layout>
     <h1>Order list</h1>
     <dialog id="profit-dialog">
-		<livewire:admin.profit-form dialog-id="profit-dialog" />
-	</dialog>
+        <livewire:admin.profit-form dialog-id="profit-dialog" />
+    </dialog>
     <table class='table'>
         <tr>
             <th></th>
@@ -29,14 +29,16 @@
         @endforeach
     </table>
     @push('latescripts')
-	<script>
-		let dialog = document.querySelector('dialog#profit-dialog');
-		document.querySelectorAll('button[name="edit"]').forEach(function(btn) {
-			btn.addEventListener('click', function(el, ev) {
-				Livewire.dispatch('populate', {dateforprofit: btn.dataset.id});
-				dialog.showModal();
-			});
-		});
-	</script>
-	@endpush
+    <script>
+        let dialog = document.querySelector('dialog#profit-dialog');
+        document.querySelectorAll('button[name="edit"]').forEach(function(btn) {
+            btn.addEventListener('click', function(el, ev) {
+                Livewire.dispatch('populate', {
+                    dateforprofit: btn.dataset.id
+                });
+                dialog.showModal();
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

@@ -125,4 +125,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'stripe_key' => env('STRIPE_KEY'),
+    'stripe_secret' => env('STRIPE_SECRET'),
+
+    'caft_originator' => env('CAFT_ORIGINATOR_ID'),
+    'caft_institution' => env('CAFT_RETURN_INSTITUTION_ID'),
+    'caft_return_acccount' => env('CAFT_RETURN_ACCOUNT_ID'),
+
 ];

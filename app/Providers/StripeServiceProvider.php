@@ -14,7 +14,7 @@ class StripeServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(StripeClient::class, function(Application $app){
-            return new StripeClient(env('STRIPE_SECRET'));
+            return new StripeClient(config('app.stripe_secret'));
         });
     }
 

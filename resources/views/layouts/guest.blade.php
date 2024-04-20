@@ -16,6 +16,7 @@
 
         <!-- Styles -->
         @livewireStyles
+        @stack('scripts')
     </head>
     <body>
         <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -107,7 +108,7 @@
         <div class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased">
             {{ $slot }}
         </div>
-
+        @stack('latescripts')
         @livewireScripts
     </body>
 </html>

@@ -90,9 +90,7 @@ class CreateNewUser implements CreatesNewUsers
 
             $customer = $this->stripe->customers->create($stripeCustomerAttributes);
             if (isset($cardToken)) {
-                $card = $customer->cards->create(['card' => $cardToken]);
-                $customer->default_card = $card->id;
-                \Stripe\Customer::update($customer->id, $customer);
+                $card = $this->stripe->customers->createSource($customer->id, ['source'=>$cardToken]);
             }
 
             $user->stripe_subscription = $customer->id;

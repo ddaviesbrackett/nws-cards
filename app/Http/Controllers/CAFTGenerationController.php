@@ -42,7 +42,7 @@ class CAFTGenerationController extends Controller implements HasMiddleware
 	{
 		$cutoff = CutoffDate::find($cutoffId);
 		return response()->streamDownload(function () use ($stripeClient, $cutoff) {
-			$originatorID = env('CAFT_ORIGINATOR_ID'); // originator ID from CAFT
+			$originatorID = config('app.caft_originator'); // originator ID from CAFT
 			$filenumber = sprintf('%04.4d', request('filenum'));
 			$originatorinfo = $originatorID . $filenumber;
 			//caft magic
@@ -81,8 +81,8 @@ class CAFTGenerationController extends Controller implements HasMiddleware
 					$content .= 'NWS Grocery Card Fundraiser   '; //our long name
 					$content .= $originatorID;
 					$content .= sprintf('%19.19s', 'User:' . $user->id . ' Order:' . $order->id); // originator cross reference
-					$content .= env('CAFT_RETURN_INSTITUTION_ID'); //institutional id number for returns = 0 . institution . transit
-					$content .= env('CAFT_RETURN_ACCOUNT_ID'); //account for returns LEFT JUSTIFIED OMIT BLANKS AND DASHES
+					$content .= config('app.caft_institution'); //institutional id number for returns = 0 . institution . transit
+					$content .= config('app.caft_return_acccount'); //account for returns LEFT JUSTIFIED OMIT BLANKS AND DASHES
 					$content .= 'NWS GROC CARDS '; // information to identify transaction to recipient
 					$content .= $this->spaces(24);
 					$content .= $this->zeroes(11);
