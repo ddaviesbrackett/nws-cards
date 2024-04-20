@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\CutoffDate;
+use App\Utilities\OrderUtilities;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Event;
@@ -28,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(OrderUtilities::class);
     }
 
     /**

@@ -141,9 +141,15 @@
             @foreach($classes as $cl)
             <x-label>
                 {{$cl['name']}}
-                <x-input type="checkbox" name="schoolclasslist" value="$cl['bucketname']" :checked="collect(old('schoolclasslist'))->contains($cl['bucketname'])" />
+                <x-input type="checkbox" name="schoolclasslist[]" :value="$cl['bucketname']" :checked="collect(old('schoolclasslist'))->contains($cl['bucketname'])" />
             </x-label>
             @endforeach
+        </div>
+        <div>
+            <x-label>
+                Referring Family
+                <x-input type="text" name="referrer" :value="old('referrer')" />
+            </x-label>
         </div>
 
         <h4>Payment</h4>
@@ -168,12 +174,12 @@
                     <x-input type="text" name="debit-account" :value="old('debit-account')" />
                 </x-label>
                 <x-label>
-                    <x-input type="checkbox" name="debit-termns" :checked="old('debit-terms')" />
+                    <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
                     I have read and agree to the <a href="#TODO">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
                 </x-label>
             </div>
             <x-label>
-                <x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'debit'" />
+                <x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" />
                 Credit Card
             </x-label>
             <div id="credit-details">

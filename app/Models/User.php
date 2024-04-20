@@ -26,7 +26,25 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 
+        'email', 
+        'password', 
+        'phone', 
+        'address1', 
+        'address2', 
+        'city', 
+        'province',
+        'postal_code',
+        'saveon',
+        'coop',
+        'schedule',
+        'saveon_onetime',
+        'coop_onetime',
+        'payment',
+        'deliverymethod',
+        'referrer',
+        'pickupalt',
+        'employee',
     ];
 
     /**
@@ -109,11 +127,11 @@ class User extends Authenticatable
     public function getFriendlySchedule(): string
     {
         switch ($this->schedule) {
-            /*case 'biweekly':
+                /*case 'biweekly':
                 return 'Bi-weekly';*/
             case 'monthly':
                 return 'Monthly';
-            /*case 'monthly-second':
+                /*case 'monthly-second':
                 return 'Monthly';*/
             case 'none':
                 return 'Never';
