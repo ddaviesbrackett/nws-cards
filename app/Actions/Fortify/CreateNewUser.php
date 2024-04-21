@@ -67,9 +67,11 @@ class CreateNewUser implements CreatesNewUsers
                 'employee'         => array_key_exists('employee', $input),
             ]);
 
-
-            $user->schoolclasses()->sync(collect($input['schoolclasslist'])->map(function ($value, $key) {
-                return $this->utils->choosableClasses()[$value];
+            $classlist = collect($input['schoolclasslist'] ?? []);
+            $classlist->add('tuitionreduction');
+            $classlist->add('pac');
+            $user->schoolclasses()->sync($classlist->map(function ($value, $key) {
+                return $this->utils->idFromBucket($value);
             }));
 
             $cardToken = null;

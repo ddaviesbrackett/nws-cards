@@ -5,8 +5,9 @@ namespace App\Utilities;
 use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Validator;
 
-class OrderUtilities {
-    public  function getValidator(array $in, array $passwordRules)
+class OrderUtilities
+{
+    public function getValidator(array $in, array $passwordRules)
     {
 
         $v = Validator::make($in, [
@@ -31,7 +32,7 @@ class OrderUtilities {
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
-            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->choosableClasses()->keys()->join(','),
+            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->choosableBuckets()->keys()->join(','),
         ], [
             'phone' => 'Please enter a valid phone number.',
             'debit-transit.required_if' => 'branch number is required.',
@@ -81,11 +82,16 @@ class OrderUtilities {
         return $v;
     }
 
-    public function choosableClasses()
+    public function choosableBuckets()
     {
         $c = SchoolClass::choosable();
-        return $c->mapWithKeys(function(SchoolClass $item, int $k){
-            return [$item["bucketname"] => $item["id"]];
+        return $c->map(function (SchoolClass $item, int $k) {
+            return $item["bucketname"];
         });
+    }
+
+    public function idFromBucket($bucket)
+    {
+        return SchoolClass::where('bucketname', $bucket)->first()->id;
     }
 }
