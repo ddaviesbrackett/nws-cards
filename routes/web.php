@@ -14,12 +14,6 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 //ultra-special login-and-resume from an email link
 Route::get('/email-resume', [OrderController::class, 'emailResume']);
 
-//account creation/view/update: new
-Route::controller(OrderController::class)->group(function(){
-    Route::get('/new', 'getNew');
-    Route::post('/new','postNew');
-});
-
 //contact form
 Route::post('/contact', [HomeController::class, 'contact']);
 
@@ -38,7 +32,7 @@ Route::middleware([
 ])->group(function () {
     Route::controller(OrderController::class)->group(function(){
         Route::get('/account', 'account')->name('account');
-        Route::get('/account/extracards', 'account'); //with onetime form showing
+        Route::get('/account/extracards', 'account')->name('account-extracards'); //with onetime form showing
 
         Route::get('/edit', 'edit');
         Route::post('/edit', 'postEdit');
