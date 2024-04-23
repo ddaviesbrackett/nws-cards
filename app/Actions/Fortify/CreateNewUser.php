@@ -99,7 +99,6 @@ class CreateNewUser implements CreatesNewUsers
         $orderRequired('schedule_onetime', 'saveon_onetime', 'coop_onetime');
         $orderRequired('schedule_onetime', 'coop_onetime', 'saveon_onetime');
 
-        return $v;
         $v->sometimes('schedule', 'in:biweekly,monthly,monthly-second', function ($input) {
             return $input->schedule_onetime == 'none';
         });
