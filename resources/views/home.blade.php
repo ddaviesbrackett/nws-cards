@@ -33,7 +33,7 @@
         @auth
             <a href="/edit">Change Order</a>
         @else
-            <a href="/new">Order Now</a>
+            <a href="/register">Order Now</a>
         @endauth
         <a href="/account">Checking on an existing order? Click here</a>
 
