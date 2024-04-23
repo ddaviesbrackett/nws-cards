@@ -11,13 +11,6 @@ use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
-    private OrderUtilities $utils;
-
-    public function __construct(OrderUtilities $utils)
-    {
-        $this->utils = $utils;
-    }
-
     /**
      * Validate and update the given user's profile information.
      *
