@@ -12,8 +12,8 @@ use Illuminate\View\View;
 class AppServiceProvider extends ServiceProvider
 {
     /*
-	* cutoff dates are the last day on which we can accept an order.
-	*/
+    * cutoff dates are the last day on which we can accept an order.
+    */
     private function getDates()
     {
         $target = (new \Carbon\Carbon('America/Los_Angeles'))->format('Y-m-d');

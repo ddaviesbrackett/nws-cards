@@ -13,28 +13,28 @@ class Pointsale extends Model
     use HasFactory;
 
     protected $table = 'pointsales';
-	protected $dates = ['created_at', 'updated_at', 'saledate'];
+    protected $dates = ['created_at', 'updated_at', 'saledate'];
 
-	protected $fillable = [
-		'payment',
-		'saveon_dollars',
-		'coop_dollars',
-		'paid',
-		'saledate',
-	];
+    protected $fillable = [
+        'payment',
+        'saveon_dollars',
+        'coop_dollars',
+        'paid',
+        'saledate',
+    ];
 
-	public function schoolclasses() : BelongsToMany
+    public function schoolclasses() : BelongsToMany
     {
-		return $this->belongsToMany(SchoolClass::class, 'classes_pointsales', 'pointsale_id', 'class_id')->withPivot('profit');
-	}
+        return $this->belongsToMany(SchoolClass::class, 'classes_pointsales', 'pointsale_id', 'class_id')->withPivot('profit');
+    }
 
-	public function isCreditcard() :bool
+    public function isCreditcard() :bool
     {
-		return $this->payment == 1;
-	}
+        return $this->payment == 1;
+    }
 
-	public function newCollection(array $models = []): Collection
-	{
-		return new Pointsales($models);
-	}
+    public function newCollection(array $models = []): Collection
+    {
+        return new Pointsales($models);
+    }
 }

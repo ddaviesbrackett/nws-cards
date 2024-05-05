@@ -13,53 +13,53 @@ class CutoffDate extends Model
     use HasFactory;
     protected $table = 'cutoffdates';
 
-	protected $fillable = [
-		'saveon_cheque_value',
-		'saveon_card_value',
-		'coop_cheque_value',
-		'coop_card_value',
-	];
+    protected $fillable = [
+        'saveon_cheque_value',
+        'saveon_card_value',
+        'coop_cheque_value',
+        'coop_card_value',
+    ];
 
-	public function getSaveonChequeValueAttribute($val) : float
+    public function getSaveonChequeValueAttribute($val) : float
     {
-		return floatval($val);
-	}
-	public function getSaveonCardValueAttribute($val) : float
+        return floatval($val);
+    }
+    public function getSaveonCardValueAttribute($val) : float
     {
-		return floatval($val);
-	}
-	public function getCoopChequeValueAttribute($val) : float
+        return floatval($val);
+    }
+    public function getCoopChequeValueAttribute($val) : float
     {
-		return floatval($val);
-	}
-	public function getCoopCardValueAttribute($val) : float
+        return floatval($val);
+    }
+    public function getCoopCardValueAttribute($val) : float
     {
-		return floatval($val);
-	}
+        return floatval($val);
+    }
 
-	public function orders() : HasMany
+    public function orders() : HasMany
     {
-		return $this->hasMany(Order::class);
-	}
+        return $this->hasMany(Order::class);
+    }
 
-	public function users() : BelongsToMany
+    public function users() : BelongsToMany
     {
-		return $this->belongsToMany(User::class, 'orders');
-	}
+        return $this->belongsToMany(User::class, 'orders');
+    }
 
-	public function cutoffdate() : Carbon
+    public function cutoffdate() : Carbon
     {
-		return new Carbon($this->cutoff, 'America/Los_Angeles');
-	}
-	public function chargedate(): Carbon
+        return new Carbon($this->cutoff, 'America/Los_Angeles');
+    }
+    public function chargedate(): Carbon
     {
-		return new Carbon($this->charge, 'America/Los_Angeles');
-	}
+        return new Carbon($this->charge, 'America/Los_Angeles');
+    }
 
-	public function deliverydate(): Carbon
+    public function deliverydate(): Carbon
     {
-		return new Carbon($this->delivery, 'America/Los_Angeles');
-	}
+        return new Carbon($this->delivery, 'America/Los_Angeles');
+    }
 
     public function dates() : Array
     {

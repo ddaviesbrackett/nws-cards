@@ -45,12 +45,12 @@
     <a name="faq"></a>
     <a name="contact"></a>
     <h2>Got another question? We've got answers</h2>
-	<p>
-		We'd love to hear from you.
-	</p>
-	<p>
-		If you have a question or a concern about your order, you can reach us at nwsgrocerycards{AT}gmail.com or use the form below.
-	</p>
+    <p>
+        We'd love to hear from you.
+    </p>
+    <p>
+        If you have a question or a concern about your order, you can reach us at nwsgrocerycards{AT}gmail.com or use the form below.
+    </p>
     <form action="/contact" method="POST">
         @csrf
         <label>
@@ -67,12 +67,12 @@
         </label>
         <x-button type="submit">Send</x-button>
     </form>
-    <p>	We will get back to you as soon as possible – usually the same day, but definitely within two business days.</p>
-	<p>
-		Please do not phone the Nelson Waldorf School unless it has been much longer than that. 
-		This fundraiser is being run by the Parent Council, not the school administration.
-	</p>
-	<p>
-		Thanks for your understanding. 
-	</p>
+    <p>    We will get back to you as soon as possible – usually the same day, but definitely within two business days.</p>
+    <p>
+        Please do not phone the Nelson Waldorf School unless it has been much longer than that. 
+        This fundraiser is being run by the Parent Council, not the school administration.
+    </p>
+    <p>
+        Thanks for your understanding. 
+    </p>
 </x-guest-layout>

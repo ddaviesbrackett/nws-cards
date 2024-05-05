@@ -12,60 +12,60 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolClass extends Model
 {
-	protected $table = 'classes';
+    protected $table = 'classes';
 
-	protected $fillable = [
-		'name',
-		'bucketname',
-	];
+    protected $fillable = [
+        'name',
+        'bucketname',
+    ];
 
-	public static function choosable() : Collection
+    public static function choosable() : Collection
     {
-		return SchoolClass::where('displayorder', '>', 0)->orderBy('displayorder', 'asc')->get();
-	}
+        return SchoolClass::where('displayorder', '>', 0)->orderBy('displayorder', 'asc')->get();
+    }
 
-	public static function profitSince( Carbon $since) : float
-	{
-		return DB::scalar("
-			select sum(co.profit) from classes_orders co
-			inner join orders o on o.id = co.order_id
-			where o.created_at > ?", [$since]);
-	}
-
-	public function profitByCutoff()
-	{
-		return array_map(function($row){
-			return [
-				'date' => new Carbon($row->delivery),
-				'profit' => $row->profit
-			];
-		}, DB::select('
-			select cd.delivery as delivery, sum(co.profit) as profit
-			from cutoffdates cd
-			inner join orders o on o.cutoff_date_id = cd.id
-			inner join classes_orders co on co.order_id = o.id
-			where co.class_id = ?
-			group by cd.delivery
-			order by cd.delivery desc', [$this->id]));
-	}
-
-	public function expenses() : HasMany
+    public static function profitSince( Carbon $since) : float
     {
-		return $this->hasMany(Expense::class, 'class_id');
-	}
+        return DB::scalar("
+            select sum(co.profit) from classes_orders co
+            inner join orders o on o.id = co.order_id
+            where o.created_at > ?", [$since]);
+    }
 
-	public function pointsales() : BelongsToMany
+    public function profitByCutoff()
     {
-		return $this->belongsToMany(Pointsale::class, 'classes_pointsales', 'class_id', 'pointsale_id')->withPivot('profit');
-	}
+        return array_map(function($row){
+            return [
+                'date' => new Carbon($row->delivery),
+                'profit' => $row->profit
+            ];
+        }, DB::select('
+            select cd.delivery as delivery, sum(co.profit) as profit
+            from cutoffdates cd
+            inner join orders o on o.cutoff_date_id = cd.id
+            inner join classes_orders co on co.order_id = o.id
+            where co.class_id = ?
+            group by cd.delivery
+            order by cd.delivery desc', [$this->id]));
+    }
 
-	public function orders() : BelongsToMany
+    public function expenses() : HasMany
     {
-		return $this->belongsToMany(Order::class, 'classes_orders', 'class_id', 'order_id')->withPivot('profit');
-	}
+        return $this->hasMany(Expense::class, 'class_id');
+    }
 
-	public function users() : BelongsToMany
+    public function pointsales() : BelongsToMany
     {
-		return $this->belongsToMany(User::class, 'classes_users', 'class_id', 'user_id');
-	}
+        return $this->belongsToMany(Pointsale::class, 'classes_pointsales', 'class_id', 'pointsale_id')->withPivot('profit');
+    }
+
+    public function orders() : BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'classes_orders', 'class_id', 'order_id')->withPivot('profit');
+    }
+
+    public function users() : BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'classes_users', 'class_id', 'user_id');
+    }
 }

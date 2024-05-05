@@ -11,20 +11,20 @@ class Expense extends Model
     use HasFactory;
     protected $table = 'expenses';
 
-	protected $fillable = [
-		'expense_date',
-		'amount',
-		'description',
-		'class_id',
-	];
+    protected $fillable = [
+        'expense_date',
+        'amount',
+        'description',
+        'class_id',
+    ];
 
-	public function schoolclass() : BelongsTo
+    public function schoolclass() : BelongsTo
     {
-		return $this->belongsTo(SchoolClass::class, 'class_id');
-	}
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
 
-	public function getDates()
-	{
-	    return ['expense_date', 'updated_at', 'created_at'];
-	}
+    public function getDates()
+    {
+        return ['expense_date', 'updated_at', 'created_at'];
+    }
 }

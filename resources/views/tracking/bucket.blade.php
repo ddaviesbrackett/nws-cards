@@ -13,12 +13,12 @@
             <th>Amount Raised</th>
         </tr>
         @if (! empty($byCutoff))
-		@foreach($byCutoff as $co)
-			<tr>
-				<td>{{$co['date']->format('F jS Y')}}</td>
-				<td>{{$co['profit']}}</td>
-			</tr>
-		@endforeach
-	@endif
+        @foreach($byCutoff as $co)
+            <tr>
+                <td>{{$co['date']->format('F jS Y')}}</td>
+                <td>{{$co['profit']}}</td>
+            </tr>
+        @endforeach
+    @endif
     </table>
 </x-guest-layout>

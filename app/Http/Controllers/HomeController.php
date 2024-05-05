@@ -31,7 +31,7 @@ class HomeController extends Controller
         $name = $request->input('nm');
         $message = $request->input('msg');
         Mail::to("nwsgrocerycards@gmail.com", "Nelson Waldorf School Grocery Cards")->send(new Contact($email, $name, $message));
-		$status = 'success';
-		return response()->json(['r' =>['status' => $status]]);
+        $status = 'success';
+        return response()->json(['r' =>['status' => $status]]);
     }
 }

@@ -1,6 +1,6 @@
 <x-mail::message>
 # Hi {{{$user->name}}},
-	
+    
 
 Need to change your grocery card order? You have until {{{$cutoff->cutoffdate()->subDay()->format('l, F jS')}}}, at midnight. 
 @if($user->saveon > 0 || $user->coop > 0 || $user->saveon_onetime > 0 || $user->coop_onetime > 0)
@@ -14,7 +14,7 @@ Log in with this email address and the password you signed up with. (Forgot your
 You are currently ordering<br>
 <b>${{{$user->coop}}}00 from Kootenay Co-op</b><br>
 <b>${{{$user->saveon}}}00 from Save-On</b><br>
-	
+    
 @endif
 @if($user->saveon_onetime > 0 || $user->coop_onetime > 0)
 

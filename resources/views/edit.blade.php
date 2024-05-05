@@ -38,19 +38,19 @@
     </script>
     @endpush
 
-	<x-slot name="header">
+    <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             Edit your order
         </h2>
     </x-slot>
 
-	<x-validation-errors />
-	<div x-data class="py-12">
-		<form method="POST" action="{{route('postEdit')}}" @submit="formSubmit">
-			@csrf
+    <x-validation-errors />
+    <div x-data class="py-12">
+        <form method="POST" action="{{route('postEdit')}}" @submit="formSubmit">
+            @csrf
 
-			<h4>your order</h4>
-			<div>
+            <h4>your order</h4>
+            <div>
                 <x-label>
                     Kootenay Co-op:
                     <x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop)" /> x $100
@@ -106,7 +106,7 @@
                 <x-input-error for="schedule_onetime" />
             </div>
 
-			<h4>Decide Who to Support</h4>
+            <h4>Decide Who to Support</h4>
             <div>
                 <x-label>
                     <x-input type="radio" name="indiv-class" value="school" :checked="old('indiv-class', $user->what) == 'school'" />
@@ -141,7 +141,7 @@
             <h4>Payment</h4>
             <span class="help-block info">You will be charged 2 business days before delivery.</span>
             <div>
-			<x-label>
+            <x-label>
                     <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" />
                     Leave payment details unchanged
                 </x-label>
@@ -249,9 +249,9 @@
                 </div>
             </div>
 
-			<div>
-				<x-button>Edit order</x-button>
-			</div>
-		</form>
-	</div>
+            <div>
+                <x-button>Edit order</x-button>
+            </div>
+        </form>
+    </div>
 </x-app-layout>
