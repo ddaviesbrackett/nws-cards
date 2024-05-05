@@ -82,7 +82,7 @@ class OrderController extends Controller implements HasMiddleware
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
-            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->utils->choosableBuckets()->keys()->join(','),
+            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->utils->choosableBuckets()->join(','),
         ], [
             'debit-transit.required_if' => 'branch number is required.',
             'debit-institution.required_if' => 'institution is required.',
@@ -164,21 +164,22 @@ class OrderController extends Controller implements HasMiddleware
             $user->schoolclasses()->sync($classlist->map(function ($value, $key) {
                 return $this->utils->idFromBucket($value);
             }));
-
-            $cardToken = null;
-            if (isset($input['stripeToken'])) {
-                $cardToken = $input['stripeToken'];
-            }
-            $stripeCustomerAttributes = [
-                'email' => $user->email,
-                'description' => $user->name,
-            ];
-            if (!isset($cardToken)) {
-                $stripeCustomerAttributes['metadata'] = [
-                    'debit-transit' => $input['debit-transit'],
-                    'debit-institution' => $input['debit-institution'],
-                    'debit-account' => $input['debit-account'],
+            if ($input['payment'] != 'keep') {
+                $cardToken = null;
+                if (isset($input['stripeToken'])) {
+                    $cardToken = $input['stripeToken'];
+                }
+                $stripeCustomerAttributes = [
+                    'email' => $user->email,
+                    'description' => $user->name,
                 ];
+                if (!isset($cardToken)) {
+                    $stripeCustomerAttributes['metadata'] = [
+                        'debit-transit' => $input['debit-transit'],
+                        'debit-institution' => $input['debit-institution'],
+                        'debit-account' => $input['debit-account'],
+                    ];
+                }
             }
 
             $customer = $this->stripe->customers->update($user->stripe_subscription, $stripeCustomerAttributes);
