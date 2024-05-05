@@ -45,7 +45,7 @@ class CreateNewUser implements CreatesNewUsers
             'coop'        => 'integer|digits_between:1,2',
             'saveon_onetime'    => 'integer|digits_between:1,2',
             'coop_onetime'        => 'integer|digits_between:1,2',
-            'payment'    => 'required|in:debit,credit,keep',
+            'payment'    => 'required|in:debit,credit',
             'debit-transit'        => 'required_if:payment,debit|nullable|digits:5',
             'debit-institution'    => 'required_if:payment,debit|nullable|digits:3',
             'debit-account'     => 'required_if:payment,debit|nullable|digits_between:5,15',

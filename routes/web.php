@@ -34,8 +34,8 @@ Route::middleware([
         Route::get('/account', 'account')->name('account');
         Route::get('/account/extracards', 'account')->name('account-extracards'); //with onetime form showing
 
-        Route::get('/edit', 'edit');
-        Route::post('/edit', 'postEdit');
+        Route::get('/edit', 'edit')->name('edit');
+        Route::post('/edit', 'postEdit')->name('postEdit');
         Route::get('/Suspend', 'suspend');
         Route::get('/Resume', 'resume');
         Route::get('/account/onetime', 'onetime')->name('account-getonetime');

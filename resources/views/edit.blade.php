@@ -1,0 +1,257 @@
+<x-app-layout>
+
+    @push('scripts')
+    <script src="https://js.stripe.com/v2/" async defer></script>
+    <script>
+        const stripeResponseHandler = function(status, response) {
+            const f = document.forms[0];
+            if (response.error) {
+                /*TODO
+                $form.find('.payment-errors').text(response.error.message);
+                $form.find('.payment-errors-group').show();
+                $form.find('button').prop('disabled', false);
+                */
+            } else {
+                // response contains id and card, which contains additional card details
+                var token = response.id;
+
+                // Insert the token into the form so it gets submitted to the server
+                const tokenInput = document.createElement('input');
+                tokenInput.type = "hidden";
+                tokenInput.name = "stripeToken";
+                tokenInput.value = token;
+
+                f.appendChild(tokenInput);
+                // and submit
+                f.submit();
+            }
+        };
+        const formSubmit = function(ev) {
+            const f = document.forms[0];
+            Stripe.setPublishableKey('{{config("app.stripe_key")}}');
+            f.querySelector('button[type="submit"]').disabled = true;
+            if (f.querySelector('input[name="payment"][value="credit"]').checked) {
+                Stripe.card.createToken(f, stripeResponseHandler);
+                ev.preventDefault();
+            }
+        }
+    </script>
+    @endpush
+
+	<x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Edit your order
+        </h2>
+    </x-slot>
+
+	<x-validation-errors />
+	<div x-data class="py-12">
+		<form method="POST" action="{{route('postEdit')}}" @submit="formSubmit">
+			@csrf
+
+			<h4>your order</h4>
+			<div>
+                <x-label>
+                    Kootenay Co-op:
+                    <x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop)" /> x $100
+                </x-label>
+                <x-input-error for="coop" />
+            </div>
+
+            <div>
+                <x-label>
+                    Save-On:
+                    <x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon)" /> x $100
+                </x-label>
+                <x-input-error for="saveon" />
+            </div>
+
+            <div>
+                <x-label>
+                    <x-input type="radio" name="schedule" value="monthly" :checked="old('schedule', $user->schedule) != 'none'" />
+                    Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
+                </x-label>
+                <x-label>
+                    <x-input type="radio" name="schedule" value="none" :checked="old('schedule', $user->schedule) == 'none'" />
+                    I don't want a recurring order
+                </x-label>
+                <x-input-error for="schedule" />
+            </div>
+
+            <div>
+                <x-label>
+                    Kootenay Co-op:
+                    <x-input type="number" id="coop_onetime" name="coop_onetime" :value="old('coop_onetime', $user->coop_onetime)" /> x $100
+                </x-label>
+                <x-input-error for="coop_onetime" />
+            </div>
+
+            <div>
+                <x-label>
+                    Save-On:
+                    <x-input type="number" id="saveon_onetime" name="saveon_onetime" :value="old('saveon_onetime', $user->saveon_onetime)" /> x $100
+                </x-label>
+                <x-input-error for="saveon_onetime" />
+            </div>
+
+            <div>
+                <x-label>
+                    <x-input type="radio" name="schedule_onetime" value="monthly" :checked="old('schedule_onetime', $user->schedule_onetime) == 'monthly'" />
+                    On <span class="font-bold">{{$dates['delivery']}}</span>
+                </x-label>
+                <x-label>
+                    <x-input type="radio" name="schedule_onetime" value="none" :checked="old('schedule_onetime', $user->schedule_onetime) == 'none' || (old('schedule_onetime', $user->schedule_onetime) == null)" />
+                    I don't want a one-time order
+                </x-label>
+                <x-input-error for="schedule_onetime" />
+            </div>
+
+			<h4>Decide Who to Support</h4>
+            <div>
+                <x-label>
+                    <x-input type="radio" name="indiv-class" value="school" :checked="old('indiv-class', $user->what) == 'school'" />
+                    Whole School
+                </x-label>
+                <x-label>
+                    <x-input type="radio" name="indiv-class" value="class" :checked="old('indiv-class', $user->what) == 'class'" />
+                    <span class="font-bold">Class(es)</span> and whole school
+                </x-label>
+                <x-input-error for="indiv-class" />
+            </div>
+            <div>
+                If you select more than one class, proceeds will be divided equally between the classes.
+            </div>
+            <div>
+                @foreach($classes as $cl)
+                <x-label>
+                    {{$cl['name']}}
+                    <x-input type="checkbox" name="schoolclasslist[]" :value="$cl['bucketname']" :checked="collect(old('schoolclasslist', $user->schoolclasses->pluck('bucketname')))->contains($cl['bucketname'])" />
+                </x-label>
+                @endforeach
+                <x-input-error for="schoolclasslist" />
+            </div>
+            <div>
+                <x-label>
+                    Referring Family
+                    <x-input type="text" name="referrer" :value="old('referrer', $user->referrer)" />
+                </x-label>
+                <x-input-error for="referrer" />
+            </div>
+
+            <h4>Payment</h4>
+            <span class="help-block info">You will be charged 2 business days before delivery.</span>
+            <div>
+			<x-label>
+                    <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" />
+                    Leave payment details unchanged
+                </x-label>
+                <x-label>
+                    <x-input type="radio" name="payment" value="debit" />
+                    Debit (we make more money with debit)
+                </x-label>
+                <x-input-error for="payment" />
+                <div id="debit-details">
+                    <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
+                    <x-label>
+                        Branch Number:
+                        <x-input type="text" name="debit-transit" :value="old('debit-transit')" />
+                    </x-label>
+                    <x-input-error for="debit-transit" />
+                    <x-label>
+                        Institution Number:
+                        <x-input type="text" name="debit-institution" :value="old('debit-institution')" />
+                    </x-label>
+                    <x-input-error for="debit-institution" />
+                    <x-label>
+                        Account Number:
+                        <x-input type="text" name="debit-account" :value="old('debit-account')" />
+                    </x-label>
+                    <x-input-error for="debit-account" />
+                    <x-label>
+                        <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
+                        I have read and agree to the <a href="#TODO">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
+                    </x-label>
+                    <x-input-error for="debit-terms" />
+                </div>
+                <x-label>
+                    <x-input type="radio" name="payment" value="credit" />
+                    Credit Card
+                </x-label>
+                <x-input-error for="payment" />
+                <div id="credit-details">
+                    <div>
+                        <x-label>
+                            Cardholder's Name
+                            <x-input type="text" data-stripe="name" value="" />
+                        </x-label>
+                    </div>
+                    <div>
+                        <x-label>
+                            Card Number
+                            <x-input type="text" data-stripe="number" value="" />
+                        </x-label>
+                    </div>
+                    <div>
+                        <div>
+                            <x-label>
+                                Exp Month
+                                <x-input type="text" placeholder="MM" data-stripe="exp-month" value="" />
+                            </x-label>
+                        </div>
+                        <div>
+                            <x-label>
+                                Exp Year
+                                <x-input type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
+                            </x-label>
+                        </div>
+                        <div>
+                            <x-label>
+                                CVC
+                                <x-input type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
+                            </x-label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Choose Delivery</h4>
+            <div>
+                <div>
+                    <x-label>
+                        <x-input type="radio" name="deliverymethod" value="pickup" :checked="old('deliverymethod', $user->deliverymethod == 1?'mail':'pickup') == 'pickup'" />
+                        Pickup at the Nelson Waldorf School
+                    </x-label>
+                    <x-input-error for="deliverymethod" />
+                    You'll have to sign for your cards. If someone else can sign for them, enter their name here.
+                    <x-label>
+                        Others who can pick up your cards:
+                        <x-input type="text" name="pickupalt" :value="old('pickupalt', $user->pickupalt)" />
+                    </x-label>
+                    <x-input-error for="pickupalt" />
+                    <x-label>
+                        <x-input type="checkbox" name="employee" value="1" :checked="old('employee', $user->employee) == 1" />
+                        I or my alternate am employed by the school
+                    </x-label>
+                    <x-input-error for="employee" />
+                </div>
+                <div>
+                    <x-label>
+                        <x-input type="radio" name="deliverymethod" value="mail" :checked="old('deliverymethod', $user->deliverymethod == 1?'mail':'pickup') == 'mail'" />
+                        Mail to the address above
+                    </x-label>
+                    <x-input-error for="deliverymethod" />
+
+                    <x-label>
+                        <x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
+                        I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.
+                    </x-label>
+                    <x-input-error for="mailwaiver" />
+                </div>
+            </div>
+
+			<div>
+				<x-button>Edit order</x-button>
+			</div>
+		</form>
+	</div>
+</x-app-layout>
