@@ -6,6 +6,7 @@
         const stripeResponseHandler = function(status, response) {
             const f = document.forms[0];
             if (response.error) {
+                alert('response errored: ' + response.error);
                 /*TODO
                 $form.find('.payment-errors').text(response.error.message);
                 $form.find('.payment-errors-group').show();
@@ -50,60 +51,67 @@
             @csrf
 
             <h4>your order</h4>
-            <div>
-                <x-label>
-                    Kootenay Co-op:
-                    <x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop)" /> x $100
-                </x-label>
-                <x-input-error for="coop" />
-            </div>
+            <div x-data="{order:'recurring', schedule:'{{ old('schedule', $user->schedule) }}', schedule_onetime:'{{old('schedule_onetime', $user->schedule_onetime)}}'}"> 
+                <a @click="order='recurring'" :class="order == 'recurring' && 'bg-red'">Edit your Recurring Order</a>
+                <a @click="order='onetime'" :class="order == 'onetime' && 'bg-red'">Edit your One-Time Order</a>
+                <div x-cloak x-show="order == 'recurring'">
 
-            <div>
-                <x-label>
-                    Save-On:
-                    <x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon)" /> x $100
-                </x-label>
-                <x-input-error for="saveon" />
-            </div>
+                    <div>
+                        <x-label>
+                            Kootenay Co-op:
+                            <x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop)" /> x $100
+                        </x-label>
+                        <x-input-error for="coop" />
+                    </div>
 
-            <div>
-                <x-label>
-                    <x-input type="radio" name="schedule" value="monthly" :checked="old('schedule', $user->schedule) != 'none'" />
-                    Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
-                </x-label>
-                <x-label>
-                    <x-input type="radio" name="schedule" value="none" :checked="old('schedule', $user->schedule) == 'none'" />
-                    I don't want a recurring order
-                </x-label>
-                <x-input-error for="schedule" />
-            </div>
+                    <div>
+                        <x-label>
+                            Save-On:
+                            <x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon)" /> x $100
+                        </x-label>
+                        <x-input-error for="saveon" />
+                    </div>
 
-            <div>
-                <x-label>
-                    Kootenay Co-op:
-                    <x-input type="number" id="coop_onetime" name="coop_onetime" :value="old('coop_onetime', $user->coop_onetime)" /> x $100
-                </x-label>
-                <x-input-error for="coop_onetime" />
-            </div>
+                    <x-label>
+                        <x-input type="radio" name="schedule" value="monthly" x-model="schedule"/>
+                        Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
+                    </x-label>
+                    <x-label>
+                        <x-input type="radio" name="schedule" value="none" x-model="schedule"/>
+                        I don't want a recurring order
+                    </x-label>
+                    <x-input-error for="schedule" />
+                </div>
 
-            <div>
-                <x-label>
-                    Save-On:
-                    <x-input type="number" id="saveon_onetime" name="saveon_onetime" :value="old('saveon_onetime', $user->saveon_onetime)" /> x $100
-                </x-label>
-                <x-input-error for="saveon_onetime" />
-            </div>
+                
+                <div x-cloak x-show="order == 'onetime'">
+                    <div>
+                        <x-label>
+                            Kootenay Co-op:
+                            <x-input type="number" id="coop_onetime" name="coop_onetime" :value="old('coop_onetime', $user->coop_onetime)" /> x $100
+                        </x-label>
+                        <x-input-error for="coop_onetime" />
+                    </div>
 
-            <div>
-                <x-label>
-                    <x-input type="radio" name="schedule_onetime" value="monthly" :checked="old('schedule_onetime', $user->schedule_onetime) == 'monthly'" />
-                    On <span class="font-bold">{{$dates['delivery']}}</span>
-                </x-label>
-                <x-label>
-                    <x-input type="radio" name="schedule_onetime" value="none" :checked="old('schedule_onetime', $user->schedule_onetime) == 'none' || (old('schedule_onetime', $user->schedule_onetime) == null)" />
-                    I don't want a one-time order
-                </x-label>
-                <x-input-error for="schedule_onetime" />
+                    <div>
+                        <x-label>
+                            Save-On:
+                            <x-input type="number" id="saveon_onetime" name="saveon_onetime" :value="old('saveon_onetime', $user->saveon_onetime)" /> x $100
+                        </x-label>
+                        <x-input-error for="saveon_onetime" />
+                    </div>
+
+                    
+                    <x-label>
+                        <x-input type="radio" name="schedule_onetime" value="monthly" x-model="schedule_onetime"/>
+                        On <span class="font-bold">{{$dates['delivery']}}</span>
+                    </x-label>
+                    <x-label>
+                        <x-input type="radio" name="schedule_onetime" value="none" x-model="schedule_onetime"/>
+                        I don't want a one-time order
+                    </x-label>
+                    <x-input-error for="schedule_onetime" />
+                </div>
             </div>
 
             <h4>Decide Who to Support</h4>
@@ -140,17 +148,17 @@
 
             <h4>Payment</h4>
             <span class="help-block info">You will be charged 2 business days before delivery.</span>
-            <div>
-            <x-label>
-                    <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" />
+            <div x-data="{payment:'keep'}">
+                <x-label>
+                    <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" x-model="payment"/>
                     Leave payment details unchanged
                 </x-label>
                 <x-label>
-                    <x-input type="radio" name="payment" value="debit" />
+                    <x-input type="radio" name="payment" value="debit" x-model="payment"/>
                     Debit (we make more money with debit)
                 </x-label>
                 <x-input-error for="payment" />
-                <div id="debit-details">
+                <div x-cloak x-show="payment == 'debit'">
                     <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
                     <x-label>
                         Branch Number:
@@ -174,11 +182,11 @@
                     <x-input-error for="debit-terms" />
                 </div>
                 <x-label>
-                    <x-input type="radio" name="payment" value="credit" />
+                    <x-input type="radio" name="payment" value="credit" x-model="payment"/>
                     Credit Card
                 </x-label>
                 <x-input-error for="payment" />
-                <div id="credit-details">
+                <div x-cloak x-show="payment == 'credit'">
                     <div>
                         <x-label>
                             Cardholder's Name

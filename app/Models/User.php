@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -123,6 +124,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isCreditcard(): bool
     {
         return $this->payment == 1;
+    }
+
+    public function schedule(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $val) => $val == 'none'?'none':'monthly', //collapse monthly-second and biweekly schedules to monthly
+        );
+    }
+
+    public function scheduleOnetime(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $val) => $val == 'none'?'none':'monthly', //collapse monthly-second and biweekly schedules to monthly
+        );
     }
 
     public function getFriendlySchedule(): string

@@ -15,6 +15,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\DB;
 use NumberFormatter;
 use Stripe\StripeClient;
+use Closure;
 
 class OrderController extends Controller implements HasMiddleware
 {
@@ -84,18 +85,20 @@ class OrderController extends Controller implements HasMiddleware
             'deliverymethod' => 'required',
             'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->utils->choosableBuckets()->join(','),
         ], [
-            'debit-transit.required_if' => 'branch number is required.',
-            'debit-institution.required_if' => 'institution is required.',
-            'debit-account.required_if' => 'account number is required.',
+            'schedule.in' => 'We need either a recurring order or a one-time order.',
+            'schedule_onetime.in' => 'We need either a recurring order or a one-time order.',
+            'debit-transit.required_if' => 'Branch number is required.',
+            'debit-institution.required_if' => 'Institution is required.',
+            'debit-account.required_if' => 'Account number is required.',
             'debit-terms.required_if' => 'You must agree to the terms to pay by pre-authorized debit.',
-            'saveon.required' => 'You need to order at least one card.',
-            'coop.required' => 'You need to order at least one card.',
-            'saveon_onetime.required' => 'You need to order at least one card.',
-            'coop_onetime.required' => 'You need to order at least one card.',
-            'saveon.min' => 'You need to order at least one card.',
-            'coop.min' => 'You need to order at least one card.',
-            'saveon_onetime.min' => 'You need to order at least one card.',
-            'coop_onetime.min' => 'You need to order at least one card.',
+            'saveon.required' => 'Please order at least one card.',
+            'coop.required' => 'Please order at least one card.',
+            'saveon_onetime.required' => 'Please order at least one card.',
+            'coop_onetime.required' => 'Please order at least one card.',
+            'saveon.min' => 'Please order at least one card.',
+            'coop.min' => 'Please order at least one card.',
+            'saveon_onetime.min' => 'Please order at least one card.',
+            'coop_onetime.min' => 'Please order at least one card.',
             'schedule.not_in' => 'Choose a delivery date',
             'schedule_onetime.not_in' => 'Choose a delivery date',
             'schoolclasslist' => 'Please correct your chosen supported classes',
@@ -135,12 +138,8 @@ class OrderController extends Controller implements HasMiddleware
         $v->sometimes('schedule_onetime', 'in:monthly,monthly-second', function ($input) {
             return $input->schedule == 'none';
         });
-        $v->setCustomMessages([
-            'schedule.in' => 'We need either a recurring order or a one-time order.',
-            'schedule_onetime.in' => 'We need either a recurring order or a one-time order.',
-        ]);
 
-        if (!$v->valid()) {
+        if ($v->fails()) {
             return $this->edit($req);
         }
 
@@ -180,14 +179,16 @@ class OrderController extends Controller implements HasMiddleware
                         'debit-account' => $input['debit-account'],
                     ];
                 }
+
+                $customer = $this->stripe->customers->update($user->stripe_subscription, $stripeCustomerAttributes);
+                if (isset($cardToken)) {
+                    $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
+                    $customer->default_source = $card;
+                }
             }
-
-            $customer = $this->stripe->customers->update($user->stripe_subscription, $stripeCustomerAttributes);
-            $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
-            $customer->default_source = $card;
-
             $user->save();
             return $user;
         });
+        return redirect('account');
     }
 }
