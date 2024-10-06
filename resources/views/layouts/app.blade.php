@@ -31,7 +31,7 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased">
                 {{ $slot }}
             </main>
         </div>
