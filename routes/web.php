@@ -61,6 +61,7 @@ Route::middleware([
 
                 /*
                 //a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
+                //if/when revived, will probably be a livewire component like profit and expenses.
                 Route::get('/pointsale', 'newSale')->name('newsale');
                 Route::post('/pointsale', 'postNewSale')->name('postnewsale');
                 Route::get('/pointsale/{sale}/delete', 'deletePointSale')->name('deletesale');

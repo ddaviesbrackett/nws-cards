@@ -1,8 +1,20 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Console\Commands\ChargeCreditCards;
+use App\Console\Commands\DoDeadlineReminder;
+use App\Console\Commands\DoPickupReminder;
+use App\Console\Commands\GenerateOrders;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Schedule::command(GenerateOrders::class,
+                 [Carbon::now()->format('Y-m-d')])->timezone('America/Los_Angeles')->dailyAt('02:30');
+
+Schedule::command(ChargeCreditCards::class,
+                 [Carbon::now()->format('Y-m-d')])->timezone('America/Los_Angeles')->dailyAt('02:30');
+
+Schedule::command(DoDeadlineReminder::class,
+                 [Carbon::now()->format('Y-m-d')])->timezone('America/Los_Angeles')->dailyAt('02:30');
+
+Schedule::command(DoPickupReminder::class,
+                 [Carbon::now()->format('Y-m-d')])->timezone('America/Los_Angeles')->dailyAt('02:30');
