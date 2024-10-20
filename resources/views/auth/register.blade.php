@@ -6,11 +6,8 @@
         const stripeResponseHandler = function(status, response) {
             const f = document.forms[0];
             if (response.error) {
-                /*TODO
-                $form.find('.payment-errors').text(response.error.message);
-                $form.find('.payment-errors-group').show();
-                $form.find('button').prop('disabled', false);
-                */
+                f.querySelector('#payment_error').textContent = response.error.message;
+                f.querySelector('button[type="submit"]').disabled = false;
             } else {
                 // response contains id and card, which contains additional card details
                 var token = response.id;
@@ -29,6 +26,7 @@
         const formSubmit = function(ev) {
             const f = document.forms[0];
             Stripe.setPublishableKey('{{config("app.stripe_key")}}');
+            f.querySelector('#payment_error').textContent = '';
             f.querySelector('button[type="submit"]').disabled = true;
             if (f.querySelector('input[name="payment"][value="credit"]').checked) {
                 Stripe.card.createToken(f, stripeResponseHandler);
@@ -247,6 +245,7 @@
                     Credit Card
                 </x-label>
                 <div x-show="payment == 'credit'">
+                    <p class="text-sm text-red-600 dark:text-red-400" x-ref="payment_error" id="payment_error"></p>
                     <div>
                         <x-label>
                             Cardholder's Name
