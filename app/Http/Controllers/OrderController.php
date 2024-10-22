@@ -178,12 +178,14 @@ class OrderController extends Controller implements HasMiddleware
                         'debit-institution' => $input['debit-institution'],
                         'debit-account' => $input['debit-account'],
                     ];
+                    $user->last_four = substr($input['debit-account'], -4, 4);
                 }
 
                 $customer = $this->stripe->customers->update($user->stripe_subscription, $stripeCustomerAttributes);
                 if (isset($cardToken)) {
                     $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
                     $customer->default_source = $card;
+                    $user->last_four = $card->last4;
                 }
             }
             $user->save();
