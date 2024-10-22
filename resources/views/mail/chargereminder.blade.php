@@ -4,8 +4,8 @@
 This is a reminder that you'll be charged for your grocery card order {{$order->cutoffdate->chargedate()->format('l, F jS')}}.
 
 You have ordered<br>
-<b>${{$order->coop + $order->coop_onetime}}00 from Kootenay Co-op</b><br>
-<b>${{$order->saveon + $order->saveon_onetime}}00 from Save-On</b><br>
+@if($order->coop + $order->coop_onetime > 0)<b>${{$order->coop + $order->coop_onetime}}00 from Kootenay Co-op</b><br>@endif
+@if($order->saveon + $order->saveon_onetime > 0)<b>${{$order->saveon + $order->saveon_onetime}}00 from Save-On</b><br>@endif
 
 On {{$order->cutoffdate->deliverydate()->format('l, F jS')}}, your cards will be
 @if($user->deliverymethod)
@@ -17,10 +17,9 @@ On {{$order->cutoffdate->deliverydate()->format('l, F jS')}}, your cards will be
 {{$user->province}}<br>
 {{$user->postal_code}}
 @else
-<b>available to be picked up at the school</b>
-@if(($user->pickupalt))
-by you or by <b>{{$user->pickupalt}}</b>
-@endif
+<b>available to be picked up at the school</b>@if($user->pickupalt)
+ by you or by <b>{{$user->pickupalt}}</b>
+@endif.
 @endif
 
 Thank you for your support,<br>

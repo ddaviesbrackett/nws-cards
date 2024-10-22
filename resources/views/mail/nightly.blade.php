@@ -1,12 +1,11 @@
 <x-mail::message>
-# Introduction
+# Nightly processing
+<ul>
+@foreach ($model as $result)
+<li>{{$result}}</li>
+@endforeach
+</ul>
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
-
-Thanks,<br>
+From<br>
 {{ config('app.name') }}
 </x-mail::message>

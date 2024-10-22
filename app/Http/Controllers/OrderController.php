@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewConfirmation;
 use App\Models\CutoffDate;
 use App\Models\Order;
 use App\Models\SchoolClass;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use NumberFormatter;
 use Stripe\StripeClient;
 use Closure;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller implements HasMiddleware
 {
@@ -191,6 +193,7 @@ class OrderController extends Controller implements HasMiddleware
             $user->save();
             return $user;
         });
+        Mail::to($user->email, $user->name)->send(new NewConfirmation($user, true));
         return redirect('account');
     }
 }

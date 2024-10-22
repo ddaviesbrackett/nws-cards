@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\ChargeReminder;
 use App\Models\CutoffDate;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Stripe\StripeClient;
 
 class GenerateOrders extends Command
@@ -70,7 +72,7 @@ class GenerateOrders extends Command
             $user->orders()->save($order);
             $order->schoolclasses()->sync($user->schoolclasses);
 
-            //TODO send charge reminder email
+            Mail::to($user->email, $user->name)->send(new ChargeReminder($user, $order));
 
         }
         return 'orders generated for ' . $this->argument('date');

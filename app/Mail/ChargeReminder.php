@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,9 +18,9 @@ class ChargeReminder extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public User $user, public Order $order)
     {
-        //
+        
     }
 
     /**

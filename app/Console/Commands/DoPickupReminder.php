@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\PickupReminder;
 use App\Models\CutoffDate;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class DoPickupReminder extends Command
 {
@@ -35,7 +37,7 @@ class DoPickupReminder extends Command
             $user = $order->user;
             if(!$user->isMail)
             {
-                //TODO send pickup reminder email
+                Mail::to($user->email, $user->name)->send(new PickupReminder($user));
             }
         }
     }

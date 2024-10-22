@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CAFTGenerationController;
+use App\Http\Controllers\EmailPreviewController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -76,6 +77,19 @@ Route::middleware([
                     //expense add/edit done with a livewire component
                     
                     Route::delete('{id}/delete', 'deleteExpense')->name('deleteexpense');
+                });
+            
+            Route::controller(EmailPreviewController::class)
+                ->prefix('/emailPreview')
+                ->group(function(){
+                    Route::get('/chargeReminder/{id?}', 'chargeReminder');
+                    Route::get('/contact', 'contact');
+                    Route::get('/deadlineReminder/{id?}', 'deadlineReminder');
+                    Route::get('/new/{id?}', 'new');
+                    Route::get('/edit/{id?}', 'edit');
+                    Route::get('/orderbeg/{id?}', 'orderbeg');
+                    Route::get('/pickupReminder/{id?}', 'pickupReminder');
+                    Route::get('/suspend/{id?}', 'suspend');
                 });
 
             Route::get('/caftfile/{cutoffId}', [CAFTGenerationController::class, 'result'])->name('getcaftfile');

@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\DeadlineReminder;
+use App\Mail\OrderBeg;
 use App\Models\CutoffDate;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 
 class DoDeadlineReminder extends Command
 {
@@ -43,7 +46,7 @@ class DoDeadlineReminder extends Command
             ->get();
         
         foreach($users as $user) {
-            //TODO send deadline reminder email
+            Mail::to($user->email, $user->name)->send(new DeadlineReminder($user, $cutoff));
         }
 
         //politely beg users without orders to make one
@@ -54,7 +57,7 @@ class DoDeadlineReminder extends Command
             ->get();
 
         foreach($usersToBeg as $user) {
-            //TODO send order beg  email
+            Mail::to($user->email, $user->name)->send(new OrderBeg($user, $cutoff));
         }
     }
 }
