@@ -18,7 +18,7 @@ class NewConfirmation extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user, public bool $isChange = false)
+    public function __construct(public User $user, public bool $isChange = false, public string $url = '')
     {
         //
     }
