@@ -123,7 +123,7 @@
                 </div>
             </header>
         @endif
-        <div class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased">
+        <div class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{ $slot }}
         </div>
         @stack('latescripts')

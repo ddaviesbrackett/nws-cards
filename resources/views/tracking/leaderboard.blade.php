@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <h1>We've raised {{$total}} so far</h1>
-    <table class='table'>
+    <table class="table">
         <tr>
             <th></th>
             <th>Amount Raised</th>

@@ -43,7 +43,7 @@
 
     <x-validation-errors />
     <div x-data class="px-12">
-        <form method="POST" action="{{ route('register') }}" @submit="formSubmit" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <form method="POST" action="{{ route('register') }}" @submit="formSubmit">
             @csrf
             <div x-data="{order:'recurring'}">
                 <a @click="order='recurring'" :class="order == 'recurring' && 'bg-red'">Make a Recurring Order</a>

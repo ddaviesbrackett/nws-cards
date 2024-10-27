@@ -15,7 +15,7 @@
         </x-slot:responsive>
     </x-slot>
     <div>
-        <img src="/images/logo.png">
+        <img class="mx-auto" src="/images/logo.png">
         <h1>Buy Grocery Cards<br/>Raise Money</h1>
             
         <h3>

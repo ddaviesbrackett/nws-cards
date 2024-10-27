@@ -43,7 +43,7 @@
     </x-slot>
 
     <x-validation-errors />
-    <div x-data class="py-12">
+    <div x-data>
         <form method="POST" action="{{route('postEdit')}}" @submit="formSubmit" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @csrf
 
