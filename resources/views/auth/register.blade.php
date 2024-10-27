@@ -257,13 +257,13 @@
             </div>
 
             <h4>Choose Delivery</h4>
-            <div>
-                <div>
-                    <x-label>
-                        <x-input type="radio" name="deliverymethod" value="pickup" :checked="old('deliverymethod') == 'pickup'" />
-                        Pickup at the Nelson Waldorf School
-                    </x-label>
-                    <x-input-error for="deliverymethod" />
+            <div x-data="{delivery:'pickup'}">
+                <x-label>
+                    <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" :checked="old('deliverymethod') == 'pickup'" />
+                    Pickup at the Nelson Waldorf School
+                </x-label>
+                <x-input-error for="deliverymethod" />
+                <div x-cloak x-show="delivery == 'pickup'">
                     You'll have to sign for your cards. If someone else can sign for them, enter their name here.
                     <x-label>
                         Others who can pick up your cards:
@@ -276,13 +276,12 @@
                     </x-label>
                     <x-input-error for="employee" />
                 </div>
-                <div>
-                    <x-label>
-                        <x-input type="radio" name="deliverymethod" value="mail" :checked="old('deliverymethod') == 'mail'" />
-                        Mail to the address above
-                    </x-label>
-                    <x-input-error for="deliverymethod" />
-
+                <x-label>
+                    <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" :checked="old('deliverymethod') == 'mail'" />
+                    Mail to the address above
+                </x-label>
+                <x-input-error for="deliverymethod" />
+                    <div x-cloak x-show="delivery == 'mail'">
                     <x-label>
                         <x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
                         I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.
