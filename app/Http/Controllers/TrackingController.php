@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use NumberFormatter;
 
 class TrackingController extends Controller
@@ -20,19 +21,37 @@ class TrackingController extends Controller
     {
         $buckets = [];
         $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
-        foreach (SchoolClass::where('displayorder', '>=', '-1')
-            ->orderby('displayorder', 'asc')
-            ->with('orders', 'pointsales', 'expenses')
-            ->get() as $class) {
-            $raised = $class->orders->getTotalProfit() + $class->pointsales->getTotalProfit();
-            $spent = $class->expenses->sum('amount');
+
+        //watch this
+        $classes_raw = DB::select(<<<EOQ
+        with order_profit(class_id, profit) as (
+            select co.class_id, sum(profit) from classes_orders co
+            group by co.class_id
+        ),
+        pointsale_profit(class_id, profit) as (
+            select cp.class_id, sum(profit) from classes_pointsales cp
+            group by cp.class_id
+        ),
+        expenses(class_id, amount) as(
+            select exp.class_id, sum(amount) from expenses exp
+            group by exp.class_id
+        )
+        select c.id, c.name, c.bucketname, ifnull(op.profit,0) + ifnull(pp.profit,0) as raised, exp.amount as expenses from classes c
+        left join order_profit op on c.id = op.class_id
+        left join pointsale_profit pp on c.id = pp.class_id
+        left join expenses exp on c.id = exp.class_id
+        order by displayorder
+        EOQ);
+
+        foreach ($classes_raw as $class) {
             $buckets[$class->bucketname] = [
                 'nm' => $class->name,
-                'spent' => $nf->format($spent),
-                'raised' => $nf->format($raised),
-                'available' => $nf->format($raised - $spent),
+                'spent' => $nf->format($class->expenses),
+                'raised' => $nf->format($class->raised),
+                'available' => $nf->format($class->raised - $class->expenses),
             ];
         }
+
         return view('tracking.leaderboard', [
             'total' => $nf->format(SchoolClass::profitSince(new Carbon('2010-01-01'))),
             'buckets' => $buckets
