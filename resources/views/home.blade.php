@@ -24,7 +24,7 @@
             Help us raise more &mdash; <em>without spending any extra!</em>
         </h3>
         <br>
-        <img src="https://grocerycards.nelsonwaldorf.org/images/saveon-coop.png" title="Save On Foods and Coop">
+        <img class="mx-auto" src="/images/saveon-coop.png" title="Save On Foods and Coop">
         
         <br>
             
