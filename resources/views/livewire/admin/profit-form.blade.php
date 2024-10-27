@@ -1,4 +1,4 @@
-<div>
+<div class="px-4 py-2">
     <x-validation-errors class="mb-4" />
     <form wire:submit="save" x-data>
         @csrf
