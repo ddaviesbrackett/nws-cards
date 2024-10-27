@@ -150,7 +150,7 @@
                     <x-input-error for="debit-account" />
                     <x-label>
                         <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
-                        I have read and agree to the <a href="#TODO">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
+                        I have read and agree to the <a @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
                     </x-label>
                     <x-input-error for="debit-terms" />
                 </div>
@@ -229,7 +229,12 @@
                     <x-input-error for="mailwaiver" />
                 </div>
             </div>
-
+            <dialog id="debit-terms-dialog" class="border-solid border-2 border-gray-700 dark:border-gray-300 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 shadow px-4 py-4" x-data>
+                <x-debit-terms />
+                <x-button type="button" @click.prevent="document.querySelector('dialog#debit-terms-dialog').close()">
+                    OK
+                </x-button>
+            </dialog>
             <div>
                 <x-button>Edit order</x-button>
             </div>

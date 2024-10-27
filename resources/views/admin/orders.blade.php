@@ -1,6 +1,6 @@
 <x-app-layout>
     <h1>Order list</h1>
-    <dialog id="profit-dialog">
+    <dialog id="profit-dialog" class="border-solid border-2 border-gray-700 dark:border-gray-300 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 shadow">
         <livewire:admin.profit-form dialog-id="profit-dialog" />
     </dialog>
     <table class='table'>

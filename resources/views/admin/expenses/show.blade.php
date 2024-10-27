@@ -1,6 +1,6 @@
 <x-app-layout>
     <h1>Expenses</h1>
-    <dialog id="expense-dialog">
+    <dialog id="expense-dialog" class="border-solid border-2 border-gray-700 dark:border-gray-300 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 shadow">
         <livewire:admin.expense-form dialog-id="expense-dialog" />
     </dialog>
     <x-button id="add">Add Expense</x-button>
