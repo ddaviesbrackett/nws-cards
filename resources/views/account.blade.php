@@ -52,12 +52,6 @@
             @endif
 
             @if($user->schedule != 'none' || $user->schedule_onetime != 'none')
-                Supporting:
-                <ul>
-                    @foreach ($user->schoolclasses as $class)
-                        <li><b><a href="/tracking/{{$class->name}}">{{$class->name}}</a></b></li>
-                    @endforeach
-                </ul>
                 <p>
                     Your cards are being
                     @if($user->deliverymethod)

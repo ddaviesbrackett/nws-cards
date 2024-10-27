@@ -3,7 +3,6 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use App\Utilities\OrderUtilities;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -14,13 +13,8 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
-    private OrderUtilities $utils;
-    private StripeClient $stripe;
-
-    public function __construct(OrderUtilities $utils, StripeClient $stripe)
+    public function __construct( private StripeClient $stripe)
     {
-        $this->utils = $utils;
-        $this->stripe = $stripe;
     }
 
     /**
@@ -52,7 +46,6 @@ class CreateNewUser implements CreatesNewUsers
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
-            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->utils->choosableBuckets()->join(','),
         ], [
             'phone' => 'Please enter a valid phone number.',
             'debit-transit.required_if' => 'branch number is required.',
@@ -69,7 +62,6 @@ class CreateNewUser implements CreatesNewUsers
             'coop_onetime.min' => 'You need to order at least one card.',
             'schedule.not_in' => 'Choose a delivery date',
             'schedule_onetime.not_in' => 'Choose a delivery date',
-            'schoolclasslist' => 'Please correct your chosen supported classes',
         ]);
         $v->sometimes('schedule', 'not_in:none', function ($input) {
             return $input['saveon'] > 0 ||
@@ -135,13 +127,6 @@ class CreateNewUser implements CreatesNewUsers
                 'pickupalt'        => $input['pickupalt'] ?? '',
                 'employee'         => array_key_exists('employee', $input),
             ]);
-
-            $classlist = collect($input['schoolclasslist'] ?? []);
-            $classlist->add('tuitionreduction');
-            $classlist->add('pac');
-            $user->schoolclasses()->sync($classlist->map(function ($value, $key) {
-                return $this->utils->idFromBucket($value);
-            }));
 
             $cardToken = null;
             if (isset($input['stripeToken'])) {

@@ -9,7 +9,6 @@
         <tr>
             <th></th>
             <th>Amount Raised</th>
-            <th>Supporters</th>
             <th>Expenses</th>
             <th>Funds Available</th>
         </tr>
@@ -17,7 +16,6 @@
             <tr>
                 <td><a href="/tracking/{{$name}}">{{$vals['nm']}}</a></td>
                 <td>{{$vals['raised']}}</td>
-                <td>{{$vals['count']}}</td>
                 <td>{{$vals['spent']}}</td>
                 <td>{{$vals['available']}}</td>
             </tr>

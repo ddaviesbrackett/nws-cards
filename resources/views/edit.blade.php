@@ -111,30 +111,6 @@
                 </div>
             </div>
 
-            <h4>Decide Who to Support</h4>
-            <div>
-                <x-label>
-                    <x-input type="radio" name="indiv-class" value="school" :checked="old('indiv-class', $user->what) == 'school'" />
-                    Whole School
-                </x-label>
-                <x-label>
-                    <x-input type="radio" name="indiv-class" value="class" :checked="old('indiv-class', $user->what) == 'class'" />
-                    <span class="font-bold">Class(es)</span> and whole school
-                </x-label>
-                <x-input-error for="indiv-class" />
-            </div>
-            <div>
-                If you select more than one class, proceeds will be divided equally between the classes.
-            </div>
-            <div>
-                @foreach($classes as $cl)
-                <x-label>
-                    {{$cl['name']}}
-                    <x-input type="checkbox" name="schoolclasslist[]" :value="$cl['bucketname']" :checked="collect(old('schoolclasslist', $user->schoolclasses->pluck('bucketname')))->contains($cl['bucketname'])" />
-                </x-label>
-                @endforeach
-                <x-input-error for="schoolclasslist" />
-            </div>
             <div>
                 <x-label>
                     Referring Family

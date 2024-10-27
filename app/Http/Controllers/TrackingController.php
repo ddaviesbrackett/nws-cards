@@ -22,14 +22,13 @@ class TrackingController extends Controller
         $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
         foreach (SchoolClass::where('displayorder', '>=', '-1')
             ->orderby('displayorder', 'asc')
-            ->with('orders', 'pointsales', 'expenses', 'users')
+            ->with('orders', 'pointsales', 'expenses')
             ->get() as $class) {
             $raised = $class->orders->getTotalProfit() + $class->pointsales->getTotalProfit();
             $spent = $class->expenses->sum('amount');
             $buckets[$class->bucketname] = [
                 'nm' => $class->name,
                 'spent' => $nf->format($spent),
-                'count' => $class->users->count(),
                 'raised' => $nf->format($raised),
                 'available' => $nf->format($raised - $spent),
             ];

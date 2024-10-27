@@ -88,11 +88,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(CutoffDate::class, 'orders');
     }
 
-    public function schoolclasses(): BelongsToMany
-    {
-        return $this->belongsToMany(SchoolClass::class, 'classes_users', 'user_id', 'class_id')->orderBy('displayorder');
-    }
-
     public function isAdmin(): bool
     {
         return $this->isadmin == 1;

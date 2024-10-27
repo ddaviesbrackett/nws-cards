@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Mail\ChargeReminder;
 use App\Models\CutoffDate;
 use App\Models\Order;
+use App\Models\SchoolClass;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -70,7 +71,7 @@ class GenerateOrders extends Command
             }
             $order->cutoffdate()->associate($cutoff);
             $user->orders()->save($order);
-            $order->schoolclasses()->sync($user->schoolclasses);
+            $order->schoolclasses()->sync(SchoolClass::current());
 
             Mail::to($user->email, $user->name)->send(new ChargeReminder($user, $order));
 

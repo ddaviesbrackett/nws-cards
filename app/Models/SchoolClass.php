@@ -19,9 +19,9 @@ class SchoolClass extends Model
         'bucketname',
     ];
 
-    public static function choosable() : Collection
+    public static function current() : Collection
     {
-        return SchoolClass::where('displayorder', '>', 0)->orderBy('displayorder', 'asc')->get();
+        return SchoolClass::where('current', True)->orderBy('displayOrder', 'asc')->get();
     }
 
     public static function profitSince( Carbon $since) : float
@@ -62,10 +62,5 @@ class SchoolClass extends Model
     public function orders() : BelongsToMany
     {
         return $this->belongsToMany(Order::class, 'classes_orders', 'class_id', 'order_id')->withPivot('profit');
-    }
-
-    public function users() : BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'classes_users', 'class_id', 'user_id');
     }
 }

@@ -21,14 +21,8 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller implements HasMiddleware
 {
-
-    private OrderUtilities $utils;
-    private StripeClient $stripe;
-
-    public function __construct(OrderUtilities $utils, StripeClient $stripe)
+    public function __construct(private StripeClient $stripe)
     {
-        $this->utils = $utils;
-        $this->stripe = $stripe;
     }
 
     public static function middleware(): array
@@ -63,8 +57,7 @@ class OrderController extends Controller implements HasMiddleware
     {
         $user = $req->user();
         return view('edit', [
-            'user' => $user,
-            'classes' => SchoolClass::choosable(),
+            'user' => $user
         ]);
     }
 
@@ -85,7 +78,6 @@ class OrderController extends Controller implements HasMiddleware
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
-            'schoolclasslist.*' => 'string|in:tuitionreduction,pac,' . $this->utils->choosableBuckets()->join(','),
         ], [
             'schedule.in' => 'We need either a recurring order or a one-time order.',
             'schedule_onetime.in' => 'We need either a recurring order or a one-time order.',
@@ -103,7 +95,6 @@ class OrderController extends Controller implements HasMiddleware
             'coop_onetime.min' => 'Please order at least one card.',
             'schedule.not_in' => 'Choose a delivery date',
             'schedule_onetime.not_in' => 'Choose a delivery date',
-            'schoolclasslist' => 'Please correct your chosen supported classes',
         ]);
 
         $v->sometimes('schedule', 'not_in:none', function ($input) {
@@ -159,12 +150,6 @@ class OrderController extends Controller implements HasMiddleware
             $user->pickupalt = $input['pickupalt'] ?? '';
             $user->employee = array_key_exists('employee', $input);
 
-            $classlist = collect($input['schoolclasslist'] ?? []);
-            $classlist->add('tuitionreduction');
-            $classlist->add('pac');
-            $user->schoolclasses()->sync($classlist->map(function ($value, $key) {
-                return $this->utils->idFromBucket($value);
-            }));
             if ($input['payment'] != 'keep') {
                 $cardToken = null;
                 if (isset($input['stripeToken'])) {
