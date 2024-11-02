@@ -45,67 +45,32 @@
     <div x-data class="px-12">
         <form method="POST" action="{{ route('register') }}" @submit="formSubmit">
             @csrf
-            <div x-data="{order:'recurring'}">
-                <a @click="order='recurring'" :class="order == 'recurring' && 'bg-red'">Make a Recurring Order</a>
-                <a @click="order='onetime'" :class="order == 'onetime' && 'bg-red'">Make a One-Time Order</a>
-                <div x-show="order=='recurring'">
-                    <div>
-                        <x-label>
-                            Kootenay Co-op:
-                            <x-input type="number" id="coop" name="coop" :value="old('coop', 0)" /> x $100
-                        </x-label>
-                        <x-input-error for="coop" />
-                    </div>
-
-                    <div>
-                        <x-label>
-                            Save-On:
-                            <x-input type="number" id="saveon" name="saveon" :value="old('saveon', 0)" /> x $100
-                        </x-label>
-                        <x-input-error for="saveon" />
-                    </div>
-
-                    <div>
-                        <x-label>
-                            <x-input type="radio" name="schedule" value="monthly" :checked="old('schedule') == 'monthly' || (old('schedule') == null)" />
-                            Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
-                        </x-label>
-                        <x-label>
-                            <x-input type="radio" name="schedule" value="none" :checked="old('schedule') == 'none'" />
-                            I don't want a recurring order
-                        </x-label>
-                        <x-input-error for="schedule" />
-                    </div>
+            <div x-data="{ordertype:'{{old('ordertype', 'monthly')}}',
+                        saveon:{{old('saveon', 0)}},
+                        coop:{{old('coop', 0)}}}">
+                <div>
+                    <x-label>
+                        Kootenay Co-op:
+                        <x-input type="number" id="coop" name="coop" x-model="coop" /> x $100
+                    </x-label>
+                    <x-input-error for="coop" />
                 </div>
-                <div x-show="order=='onetime'">
-                    <div>
-                        <x-label>
-                            Kootenay Co-op:
-                            <x-input type="number" id="coop_onetime" name="coop_onetime" :value="old('coop_onetime', 0)" /> x $100
-                        </x-label>
-                        <x-input-error for="coop_onetime" />
-                    </div>
-
-                    <div>
-                        <x-label>
-                            Save-On:
-                            <x-input type="number" id="saveon_onetime" name="saveon_onetime" :value="old('saveon_onetime', 0)" /> x $100
-                        </x-label>
-                        <x-input-error for="saveon_onetime" />
-                    </div>
-
-                    <div>
-                        <x-label>
-                            <x-input type="radio" name="schedule_onetime" value="monthly" :checked="old('schedule_onetime') == 'monthly'" />
-                            On <span class="font-bold">{{$dates['delivery']}}</span>
-                        </x-label>
-                        <x-label>
-                            <x-input type="radio" name="schedule_onetime" value="none" :checked="old('schedule_onetime') == 'none' || (old('schedule_onetime') == null)" />
-                            I don't want a one-time order
-                        </x-label>
-                        <x-input-error for="schedule_onetime" />
-                    </div>
+                <div>
+                    <x-label>
+                        Save-On:
+                        <x-input type="number" id="saveon" name="saveon" x-model="saveon" /> x $100
+                    </x-label>
+                    <x-input-error for="saveon" />
                 </div>
+                <x-label>
+                    <x-input type="radio" name="ordertype" value="monthly" x-model="ordertype" />
+                    Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
+                </x-label>
+                <x-label>
+                    <x-input type="radio" name="ordertype" value="onetime" x-model="ordertype" />
+                    Just once, on <span class="font-bold">{{$dates['delivery']}}</span>
+                </x-label>
+                <x-input-error for="schedule" />
             </div>
             <h4>Your Details</h4>
             <div>
@@ -175,13 +140,6 @@
                     <x-input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
                 </x-label>
                 <x-input-error for="password_confirmation" />
-            </div>
-            <div>
-                <x-label>
-                    Referring Family
-                    <x-input type="text" name="referrer" :value="old('referrer')" />
-                </x-label>
-                <x-input-error for="referrer" />
             </div>
 
             <h4>Payment</h4>
@@ -257,9 +215,9 @@
             </div>
 
             <h4>Choose Delivery</h4>
-            <div x-data="{delivery:'pickup'}">
+            <div x-data="{delivery:'{{old('deliverymethod','pickup')}}'}">
                 <x-label>
-                    <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" :checked="old('deliverymethod') == 'pickup'" />
+                    <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
                     Pickup at the Nelson Waldorf School
                 </x-label>
                 <x-input-error for="deliverymethod" />
@@ -277,7 +235,7 @@
                     <x-input-error for="employee" />
                 </div>
                 <x-label>
-                    <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" :checked="old('deliverymethod') == 'mail'" />
+                    <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
                     Mail to the address above
                 </x-label>
                 <x-input-error for="deliverymethod" />

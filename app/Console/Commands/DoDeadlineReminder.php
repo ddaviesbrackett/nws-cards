@@ -38,11 +38,7 @@ class DoDeadlineReminder extends Command
 
         //remind people with orders of the deadline to change their order
         $users = User::where('stripe_active', 1)
-            ->where(function (Builder $q)
-            {
-                $q->where('schedule', 'monthly')
-                    ->orWhere('schedule_onetime', 'monthly');
-            })
+            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
             ->get();
         
         foreach($users as $user) {
@@ -51,8 +47,7 @@ class DoDeadlineReminder extends Command
 
         //politely beg users without orders to make one
         $usersToBeg = User::where('stripe_active', 1)
-            ->where('schedule', 'none')
-            ->where('schedule_onetime', 'none')
+            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime = 0')
             ->where('no_beg', '<>', 1)
             ->get();
 

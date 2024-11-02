@@ -61,12 +61,8 @@ class OrderController extends Controller implements HasMiddleware
     {
         $input = $req->input();
         $v = Validator::make($input, [
-            'schedule'    => 'in:none,monthly',
-            'schedule_onetime'    => 'in:none,monthly',
             'saveon'    => 'integer|digits_between:1,2',
             'coop'        => 'integer|digits_between:1,2',
-            'saveon_onetime'    => 'integer|digits_between:1,2',
-            'coop_onetime'        => 'integer|digits_between:1,2',
             'payment'    => 'required|in:debit,credit,keep',
             'debit-transit'        => 'required_if:payment,debit|nullable|digits:5',
             'debit-institution'    => 'required_if:payment,debit|nullable|digits:3',
@@ -74,59 +70,53 @@ class OrderController extends Controller implements HasMiddleware
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
+            'ordertype' => 'required|in:monthly,onetime',
         ], [
-            'schedule.in' => 'Invalid schedule.',
-            'schedule_onetime.in' => 'Invalid one-time schedule.',
             'debit-transit.required_if' => 'Branch number is required.',
             'debit-institution.required_if' => 'Institution is required.',
             'debit-account.required_if' => 'Account number is required.',
             'debit-terms.required_if' => 'You must agree to the terms to pay by pre-authorized debit.',
             'saveon.required' => 'Please order at least one card.',
             'coop.required' => 'Please order at least one card.',
-            'saveon_onetime.required' => 'Please order at least one card.',
-            'coop_onetime.required' => 'Please order at least one card.',
             'saveon.min' => 'Please order at least one card.',
             'coop.min' => 'Please order at least one card.',
-            'saveon_onetime.min' => 'Please order at least one card.',
-            'coop_onetime.min' => 'Please order at least one card.',
         ]);
 
-        //rules for order amounts are complicated.  They can't both be 0 if they have a schedule
-        $orderRequired = function ($schedulefield, $field, $other) use ($v, $input) {
-            if (($input[$schedulefield] == 'biweekly' ||
-                    $input[$schedulefield] == 'monthly' ||
-                    $input[$schedulefield] == 'monthly-second')
-                &&
-                ($input[$other] == '' || $input[$other] == '0')
-            ) {
-                $v->addRules([$field => 'required|min:1']);
+        //order amounts can't both be zero
+        $orderRequired = function ($field, $other) use ($v, $input) {
+            if ($input[$other] == '' || $input[$other] == '0') {
+                $v->addRules($field, 'required|min:1');
             } else {
-                $v->addRules([$field => 'min:0']);
+                $v->addRules($field, 'min:0');
             }
         };
 
-        $orderRequired('schedule', 'saveon', 'coop');
-        $orderRequired('schedule', 'coop', 'saveon');
-        $orderRequired('schedule_onetime', 'saveon_onetime', 'coop_onetime');
-        $orderRequired('schedule_onetime', 'coop_onetime', 'saveon_onetime');
+        $orderRequired('saveon', 'coop');
+        $orderRequired('coop', 'saveon');
        
         $v->validate();
 
         $user = $req->user();
         DB::transaction(function () use ($user, $input) {
-            $user->saveon = $input['saveon'];
-            $user->coop = $input['coop'];
-            $user->schedule = $input['schedule'];
-            $user->saveon_onetime = $input['saveon_onetime'];
-            $user->coop_onetime = $input['coop_onetime'];
-            $user->schedule_onetime = $input['schedule_onetime'];
-            $user->payment = $input['payment'] == 'credit' ? 1 : 0;
+            $user->saveon = 0;
+            $user->coop = 0;
+            $user->saveon_onetime = 0;
+            $user->coop_onetime  = 0;
+            
+            if($input['ordertype'] == 'monthly') {
+                $user->saveon = $input['saveon'];
+                $user->coop = $input['coop'];
+            }
+            else if($input['ordertype'] == 'onetime') {
+                $user->saveon_onetime = $input['saveon'];
+                $user->coop_onetime = $input['coop'];
+            }
             $user->deliverymethod = $input['deliverymethod'] == 'mail' ? 1 : 0;
-            $user->referrer = $input['referrer'] ?? '';
             $user->pickupalt = $input['pickupalt'] ?? '';
             $user->employee = array_key_exists('employee', $input);
 
             if ($input['payment'] != 'keep') {
+                $user->payment = $input['payment'] == 'credit' ? 1 : 0;
                 $cardToken = null;
                 if (isset($input['stripeToken'])) {
                     $cardToken = $input['stripeToken'];
@@ -144,7 +134,7 @@ class OrderController extends Controller implements HasMiddleware
                     $user->last_four = substr($input['debit-account'], -4, 4);
                 }
 
-                $customer = $this->stripe->customers->update($user->stripe_subscription, $stripeCustomerAttributes);
+                $customer = $this->stripe->customers->update($user->stripe_id, $stripeCustomerAttributes);
                 if (isset($cardToken)) {
                     $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
                     $customer->default_source = $card;

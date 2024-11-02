@@ -39,7 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'postal_code',
         'saveon',
         'coop',
-        'schedule',
         'saveon_onetime',
         'coop_onetime',
         'payment',
@@ -119,36 +118,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isCreditcard(): bool
     {
         return $this->payment == 1;
-    }
-
-    public function schedule(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $val) => $val == 'none'?'none':'monthly', //collapse monthly-second and biweekly schedules to monthly
-        );
-    }
-
-    public function scheduleOnetime(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $val) => $val == 'none'?'none':'monthly', //collapse monthly-second and biweekly schedules to monthly
-        );
-    }
-
-    public function getFriendlySchedule(): string
-    {
-        switch ($this->schedule) {
-                /*case 'biweekly':
-                return 'Bi-weekly';*/
-            case 'monthly':
-                return 'Monthly';
-                /*case 'monthly-second':
-                return 'Monthly';*/
-            case 'none':
-                return 'Never';
-            default:
-                throw new Exception("Invalid schedule");
-                break;
-        }
     }
 }

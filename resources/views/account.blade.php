@@ -20,10 +20,10 @@
                 <hr/>
             @endif
 
-            @if( $user->saveon + $user->coop > 0 && $user->schedule != 'none')
+            @if( $user->saveon + $user->coop > 0 )
                 <h2>Your recurring order</h2>
                 <p>
-                    You have a <b style="text-transform:capitalize;">{{$user->getFriendlySchedule()}}</b> order of<br/>
+                    You have a <b style="text-transform:capitalize;">monthly</b> order of<br/>
                     @if($user->coop > 0)
                         <b>${{$user->coop}}00 from Kootenay Co-op</b><br/>
                     @endif
@@ -36,7 +36,7 @@
             @else
                 <p>You have no recurring order. You'll make more money for the school if you order more cards!</p>
             @endif
-            @if($user->saveon_onetime + $user->coop_onetime > 0 && $user->schedule_onetime != 'none')
+            @if($user->saveon_onetime + $user->coop_onetime > 0)
                 <h2>Onetime order</h2>
                 <p>
                     You have a <b style="text-transform:capitalize;">one-time</b> order of<br/>
@@ -51,7 +51,7 @@
                 <p>Your cards will be available on <b>{{$dates['delivery']}}</b>.</p>
             @endif
 
-            @if($user->schedule != 'none' || $user->schedule_onetime != 'none')
+            @if($user->saveon + $user->coop + $user->saveon_onetime + $user->coop_onetime > 0)
                 <p>
                     Your cards are being
                     @if($user->deliverymethod)

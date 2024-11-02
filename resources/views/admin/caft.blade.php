@@ -15,7 +15,6 @@
                 <th>Transit</th>
                 <th>Name</th>
                 <th>Amount</th>
-                <th>Frequency</th>
                 <th>Has One-Time Order?</th>
             </tr>
             @foreach($bucket as $info)
@@ -25,7 +24,6 @@
                     <td>{{{$info['transit']}}}</td>
                     <td>{{{$info['order']->user->name}}}</td>
                     <td>${{{$info['order']->totalCards()}}}00</td>
-                    <td>{{{$info['order']->user->schedule}}}</td>
                     <td>{{{$info['order']->hasOnetime()?'YES':''}}}</td>
                 </tr>
             @endforeach

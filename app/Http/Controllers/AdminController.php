@@ -90,19 +90,14 @@ class AdminController extends Controller implements HasMiddleware
             'Unchanged' => [],
         ];
         $total = 0;
-        $bicutoff = null;
-        $mcutoff = null;
-        if($cutoffId > 2) {
-            $bicutoff = CutoffDate::find($cutoffId - 1)->cutoffdate()->tz('UTC');
-            $mcutoff = CutoffDate::find($cutoffId - 2)->cutoffdate()->tz('UTC');
-        }
+
         foreach($orders as $order) {
             $user = $order->user;    
             $stripeCustomer = $stripeClient->customers->retrieve($user->stripe_id);
             $total += $order->totalCards();
             if($cutoffId > 2) {
-                $cutoff = $user->schedule == 'biweekly' ? $bicutoff : $mcutoff;
-                $bucket = ($cutoff->lt($user->created_at) ? 'New' : ($cutoff->lt($user->updated_at) ? 'Updated' : 'Unchanged'));
+                $prevcutoff = CutoffDate::find($cutoffId - 1)->cutoffdate()->tz('UTC');
+                $bucket = ($prevcutoff->lt($user->created_at) ? 'New' : ($prevcutoff->lt($user->updated_at) ? 'Updated' : 'Unchanged'));
             }
             else {
                 $bucket = 'New';

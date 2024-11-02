@@ -39,16 +39,7 @@ class GenerateOrders extends Command
         if(! $cutoff->orders->isEmpty()) return 'orders already generated for this date';
 
         $users = User::where('stripe_active', '=', 1)
-            ->orWhere(function(Builder $q) {
-                $q->where('schedule', '=', 'monthly')
-                  ->orWhere('scheduleonetime', '=', 'monthly');
-            })
-            ->orWhere(function(Builder $q) {
-                $q->where('saveon', '>', 0)
-                  ->orWhere('coop', '>', 0)
-                  ->orWhere('saveon_onetime', '>', 0)
-                  ->orWhere('coop_onetime', '>', 0);
-            })
+            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
             ->get();
 
         foreach($users as $user){
@@ -57,18 +48,15 @@ class GenerateOrders extends Command
                 'payment' => $user->payment,
                 'deliverymethod' => $user->deliverymethod,
             ]);
-            if($user->schedule == 'monthly') {
-                $order->coop = $user->coop;
-                $order->saveon = $user->saveon;
-            }
-            if($user->schhedule_onetime == 'monthly') {
-                $order->coop_onetime = $user->coop_onetime;
-                $order->saveon_onetime = $user->saveon_onetime;
-                $user->coop_onetime = 0;
-                $user->saveon_onetime = 0;
-                $user->schedule_onetime = 'none';
-                $user->save();
-            }
+            
+            $order->coop = $user->coop;
+            $order->saveon = $user->saveon;
+            $order->coop_onetime = $user->coop_onetime;
+            $order->saveon_onetime = $user->saveon_onetime;
+            $user->coop_onetime = 0;
+            $user->saveon_onetime = 0;
+            $user->save();
+
             $order->cutoffdate()->associate($cutoff);
             $user->orders()->save($order);
             $order->schoolclasses()->sync(SchoolClass::current());

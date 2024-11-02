@@ -33,12 +33,8 @@ class CreateNewUser implements CreatesNewUsers
             'address1'    => 'required_if:deliverymethod,mail',
             'city'        => 'required_if:deliverymethod,mail',
             'postal_code'    => 'required_if:deliverymethod,mail|regex:/^\w\d\w ?\d\w\d$/',
-            'schedule'    => 'in:none,monthly',
-            'schedule_onetime'    => 'in:none,monthly',
             'saveon'    => 'integer|digits_between:1,2',
             'coop'        => 'integer|digits_between:1,2',
-            'saveon_onetime'    => 'integer|digits_between:1,2',
-            'coop_onetime'        => 'integer|digits_between:1,2',
             'payment'    => 'required|in:debit,credit',
             'debit-transit'        => 'required_if:payment,debit|nullable|digits:5',
             'debit-institution'    => 'required_if:payment,debit|nullable|digits:3',
@@ -46,6 +42,7 @@ class CreateNewUser implements CreatesNewUsers
             'debit-terms'     => 'required_if:payment,debit|nullable',
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
+            'ordertype' => 'required|in:monthly,onetime',
         ], [
             'phone' => 'Please enter a valid phone number.',
             'debit-transit.required_if' => 'branch number is required.',
@@ -54,32 +51,22 @@ class CreateNewUser implements CreatesNewUsers
             'debit-terms.required_if' => 'You must agree to the terms to pay by pre-authorized debit.',
             'saveon.required' => 'You need to order at least one card.',
             'coop.required' => 'You need to order at least one card.',
-            'saveon_onetime.required' => 'You need to order at least one card.',
-            'coop_onetime.required' => 'You need to order at least one card.',
             'saveon.min' => 'You need to order at least one card.',
             'coop.min' => 'You need to order at least one card.',
-            'saveon_onetime.min' => 'You need to order at least one card.',
-            'coop_onetime.min' => 'You need to order at least one card.',
+            'mailwaiver.required_if' => 'Please release PAC of liability for mailing your order.'
         ]);
 
-        //rules for order amounts are complicated.  They can't both be 0 if they have a schedule
-        $orderRequired = function ($schedulefield, $field, $other) use ($v, $input) {
-            if (($input[$schedulefield] == 'biweekly' ||
-                    $input[$schedulefield] == 'monthly' ||
-                    $input[$schedulefield] == 'monthly-second')
-                &&
-                ($input[$other] == '' || $input[$other] == '0')
-            ) {
+        //order amounts can't both be zero
+        $orderRequired = function ($field, $other) use ($v, $input) {
+            if ($input[$other] == '' || $input[$other] == '0') {
                 $v->addRules($field, 'required|min:1');
             } else {
                 $v->addRules($field, 'min:0');
             }
         };
 
-        $orderRequired('schedule', 'saveon', 'coop');
-        $orderRequired('schedule', 'coop', 'saveon');
-        $orderRequired('schedule_onetime', 'saveon_onetime', 'coop_onetime');
-        $orderRequired('schedule_onetime', 'coop_onetime', 'saveon_onetime');
+        $orderRequired('saveon', 'coop');
+        $orderRequired('coop', 'saveon');
 
         $v->validate();
 
@@ -94,18 +81,24 @@ class CreateNewUser implements CreatesNewUsers
                 'city'             => $input['city'] ?? '',
                 'province'         => 'BC',
                 'postal_code'      => $input['postal_code'] ?? '',
-                'saveon'           => $input['saveon'],
-                'coop'             => $input['coop'],
-                'schedule'         => $input['schedule'],
-                'saveon_onetime'   => $input['saveon_onetime'],
-                'coop_onetime'     => $input['coop_onetime'],
-                'schedule_onetime' => $input['schedule_onetime'],
+                'saveon'           => 0,
+                'coop'             => 0,
+                'saveon_onetime'   => 0,
+                'coop_onetime'     => 0,
                 'payment'          => $input['payment'] == 'credit' ? 1 : 0,
                 'deliverymethod'   => $input['deliverymethod'] == 'mail' ? 1 : 0,
-                'referrer'         => $input['referrer'] ?? '',
                 'pickupalt'        => $input['pickupalt'] ?? '',
                 'employee'         => array_key_exists('employee', $input),
             ]);
+
+            if($input['ordertype'] == 'monthly') {
+                $user->saveon = $input['saveon'];
+                $user->coop = $input['coop'];
+            }
+            else if($input['ordertype'] == 'onetime') {
+                $user->saveon_onetime = $input['saveon'];
+                $user->coop_onetime = $input['coop'];
+            }
 
             $cardToken = null;
             if (isset($input['stripeToken'])) {
@@ -131,7 +124,7 @@ class CreateNewUser implements CreatesNewUsers
                 $user->last_four = $card->last4;
             }
 
-            $user->stripe_subscription = $customer->id;
+            $user->stripe_id = $customer->id;
             $user->save();
             return $user;
         });
