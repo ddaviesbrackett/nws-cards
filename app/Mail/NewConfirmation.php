@@ -52,7 +52,9 @@ class NewConfirmation extends Mailable
      */
     public function attachments(): array
     {
-        if ($this->user->isCreditcard() || $this->user->saveon + $this->user->coop + $this->user->saveon_onetime + $this->user->coop_onetime == 0) return [];
+        if ($this->user->isCreditcard() || 
+            $this->user->saveon + $this->user->coop + $this->user->saveon_onetime + $this->user->coop_onetime == 0 ||
+            ($this->user->schedule == 'none' && $this->user->schedule_onetime == 'none')) return [];
         
         return [
             Attachment::fromData(function () {
