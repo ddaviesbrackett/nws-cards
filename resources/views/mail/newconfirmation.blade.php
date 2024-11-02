@@ -1,13 +1,13 @@
 <x-mail::message>
 # Hi {{$user->name}},
-Thank you very much for your grocery card order.  This email is to confirm {{$isChange?"the changes you just made to ":""}}your order and to verify your email address. 
-
+Thank you very much for your grocery card order.  This email is to confirm {{$isChange?"the changes you just made to ":""}}your order{{!is_null($url)?" and to verify your email address":""}}. 
+@if(!is_null($url))
 Please click the button below to verify your email address. 
 
 <x-mail::button :url="$url">
 Verify Email Address
 </x-mail::button>
-
+@endif
 If you did not make an order or update your email address, no further action is required.
 
 You can change your order at <a href="{{ config('app.url') }}/edit">{{ config('app.url') }}/edit</a>.
