@@ -31,7 +31,7 @@ class NewConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Confirmation',
+            subject: 'Your Nelson Waldorf School Grocery card order',
         );
     }
 
@@ -52,7 +52,7 @@ class NewConfirmation extends Mailable
      */
     public function attachments(): array
     {
-        if ($this->user->isCreditcard()) return [];
+        if ($this->user->isCreditcard() || $this->user->saveon + $this->user->coop + $this->user->saveon_onetime + $this->user->coop_onetime == 0) return [];
         
         return [
             Attachment::fromData(function () {

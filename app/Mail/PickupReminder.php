@@ -28,7 +28,7 @@ class PickupReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pickup Reminder',
+            subject: 'Your Grocery Cards will be ready to be picked up',
         );
     }
 

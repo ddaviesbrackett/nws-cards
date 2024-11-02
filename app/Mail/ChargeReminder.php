@@ -29,7 +29,7 @@ class ChargeReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Charge Reminder',
+            subject: 'You\'ll be charged for your grocery cards soon',
         );
     }
 
