@@ -7,9 +7,11 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\View;
 
 class NewConfirmation extends Mailable
 {
@@ -50,6 +52,13 @@ class NewConfirmation extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        if ($this->user->isCreditcard()) return [];
+        
+        return [
+            Attachment::fromData(function () {
+                $agreementView = View::make('components.debit-terms');
+                return "<html><body>{$agreementView->render()}</body></html>'";
+            }, 'debitagreement.html')->withMime('text/html')
+        ];
     }
 }

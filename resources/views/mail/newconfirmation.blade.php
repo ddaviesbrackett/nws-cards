@@ -11,7 +11,7 @@ Verify Email Address
 If you did not make an order or update your email address, no further action is required.
 
 You can change your order at <a href="{{ config('app.url') }}/edit">{{ config('app.url') }}/edit</a>.
-Log in with this email address and the password you signed up with. (Forgot your password? You can reset it at the login screen.)</p>
+Log in with this email address and the password you signed up with. (Forgot your password? You can reset it at the login screen.)
 
 @if($user->saveon + $user->coop > 0 && $user->schedule != 'none')
 You are currently ordering<br>
@@ -44,6 +44,10 @@ Your cards will be
 by you or by <b>{{{$user->pickupalt}}}</b>
 @endif.
 @endif
+@endif
+
+@if(!$user->isCreditCard())
+The terms of your debit agreement with the school are attached to this email.
 @endif
 
 Thanks,<br>
