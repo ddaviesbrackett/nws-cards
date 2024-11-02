@@ -33,8 +33,8 @@ class CreateNewUser implements CreatesNewUsers
             'address1'    => 'required_if:deliverymethod,mail',
             'city'        => 'required_if:deliverymethod,mail',
             'postal_code'    => 'required_if:deliverymethod,mail|regex:/^\w\d\w ?\d\w\d$/',
-            'schedule'    => 'in:none,biweekly,monthly,monthly-second',
-            'schedule_onetime'    => 'in:none,monthly,monthly-second',
+            'schedule'    => 'in:none,monthly',
+            'schedule_onetime'    => 'in:none,monthly',
             'saveon'    => 'integer|digits_between:1,2',
             'coop'        => 'integer|digits_between:1,2',
             'saveon_onetime'    => 'integer|digits_between:1,2',
@@ -60,17 +60,7 @@ class CreateNewUser implements CreatesNewUsers
             'coop.min' => 'You need to order at least one card.',
             'saveon_onetime.min' => 'You need to order at least one card.',
             'coop_onetime.min' => 'You need to order at least one card.',
-            'schedule.not_in' => 'Choose a delivery date',
-            'schedule_onetime.not_in' => 'Choose a delivery date',
         ]);
-        $v->sometimes('schedule', 'not_in:none', function ($input) {
-            return $input['saveon'] > 0 ||
-                $input['coop'] > 0;
-        });
-        $v->sometimes('schedule_onetime', 'not_in:none', function ($input) {
-            return $input['saveon_onetime'] > 0 ||
-                $input['coop_onetime'] > 0;
-        });
 
         //rules for order amounts are complicated.  They can't both be 0 if they have a schedule
         $orderRequired = function ($schedulefield, $field, $other) use ($v, $input) {
@@ -90,17 +80,6 @@ class CreateNewUser implements CreatesNewUsers
         $orderRequired('schedule', 'coop', 'saveon');
         $orderRequired('schedule_onetime', 'saveon_onetime', 'coop_onetime');
         $orderRequired('schedule_onetime', 'coop_onetime', 'saveon_onetime');
-
-        $v->sometimes('schedule', 'in:biweekly,monthly,monthly-second', function ($input) {
-            return $input->schedule_onetime == 'none';
-        });
-        $v->sometimes('schedule_onetime', 'in:monthly,monthly-second', function ($input) {
-            return $input->schedule == 'none';
-        });
-        $v->setCustomMessages([
-            'schedule.in' => 'We need either a recurring order or a one-time order.',
-            'schedule_onetime.in' => 'We need either a recurring order or a one-time order.',
-        ]);
 
         $v->validate();
 

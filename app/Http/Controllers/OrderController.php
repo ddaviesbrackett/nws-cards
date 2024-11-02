@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\NewConfirmation;
 use App\Models\CutoffDate;
 use App\Models\Order;
-use App\Models\SchoolClass;
-use App\Models\User;
-use App\Utilities\OrderUtilities;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\View\View;
@@ -16,7 +13,6 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\DB;
 use NumberFormatter;
 use Stripe\StripeClient;
-use Closure;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller implements HasMiddleware
@@ -65,8 +61,8 @@ class OrderController extends Controller implements HasMiddleware
     {
         $input = $req->input();
         $v = Validator::make($input, [
-            'schedule'    => 'in:none,biweekly,monthly,monthly-second',
-            'schedule_onetime'    => 'in:none,monthly,monthly-second',
+            'schedule'    => 'in:none,monthly',
+            'schedule_onetime'    => 'in:none,monthly',
             'saveon'    => 'integer|digits_between:1,2',
             'coop'        => 'integer|digits_between:1,2',
             'saveon_onetime'    => 'integer|digits_between:1,2',
@@ -79,8 +75,8 @@ class OrderController extends Controller implements HasMiddleware
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
         ], [
-            'schedule.in' => 'We need either a recurring order or a one-time order.',
-            'schedule_onetime.in' => 'We need either a recurring order or a one-time order.',
+            'schedule.in' => 'Invalid schedule.',
+            'schedule_onetime.in' => 'Invalid one-time schedule.',
             'debit-transit.required_if' => 'Branch number is required.',
             'debit-institution.required_if' => 'Institution is required.',
             'debit-account.required_if' => 'Account number is required.',
@@ -93,18 +89,7 @@ class OrderController extends Controller implements HasMiddleware
             'coop.min' => 'Please order at least one card.',
             'saveon_onetime.min' => 'Please order at least one card.',
             'coop_onetime.min' => 'Please order at least one card.',
-            'schedule.not_in' => 'Choose a delivery date',
-            'schedule_onetime.not_in' => 'Choose a delivery date',
         ]);
-
-        $v->sometimes('schedule', 'not_in:none', function ($input) {
-            return $input['saveon'] > 0 ||
-                $input['coop'] > 0;
-        });
-        $v->sometimes('schedule_onetime', 'not_in:none', function ($input) {
-            return $input['saveon_onetime'] > 0 ||
-                $input['coop_onetime'] > 0;
-        });
 
         //rules for order amounts are complicated.  They can't both be 0 if they have a schedule
         $orderRequired = function ($schedulefield, $field, $other) use ($v, $input) {
@@ -114,9 +99,9 @@ class OrderController extends Controller implements HasMiddleware
                 &&
                 ($input[$other] == '' || $input[$other] == '0')
             ) {
-                $v->addRules($field, 'required|min:1');
+                $v->addRules([$field => 'required|min:1']);
             } else {
-                $v->addRules($field, 'min:0');
+                $v->addRules([$field => 'min:0']);
             }
         };
 
@@ -124,17 +109,8 @@ class OrderController extends Controller implements HasMiddleware
         $orderRequired('schedule', 'coop', 'saveon');
         $orderRequired('schedule_onetime', 'saveon_onetime', 'coop_onetime');
         $orderRequired('schedule_onetime', 'coop_onetime', 'saveon_onetime');
-
-        $v->sometimes('schedule', 'in:biweekly,monthly,monthly-second', function ($input) {
-            return $input->schedule_onetime == 'none';
-        });
-        $v->sometimes('schedule_onetime', 'in:monthly,monthly-second', function ($input) {
-            return $input->schedule == 'none';
-        });
-
-        if ($v->fails()) {
-            return $this->edit($req);
-        }
+       
+        $v->validate();
 
         $user = $req->user();
         DB::transaction(function () use ($user, $input) {
