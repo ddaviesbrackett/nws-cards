@@ -19,7 +19,7 @@ class HomeController extends Controller
         $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
         return view('home', [
                                 'total'=>$nf->format(SchoolClass::profitSince(new Carbon('2010-01-01'))),
-                                'totalThisYear'=>$nf->format(SchoolClass::profitSince(new Carbon('2023-09-01'))),
+                                'totalThisYear'=>$nf->format(SchoolClass::profitSince(new Carbon('2024-09-01'))),
                                 'isBlackout'=>OrderController::IsBlackoutPeriod()
                             ]);
     }
