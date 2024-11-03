@@ -33,7 +33,7 @@ class GenerateOrders extends Command
      */
     public function handle(StripeClient $stripe)
     {
-        $cutoff = CutoffDate::where('cutoff', '=', $this->argument('date'))->orderby('cutoff', 'desc')->first();
+        $cutoff = CutoffDate::where('cutoff', '=', $this->argument('date'))->first();
         
         if(! isset($cutoff)) return;
         if(! $cutoff->orders->isEmpty()) return 'orders already generated for this date';
@@ -47,12 +47,13 @@ class GenerateOrders extends Command
                 'paid' => 0,
                 'payment' => $user->payment,
                 'deliverymethod' => $user->deliverymethod,
+                'profit' => 0,
+                'coop' => $user->coop,
+                'saveon' => $user->saveon,
+                'coop_onetime' => $user->coop_onetime,
+                'saveon_onetime' => $user->saveon_onetime,
             ]);
             
-            $order->coop = $user->coop;
-            $order->saveon = $user->saveon;
-            $order->coop_onetime = $user->coop_onetime;
-            $order->saveon_onetime = $user->saveon_onetime;
             $user->coop_onetime = 0;
             $user->saveon_onetime = 0;
             $user->save();

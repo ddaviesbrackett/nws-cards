@@ -68,9 +68,9 @@ class ProfitForm extends Component
 
             //now update order profits on all orders in the cutoff
             $profits = $this->generateProfits($cutoff);
-            $pacClassId = SchoolClass::where('bucketname', '=', 'pac')->pluck('id');
-            $tuitionClassId = SchoolClass::where('bucketname', '=', 'tuitionreduction')->pluck('id');
-            $cutoff->orders->load('user')->each(function($order) use ($profits, $pacClassId, $tuitionClassId) {
+            $pacClassId = SchoolClass::where('bucketname', 'pac')->first()->id;
+            $totalEnrolment = SchoolClass::all()->sum('enrolment');
+            $cutoff->orders->load('user')->each(function($order) use ($profits, $pacClassId, $totalEnrolment) {
                 $saveon = $order->saveon + $order->saveon_onetime;
                 $coop = $order->coop + $order->coop_onetime;
                 $profit = ($saveon * $profits['saveon']) + ($coop * $profits['coop']);
@@ -82,28 +82,15 @@ class ProfitForm extends Component
                 }
                 $order->profit = $profit;
 
-                $buckets = $order->schoolclasses()->count();
-
-                $pac = 0;
-                $tuitionreduction = 0;
-                
-                if($buckets > 2) {
-                    $perBucket = $profit / ($buckets - 2); //pac and tuitionreduction don't count anymore
-                    foreach($order->schoolclasses()->where('bucketname','<>', 'pac')->where('bucketname', '<>', 'tuitionreduction')->get() as $class)
-                    {
-                        $order->schoolclasses()->updateExistingPivot($class->id, ['profit' => $perBucket * $class->classsplit]);
-                        $pac += $perBucket * $class->pacsplit;
-                        $tuitionreduction += $perBucket * $class->tuitionsplit;
+                foreach($order->schoolclasses as $class)
+                {
+                    if($class->id != $pacClassId) {
+                        $profitForThisClass = round($order->profit * 0.7 * $class->enrolment / $totalEnrolment, 2);
+                        $order->schoolclasses()->updateExistingPivot($class->id, ['profit' => $profitForThisClass]);
+                        $profit -= $profitForThisClass;
                     }
                 }
-                else
-                {
-                    $pac = $profit * 0.05;
-                    $tuitionreduction = $profit * 0.95;
-                }
-
-                $order->schoolclasses()->updateExistingPivot($pacClassId, ['profit' => $pac]);
-                $order->schoolclasses()->updateExistingPivot($tuitionClassId, ['profit' => $tuitionreduction]);
+                $order->schoolclasses()->updateExistingPivot($pacClassId, ['profit' => $profit]);
                 $order->save();
             });
 

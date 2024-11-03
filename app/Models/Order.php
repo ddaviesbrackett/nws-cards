@@ -16,6 +16,7 @@ class Order extends Model
     protected $fillable = [
         'paid',
         'payment',
+        'profit',
         'saveon',
         'coop',
         'saveon_onetime',
