@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
     <h1>{{$sum}} raised for {{$name}} so far</h1>
-    <h3>{{$name}} has {{$supporters}} supporters</h3>
     <h4>Funds Raised</h4>
     <table class='table'>
         <tr>

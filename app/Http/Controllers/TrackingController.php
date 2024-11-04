@@ -62,7 +62,6 @@ class TrackingController extends Controller
     {
         $sc = SchoolClass::where('bucketname', '=', $bucketname)
             ->with('orders', 'expenses', 'pointsales')
-            ->withCount('users')
             ->first();
         if (is_null($sc)) {
             return $this->toLeaderboard();
@@ -77,7 +76,6 @@ class TrackingController extends Controller
             'expenses' => $expenses,
             'pointsales' => $pointsales,
             'sum' => $sc->orders->getTotalProfit() + $sc->pointsales->getTotalProfit(),
-            'supporters' => $sc->users_count,
         ]);
     }
 }
