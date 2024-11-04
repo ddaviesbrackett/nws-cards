@@ -40,6 +40,7 @@ class TrackingController extends Controller
         left join order_profit op on c.id = op.class_id
         left join pointsale_profit pp on c.id = pp.class_id
         left join expenses exp on c.id = exp.class_id
+        where c.current = 1
         order by displayorder
         EOQ);
 
