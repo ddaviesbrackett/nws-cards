@@ -14,7 +14,7 @@
         </tr>
         @foreach($buckets as $name => $vals)
             <tr>
-                <td><a href="/tracking/{{$name}}">{{$vals['nm']}}</a></td>
+                <td><x-link href="/tracking/{{$name}}">{{$vals['nm']}}</x-link></td>
                 <td>{{$vals['raised']}}</td>
                 <td>{{$vals['spent']}}</td>
                 <td>{{$vals['available']}}</td>

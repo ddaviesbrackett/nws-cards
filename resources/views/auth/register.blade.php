@@ -169,7 +169,7 @@
                     <x-input-error for="debit-account" />
                     <x-label>
                         <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
-                        I have read and agree to the <a @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
+                        I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link>
                     </x-label>
                     <x-input-error for="debit-terms" />
                 </div>

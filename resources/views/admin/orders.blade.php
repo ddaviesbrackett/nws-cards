@@ -16,8 +16,8 @@
         @foreach($model as $order)
         <tr>
             <td>
-                <a href="{{URL::route('admin-order', ['id' => $order['id']])}}">Order Sheet</a> &middot;
-                <a href="{{URL::route('admin-caft', ['id' => $order['id']])}}">CAFT</a>
+                <x-link href="{{URL::route('admin-order', ['id' => $order['id']])}}">Order Sheet</x-link> &middot;
+                <x-link href="{{URL::route('admin-caft', ['id' => $order['id']])}}">CAFT</x-link>
             </td>
             <td>{{{$order['delivery']}}}</td>
             <td>{{{$order['orders']}}}</td>

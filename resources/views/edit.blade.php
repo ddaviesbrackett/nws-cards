@@ -109,7 +109,7 @@
                             <x-input-error for="debit-account" />
                             <x-label>
                                 <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
-                                I have read and agree to the <a @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</a>
+                                I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link>
                             </x-label>
                             <x-input-error for="debit-terms" />
                         </div>
@@ -177,7 +177,7 @@
                         </div>
                         <x-label>
                             <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" :checked="old('deliverymethod', $user->deliverymethod == 1?'mail':'pickup') == 'mail'" />
-                            Mail to my address on file (<a href="{{ route('profile.show') }}">edit your address</a>)
+                            Mail to my address on file (<x-link href="{{ route('profile.show') }}">edit your address</x-link>)
                         </x-label>
                         <x-input-error for="deliverymethod" />
                         <div x-cloak x-show="delivery == 'mail'">
