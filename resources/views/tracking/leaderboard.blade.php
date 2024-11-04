@@ -1,10 +1,7 @@
 <x-guest-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Leaderboard
-        </h2>
+    We've raised {{$total}} so far
     </x-slot>
-    <h1>We've raised {{$total}} so far</h1>
     <table class="table">
         <tr>
             <th></th>

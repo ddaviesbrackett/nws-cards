@@ -37,9 +37,7 @@
     @endpush
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Edit your order
-        </h2>
+        Edit your order
     </x-slot>
 
     <x-validation-errors />

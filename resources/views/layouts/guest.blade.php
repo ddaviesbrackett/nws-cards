@@ -117,13 +117,15 @@
         
         <!-- Page Heading -->
         @if (isset($header))
-            <header class="bg-gray-100 dark:bg-gray-900">
+            <header class="text-center bg-gray-300 dark:bg-gray-700">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+                    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200">
+                        {{ $header }}
+                    </h2>
                 </div>
             </header>
         @endif
-        <div class="font-sans text-gray-900 dark:text-gray-100 antialiased bg-gray-100 dark:bg-gray-900">
+        <div class="font-sans text-gray-900 dark:text-gray-100 antialiased bg-gray-100 dark:bg-gray-900 pt-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 {{ $slot }}
             </div>
