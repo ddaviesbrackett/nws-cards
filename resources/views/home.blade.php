@@ -14,7 +14,9 @@
         <h1 class="text-3xl">Buy Grocery Cards<br/>Raise Money</h1>
             
         <h3 class="text-xl">
+            @if($totalThisYear != "$0.00") 
             This year we've raised {{$totalThisYear}}<br/>
+            @endif
             From July 2014 we've raised {{$total}}<br/>
             Help us raise more &mdash; <em>without spending any extra!</em>
         </h3>

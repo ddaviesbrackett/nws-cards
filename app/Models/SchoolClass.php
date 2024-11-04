@@ -26,10 +26,12 @@ class SchoolClass extends Model
 
     public static function profitSince( Carbon $since) : float
     {
-        return DB::scalar("
+        $val = DB::scalar("
             select sum(co.profit) from classes_orders co
             inner join orders o on o.id = co.order_id
             where o.created_at > ?", [$since]);
+        if(isset($val)) return $val;
+        return 0.0;
     }
 
     public function profitByCutoff()
