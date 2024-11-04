@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('scripts')
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased text-lg">
         <x-banner />
 
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

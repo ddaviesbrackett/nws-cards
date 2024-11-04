@@ -40,34 +40,36 @@
     </x-slot>
 
     <x-validation-errors />
-    <div x-data class="px-12">
+    <div x-data class="max-w-5xl pl-12">
         <form method="POST" action="{{ route('register') }}" @submit="formSubmit">
             @csrf
-            <h4 class="text-xl mb-1">Your Order</h4>
-            <div x-data="{ordertype:'{{old('ordertype', 'monthly')}}',
+            <h4 class="text-3xl">Your Order</h4>
+            <div class="" x-data="{ordertype:'{{old('ordertype', 'monthly')}}',
                         saveon:{{old('saveon', 0)}},
                         coop:{{old('coop', 0)}}}">
                 <x-label>
                     Kootenay Co-op:
-                    <span><x-input type="number" id="coop" name="coop" x-model="coop" /> x $100</span>
+                    <span class="text-left"><x-input class="w-24" type="number" id="coop" name="coop" x-model="coop" /> x $100</span>
                 </x-label>
                 <x-input-error for="coop" />
                 <x-label>
                     Save-On:
-                    <span><x-input type="number" id="saveon" name="saveon" x-model="saveon" /> x $100</span>
+                    <span class="text-left"><x-input class="w-24" type="number" id="saveon" name="saveon" x-model="saveon" /> x $100</span>
                 </x-label>
                 <x-input-error for="saveon" />
-                <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="ordertype" value="monthly" x-model="ordertype" />
+                <x-label class="mt-2">
+                    <span></span>
+                    <span class="text-left"><x-input type="radio" name="ordertype" value="monthly" x-model="ordertype" />
                     Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span></span>
                 </x-label>
                 <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="ordertype" value="onetime" x-model="ordertype" />
+                    <span></span>
+                    <span class="text-left"><x-input type="radio" name="ordertype" value="onetime" x-model="ordertype" />
                     Just once, on <span class="font-bold">{{$dates['delivery']}}</span></span>
                 </x-label>
                 <x-input-error for="ordertype" />
             </div>
-            <h4 class="text-xl mt-6 mb-1">Your Details</h4>
+            <h4 class="text-3xl mt-6 mb-1">Your Details</h4>
             <div>
                 <x-label>
                     Name:
@@ -137,16 +139,18 @@
                 <x-input-error for="password_confirmation" />
             </div>
 
-            <h4 class="text-xl mt-6 mb-1">Payment</h4>
-            <span class="help-block info">You will be charged 2 business days before delivery.</span>
+            <h4 class="text-3xl mt-6 mb-1">Payment</h4>
             <div x-data="{payment:'debit'}">
                 <x-input-error for="payment" />
                 <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="payment" value="debit" :checked="old('payment') ==  'debit'" x-model="payment" />
+                    <span class="text-left"><x-input type="radio" name="payment" value="debit" :checked="old('payment') ==  'debit'" x-model="payment" />
                     Debit (we make more money with debit)</span>
                 </x-label>
                 <div x-show="payment == 'debit'" class="px-8 py-4">
-                    <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
+                    <div class="grid grid-cols-2 gap-4">
+                        <span></span>
+                        <img class="pb-2" src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
+                    </div>
                     <x-label>
                         Branch Number:
                         <x-input type="text" name="debit-transit" :value="old('debit-transit')" />
@@ -162,57 +166,56 @@
                         <x-input type="text" name="debit-account" :value="old('debit-account')" />
                     </x-label>
                     <x-input-error for="debit-account" />
+                    <div class="grid grid-cols-2 gap-4 my-4">
+                        <span></span>
+                        <span>You will be charged 2 business days before delivery.</span>
+                    </div>
                     <x-label>
-                        <span class="col-span-2"><x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
+                        <span></span>
+                        <span class="text-left"><x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
                         I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link></span>
                     </x-label>
                     <x-input-error for="debit-terms" />
                 </div>
                 <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
+                    <span class="text-left"><x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
                     Credit Card</span>
                 </x-label>
                 <div x-show="payment == 'credit'" class="px-8 py-4">
                     <p class="text-sm text-red-600 dark:text-red-400" x-ref="payment_error" id="payment_error"></p>
-                    <div>
                         <x-label>
-                            Cardholder's Name
+                            Cardholder's Name:
                             <x-input type="text" data-stripe="name" value="" />
                         </x-label>
-                    </div>
-                    <div>
                         <x-label>
-                            Card Number
+                            Card Number:
                             <x-input type="text" data-stripe="number" value="" />
                         </x-label>
-                    </div>
-                    <div>
                         <div>
-                            <x-label>
-                                Exp Month
-                                <x-input type="text" placeholder="MM" data-stripe="exp-month" value="" />
-                            </x-label>
-                        </div>
-                        <div>
-                            <x-label>
-                                Exp Year
-                                <x-input type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
-                            </x-label>
-                        </div>
-                        <div>
-                            <x-label>
-                                CVC
-                                <x-input type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
-                            </x-label>
+                        <x-label>
+                            Exp Month:
+                            <x-input class="w-24" type="text" placeholder="MM" data-stripe="exp-month" value="" />
+                        </x-label>
+                        <x-label>
+                            Exp Year:
+                            <x-input class="w-24" type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
+                        </x-label>
+                        <x-label>
+                            CVC:
+                            <x-input class="w-24" type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
+                        </x-label>
+                        <div class="grid grid-cols-2 gap-4 my-4">
+                            <span></span>
+                            <span>You will be charged 2 business days before delivery.</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <h4 class="text-xl mt-6 mb-1">Delivery</h4>
+            <h4 class="text-3xl mt-6 mb-1">Delivery</h4>
             <div x-data="{delivery:'{{old('deliverymethod','pickup')}}'}">
                 <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
+                    <span class="text-left"><x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
                     Pickup at the Nelson Waldorf School</span>
                 </x-label>
                 <x-input-error for="deliverymethod" />
@@ -230,7 +233,7 @@
                     <x-input-error for="employee" />
                 </div>
                 <x-label>
-                    <span class="col-span-2"><x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
+                    <span class="text-left"><x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
                     Mail to the address above</span>
                 </x-label>
                 <x-input-error for="deliverymethod" />
