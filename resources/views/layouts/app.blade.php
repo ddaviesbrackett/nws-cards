@@ -23,9 +23,9 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header class="text-center bg-gray-300 dark:bg-gray-700">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">
+                        <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200">
                             {{ $header }}
                         </h2>
                     </div>
@@ -33,7 +33,7 @@
             @endif
 
             <!-- Page Content -->
-            <main class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased">
+            <main class="font-sans text-gray-900 dark:text-gray-100 dark:bg-gray-800 antialiased bg-gray-100 dark:bg-gray-900 pt-4">
                 {{ $slot }}
             </main>
         </div>

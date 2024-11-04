@@ -1,5 +1,5 @@
 <x-app-layout>
-
+<!-- TODO prettify errors location -->
     @push('scripts')
     <script src="https://js.stripe.com/v2/" async defer></script>
     <script>
@@ -44,52 +44,57 @@
     <div x-data>
         <form method="POST" action="{{route('postEdit')}}" @submit="formSubmit" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @csrf
-
+            <h4 class="text-3xl">Your Order</h4>
             <div x-data="{
                             coop:{{$user->coop_onetime > 0? $user->coop_onetime : $user->coop}}, 
                             saveon:{{$user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon}}, 
                             ordertype:'{{$user->coop_onetime + $user->saveon_onetime > 0 ? 'onetime' : 'monthly'}}'
                         }"> 
-                <div>
-                    <x-label>
-                        Kootenay Co-op:
-                        <x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop_onetime > 0? $user->coop_onetime : $user->coop)" x-model="coop"/> x $100
-                    </x-label>
-                    <x-input-error for="coop" />
-                </div>
-
-                <div>
-                    <x-label>
-                        Save-On:
-                        <x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon)" x-model="saveon"/> x $100
-                    </x-label>
-                    <x-input-error for="saveon" />
-                </div>
+                <x-label>
+                    Kootenay Co-op:
+                    <span class="text-left"><x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop_onetime > 0? $user->coop_onetime : $user->coop)" x-model="coop"/> x $100</span>
+                </x-label>
+                <x-input-error for="coop" />
+                <x-label>
+                    Save-On:
+                    <span class="text-left"><x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon)" x-model="saveon"/> x $100</span>
+                </x-label>
+                <x-input-error for="saveon" />
                 <div x-cloak x-show='coop + saveon > 0'>
                     <x-label>
-                        <x-input type="radio" name="ordertype" value="monthly" x-model="ordertype"/>
-                        Once a month during the school year, starting <span class="font-bold">{{$dates['delivery']}}</span>
+                        <span></span>
+                        <span class="text-left"><x-input type="radio" name="ordertype" value="monthly" x-model="ordertype"/>
+                        Once a month during the school year, starting <span class="font-bold">{{$dates['delivery']}}</span></span>
                     </x-label>
                     <x-label>
-                        <x-input type="radio" name="ordertype" value="onetime" x-model="ordertype"/>
-                        Just once, on <span class="font-bold">{{$dates['delivery']}}</span>
+                        <span></span>
+                        <span class="text-left"><x-input type="radio" name="ordertype" value="onetime" x-model="ordertype"/>
+                        Just once, on <span class="font-bold">{{$dates['delivery']}}</span></span>
                     </x-label>
                     <x-input-error for="ordertype" />
 
-                    <h4>Payment</h4>
-                    <span class="help-block info">You will be charged 2 business days before delivery.</span>
+                    <h4 class="text-3xl mt-6 mb-1">Payment</h4>
                     <div x-data="{payment:'keep'}">
-                        <x-label>
-                            <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" x-model="payment"/>
-                            Leave payment details unchanged
-                        </x-label>
-                        <x-label>
-                            <x-input type="radio" name="payment" value="debit" x-model="payment"/>
-                            Debit (we make more money with debit)
-                        </x-label>
+                        <div class="grid grid-cols-3 gap-4 ml-4 mt-2">
+                            <label class="text-left inline-block ml-4 mt-2">
+                                <x-input type="radio" name="payment" value="keep" :checked="old('payment') != 'debit' && old('payment') != 'credit'" x-model="payment"/>
+                                Leave payment details unchanged
+                            </label>
+                            <label class="text-left inline-block ml-4 mt-2">
+                                <x-input type="radio" name="payment" value="debit" :checked="old('payment') == 'debit'" x-model="payment" />
+                                Debit (we make more money with debit)
+                            </label>
+                            <label class="text-left inline-block ml-4 mt-2">
+                            <x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
+                                Credit Card
+                            </label>
+                        </div>
                         <x-input-error for="payment" />
-                        <div x-cloak x-show="payment == 'debit'">
-                            <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
+                        <div x-cloak x-show="payment == 'debit'" class="px-8 py-4">
+                            <div class="grid grid-cols-xlabel gap-4">
+                                <span></span>
+                                <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
+                            </div>
                             <x-label>
                                 Branch Number:
                                 <x-input type="text" name="debit-transit" :value="old('debit-transit')" />
@@ -105,62 +110,60 @@
                                 <x-input type="text" name="debit-account" :value="old('debit-account')" />
                             </x-label>
                             <x-input-error for="debit-account" />
+                            <div class="grid grid-cols-xlabel gap-4 my-4">
+                                <span></span>
+                                <span>You will be charged 2 business days before delivery.</span>
+                            </div>
                             <x-label>
-                                <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
-                                I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link>
+                                <span></span>
+                                <span class="text-left"><x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
+                                I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link></span>
                             </x-label>
                             <x-input-error for="debit-terms" />
                         </div>
-                        <x-label>
-                            <x-input type="radio" name="payment" value="credit" x-model="payment"/>
-                            Credit Card
-                        </x-label>
-                        <x-input-error for="payment" />
                         <div x-cloak x-show="payment == 'credit'">
                             <p class="text-sm text-red-600 dark:text-red-400" x-ref="payment_error" id="payment_error"></p>
-                            <div>
-                                <x-label>
-                                    Cardholder's Name
-                                    <x-input type="text" data-stripe="name" value="" />
-                                </x-label>
-                            </div>
-                            <div>
-                                <x-label>
-                                    Card Number
-                                    <x-input type="text" data-stripe="number" value="" />
-                                </x-label>
-                            </div>
-                            <div>
-                                <div>
-                                    <x-label>
-                                        Exp Month
-                                        <x-input type="text" placeholder="MM" data-stripe="exp-month" value="" />
-                                    </x-label>
-                                </div>
-                                <div>
-                                    <x-label>
-                                        Exp Year
-                                        <x-input type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
-                                    </x-label>
-                                </div>
-                                <div>
-                                    <x-label>
-                                        CVC
-                                        <x-input type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
-                                    </x-label>
-                                </div>
+                            <x-label>
+                                Cardholder's Name:
+                                <x-input type="text" data-stripe="name" value="" />
+                            </x-label>
+                            <x-label>
+                                Card Number:
+                                <x-input type="text" data-stripe="number" value="" />
+                            </x-label>
+                            <x-label>
+                                Exp Month:
+                                <x-input class="w-24" type="text" placeholder="MM" data-stripe="exp-month" value="" />
+                            </x-label>
+                            <x-label>
+                                Exp Year:
+                                <x-input class="w-24" type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
+                            </x-label>
+                            <x-label>
+                                CVC:
+                                <x-input class="w-24" type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
+                            </x-label>
+                            <div class="grid grid-cols-xlabel gap-4 my-4">
+                                <span></span>
+                                <span>You will be charged 2 business days before delivery.</span>
                             </div>
                         </div>
                     </div>
 
-                    <h4>Choose Delivery</h4>
+                    <h4 class="text-3xl mt-6 mb-1">Choose Delivery</h4>
                     <div x-data="{delivery:'{{$user->deliverymethod == 1?'mail':'pickup'}}'}">
-                        <x-label>
-                            <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" :checked="old('deliverymethod', $user->deliverymethod == 1?'mail':'pickup') == 'pickup'" />
+                        <div class="grid grid-cols-2 gap-4 ml-4 mt-2">
+                            <label class="text-left inline-block ml-4 mt-2">
+                            <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
                             Pickup at the Nelson Waldorf School
-                        </x-label>
+                            </label>
+                            <label class="text-left inline-block ml-4 mt-2">
+                                <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery"/>
+                                Mail to my address on file (<x-link href="{{ route('profile.show') }}">edit your address</x-link>)
+                            </label>
+                        </div>
                         <x-input-error for="deliverymethod" />
-                        <div x-cloak x-show="delivery == 'pickup'">
+                        <div x-cloak x-show="delivery == 'pickup'" class="px-8 py-4">
                             You'll have to sign for your cards. If someone else can sign for them, enter their name here.
                             <x-label>
                                 Others who can pick up your cards:
@@ -168,20 +171,15 @@
                             </x-label>
                             <x-input-error for="pickupalt" />
                             <x-label>
-                                <x-input type="checkbox" name="employee" value="1" :checked="old('employee', $user->employee) == 1" />
-                                I or my alternate am employed by the school
+                                <span class="col-span-2"><x-input type="checkbox" name="employee" value="1" :checked="old('employee', $user->employee) == 1" />
+                                I or my alternate am employed by the school</span>
                             </x-label>
                             <x-input-error for="employee" />
                         </div>
-                        <x-label>
-                            <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" :checked="old('deliverymethod', $user->deliverymethod == 1?'mail':'pickup') == 'mail'" />
-                            Mail to my address on file (<x-link href="{{ route('profile.show') }}">edit your address</x-link>)
-                        </x-label>
-                        <x-input-error for="deliverymethod" />
-                        <div x-cloak x-show="delivery == 'mail'">
+                        <div x-cloak x-show="delivery == 'mail'" class="px-8 py-4">
                             <x-label>
-                                <x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
-                                I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.
+                                <span class="col-span-2"><x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
+                                I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.</span>
                             </x-label>
                             <x-input-error for="mailwaiver" />
                         </div>

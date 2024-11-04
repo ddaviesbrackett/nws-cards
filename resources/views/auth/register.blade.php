@@ -1,5 +1,5 @@
 <x-guest-layout>
-
+<!-- TODO prettify errors location -->
     @push('scripts')
     <script src="https://js.stripe.com/v2/" async defer></script>
     <script>
@@ -70,84 +70,67 @@
                 <x-input-error for="ordertype" />
             </div>
             <h4 class="text-3xl mt-6 mb-1">Your Details</h4>
-            <div>
-                <x-label>
-                    Name:
-                    <x-input id="name" type="text" name="name" :value="old('name')" required autocomplete="name" />
-                </x-label>
-                <x-input-error for="name" />
-            </div>
-
-            <div>
-                <x-label>
-                    Email:
-                    <x-input id="email" type="email" name="email" :value="old('email')" required />
-                </x-label>
-                <x-input-error for="email" />
-            </div>
-
-            <div>
-                <x-label>
-                    Phone Numer:
-                    <x-input id="phone" type="tel" name="phone" :value="old('phone')" required placeholder="(250) 555-5555" />
-                </x-label>
-                <x-input-error for="phone" />
-            </div>
-
-            <div>
-                <x-label>
-                    Address:
-                    <x-input id="address1" type="text" name="address1" :value="old('address1')" placeholder="your mailing address" />
-                </x-label>
-                <x-input-error for="address1" />
-            </div>
-
-            <div>
-                <x-label>
-                    Address 2:
-                    <x-input id="address2" type="text" name="address2" :value="old('address2')" />
-                </x-label>
-                <x-input-error for="address2" />
-            </div>
-
-            <div>
-                <x-label>
-                    City:
-                    <x-input id="city" type="text" name="city" :value="old('city')" placeholder="Nelson? Ymir? Salmo? Slocan?" />
-                </x-label>
-                <x-input-error for="city" />
-                <x-label>
-                    Postal Code:
-                    <x-input id="postal_code" type="text" name="postal_code" :value="old('postal_code')" placeholder="V1A 1A1" />
-                </x-label>
-                <x-input-error for="postal_code" />
-            </div>
-
-            <div>
-                <x-label>
-                    Password:
-                    <x-input id="password" type="password" name="password" required autocomplete="new-password" />
-                </x-label>
-                <x-input-error for="password" />
-            </div>
-
-            <div>
-                <x-label>
-                    Confirm Password:
-                    <x-input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
-                </x-label>
-                <x-input-error for="password_confirmation" />
-            </div>
+            <x-label>
+                Name:
+                <x-input id="name" type="text" name="name" :value="old('name')" required autocomplete="name" />
+            </x-label>
+            <x-input-error for="name" />
+            <x-label>
+                Email:
+                <x-input id="email" type="email" name="email" :value="old('email')" required />
+            </x-label>
+            <x-input-error for="email" />
+            <x-label>
+                Phone Numer:
+                <x-input id="phone" type="tel" name="phone" :value="old('phone')" required placeholder="(250) 555-5555" />
+            </x-label>
+            <x-input-error for="phone" />
+            <x-label>
+                Address:
+                <x-input id="address1" type="text" name="address1" :value="old('address1')" placeholder="your mailing address" />
+            </x-label>
+            <x-input-error for="address1" />
+            <x-label>
+                Address 2:
+                <x-input id="address2" type="text" name="address2" :value="old('address2')" />
+            </x-label>
+            <x-input-error for="address2" />
+            <x-label>
+                City:
+                <x-input id="city" type="text" name="city" :value="old('city')" placeholder="Nelson? Ymir? Salmo? Slocan?" />
+            </x-label>
+            <x-input-error for="city" />
+            <x-label>
+                Postal Code:
+                <x-input id="postal_code" type="text" name="postal_code" :value="old('postal_code')" placeholder="V1A 1A1" />
+            </x-label>
+            <x-input-error for="postal_code" />
+            <x-label>
+                Password:
+                <x-input id="password" type="password" name="password" required autocomplete="new-password" />
+            </x-label>
+            <x-input-error for="password" />
+            <x-label>
+                Confirm Password:
+                <x-input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
+            </x-label>
+            <x-input-error for="password_confirmation" />
 
             <h4 class="text-3xl mt-6 mb-1">Payment</h4>
             <div x-data="{payment:'debit'}">
+                <div class="grid grid-cols-2 gap-4 ml-4 mt-2">
+                    <label class="text-left inline-block ml-4 mt-2">
+                        <x-input type="radio" name="payment" value="debit" :checked="old('payment') == 'debit'" x-model="payment" />
+                        Debit (we make more money with debit)
+                    </label>
+                    <label class="text-left inline-block ml-4 mt-2">
+                    <x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
+                        Credit Card
+                    </label>
+                </div>
                 <x-input-error for="payment" />
-                <x-label>
-                    <span class="text-left"><x-input type="radio" name="payment" value="debit" :checked="old('payment') ==  'debit'" x-model="payment" />
-                    Debit (we make more money with debit)</span>
-                </x-label>
                 <div x-show="payment == 'debit'" class="px-8 py-4">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-xlabel gap-4">
                         <span></span>
                         <img class="pb-2" src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
                     </div>
@@ -166,7 +149,7 @@
                         <x-input type="text" name="debit-account" :value="old('debit-account')" />
                     </x-label>
                     <x-input-error for="debit-account" />
-                    <div class="grid grid-cols-2 gap-4 my-4">
+                    <div class="grid grid-cols-xlabel gap-4 my-4">
                         <span></span>
                         <span>You will be charged 2 business days before delivery.</span>
                     </div>
@@ -177,47 +160,48 @@
                     </x-label>
                     <x-input-error for="debit-terms" />
                 </div>
-                <x-label>
-                    <span class="text-left"><x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
-                    Credit Card</span>
-                </x-label>
-                <div x-show="payment == 'credit'" class="px-8 py-4">
+                <div x-cloak x-show="payment == 'credit'" class="px-8 py-4">
                     <p class="text-sm text-red-600 dark:text-red-400" x-ref="payment_error" id="payment_error"></p>
-                        <x-label>
-                            Cardholder's Name:
-                            <x-input type="text" data-stripe="name" value="" />
-                        </x-label>
-                        <x-label>
-                            Card Number:
-                            <x-input type="text" data-stripe="number" value="" />
-                        </x-label>
-                        <div>
-                        <x-label>
-                            Exp Month:
-                            <x-input class="w-24" type="text" placeholder="MM" data-stripe="exp-month" value="" />
-                        </x-label>
-                        <x-label>
-                            Exp Year:
-                            <x-input class="w-24" type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
-                        </x-label>
-                        <x-label>
-                            CVC:
-                            <x-input class="w-24" type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
-                        </x-label>
-                        <div class="grid grid-cols-2 gap-4 my-4">
-                            <span></span>
-                            <span>You will be charged 2 business days before delivery.</span>
-                        </div>
+                    <x-label>
+                        Cardholder's Name:
+                        <x-input type="text" data-stripe="name" value="" />
+                    </x-label>
+                    <x-label>
+                        Card Number:
+                        <x-input type="text" data-stripe="number" value="" />
+                    </x-label>
+                    <div>
+                    <x-label>
+                        Exp Month:
+                        <x-input class="w-24" type="text" placeholder="MM" data-stripe="exp-month" value="" />
+                    </x-label>
+                    <x-label>
+                        Exp Year:
+                        <x-input class="w-24" type="text" placeholder="YYYY" data-stripe="exp-year" value="" />
+                    </x-label>
+                    <x-label>
+                        CVC:
+                        <x-input class="w-24" type="text" placeholder="Eg. 331" data-stripe="cvc" value="" />
+                    </x-label>
+                    <div class="grid grid-cols-xlabel gap-4 my-4">
+                        <span></span>
+                        <span>You will be charged 2 business days before delivery.</span>
                     </div>
                 </div>
             </div>
 
             <h4 class="text-3xl mt-6 mb-1">Delivery</h4>
             <div x-data="{delivery:'{{old('deliverymethod','pickup')}}'}">
-                <x-label>
-                    <span class="text-left"><x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
-                    Pickup at the Nelson Waldorf School</span>
-                </x-label>
+                <div class="grid grid-cols-2 gap-4 ml-4 mt-2">
+                    <label class="text-left inline-block ml-4 mt-2">
+                        <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
+                        Pickup at the Nelson Waldorf School
+                    </label>
+                    <label class="text-left inline-block ml-4 mt-2">
+                        <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
+                        Mail to the address above
+                    </label>
+                </div>
                 <x-input-error for="deliverymethod" />
                 <div x-cloak x-show="delivery == 'pickup'" class="px-8 py-4">
                     You'll have to sign for your cards. If someone else can sign for them, enter their name here.
@@ -232,10 +216,6 @@
                     </x-label>
                     <x-input-error for="employee" />
                 </div>
-                <x-label>
-                    <span class="text-left"><x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
-                    Mail to the address above</span>
-                </x-label>
                 <x-input-error for="deliverymethod" />
                     <div x-cloak x-show="delivery == 'mail'" class="px-8 py-4">
                     <x-label>
@@ -251,7 +231,7 @@
                     Already have an account?
                 </x-link>
 
-                <x-button class="ml-4">
+                <x-button class="ml-4 text-3xl">
                     Sign me up!
                 </x-button>
             </div>

@@ -24,7 +24,7 @@
         <img class="mx-auto" src="/images/saveon-coop.png" title="Save On Foods and Coop">
         <p>Generously supported by our store partners The Kootenay Co-Op and Save-On Foods</p>
         
-        @if(!$isBlackout)
+        @if($isBlackout)
             <br><span><b>Unfortunately, you can't order now while we process orders.<br>You will be able to make changes again from the next pick-up Wednesday until the following order deadline.</b></span>
         @else
             <div><x-button type="button"><a href="/register">Order Now</a></x-button></div>
