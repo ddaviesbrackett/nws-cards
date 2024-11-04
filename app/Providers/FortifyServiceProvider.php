@@ -34,6 +34,9 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+        Fortify::registerView(function () {
+            return view('auth.register', []);
+        });
 
         VerifyEmail::toMailUsing(function($user, $verificationUrl){
             return (new NewConfirmation($user, false, $verificationUrl))->to($user->email, $user->name);

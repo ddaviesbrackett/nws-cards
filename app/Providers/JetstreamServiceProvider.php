@@ -26,9 +26,6 @@ class JetstreamServiceProvider extends ServiceProvider
         $this->configurePermissions();
 
         Jetstream::deleteUsersUsing(DeleteUser::class);
-        Fortify::registerView(function () {
-            return view('auth.register', []);
-        });
     }
 
     /**

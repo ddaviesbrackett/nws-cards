@@ -9,14 +9,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
-//main
-Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/', 'home')->name('home'); //main
+    Route::post('/contact', 'contact'); //contact form
+});
 
-//ultra-special login-and-resume from an email link
+//ultra-special login-and-resume from an email link - vestigial
 Route::get('/email-resume', [OrderController::class, 'emailResume']);
-
-//contact form
-Route::post('/contact', [HomeController::class, 'contact']);
 
 //profit tracking
 Route::controller(TrackingController::class)->group(function(){

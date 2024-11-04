@@ -1,5 +1,12 @@
 <x-app-layout>
 <!-- TODO prettify errors location -->
+    @if(\App\Http\Controllers\OrderController::IsBlackoutPeriod())
+    <div class="mx-auto text-center">
+            <h1 class="text-3xl">Orders are being processed</h1>
+            <br><span><b>Unfortunately, you can't order now while we process orders.<br>
+            You will be able to make changes again from the next pick-up Wednesday until the following order deadline.</b></span>
+    </div>
+    @else
     @push('scripts')
     <script src="https://js.stripe.com/v2/" async defer></script>
     <script>
@@ -197,4 +204,5 @@
             OK
         </x-button>
     </dialog>
+    @endif
 </x-app-layout>

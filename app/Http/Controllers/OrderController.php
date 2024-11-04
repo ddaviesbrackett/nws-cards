@@ -59,6 +59,9 @@ class OrderController extends Controller implements HasMiddleware
 
     public function postEdit(Request $req)
     {
+        if(OrderController::IsBlackoutPeriod()) {
+            return $this->edit($req);
+        }
         $input = $req->input();
         $v = Validator::make($input, [
             'saveon'    => 'integer|digits_between:1,2',

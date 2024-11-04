@@ -2,11 +2,14 @@
 
 namespace App\Actions\Fortify;
 
+use App\Http\Controllers\OrderController;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Stripe\StripeClient;
 
 class CreateNewUser implements CreatesNewUsers
@@ -55,6 +58,12 @@ class CreateNewUser implements CreatesNewUsers
             'coop.min' => 'You need to order at least one card.',
             'mailwaiver.required_if' => 'Please release PAC of liability for mailing your order.'
         ]);
+
+        //bail if we are in blackout
+        if(OrderController::IsBlackoutPeriod()) {
+            $v->errors()->add('general', "Application is in blackout.");
+            throw new ValidationException($v);
+        }
 
         //order amounts can't both be zero
         $orderRequired = function ($field, $other) use ($v, $input) {
