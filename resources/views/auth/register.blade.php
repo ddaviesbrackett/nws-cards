@@ -43,34 +43,31 @@
     <div x-data class="px-12">
         <form method="POST" action="{{ route('register') }}" @submit="formSubmit">
             @csrf
+            <h4 class="text-xl mb-1">Your Order</h4>
             <div x-data="{ordertype:'{{old('ordertype', 'monthly')}}',
                         saveon:{{old('saveon', 0)}},
                         coop:{{old('coop', 0)}}}">
-                <div>
-                    <x-label>
-                        Kootenay Co-op:
-                        <x-input type="number" id="coop" name="coop" x-model="coop" /> x $100
-                    </x-label>
-                    <x-input-error for="coop" />
-                </div>
-                <div>
-                    <x-label>
-                        Save-On:
-                        <x-input type="number" id="saveon" name="saveon" x-model="saveon" /> x $100
-                    </x-label>
-                    <x-input-error for="saveon" />
-                </div>
                 <x-label>
-                    <x-input type="radio" name="ordertype" value="monthly" x-model="ordertype" />
-                    Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span>
+                    Kootenay Co-op:
+                    <span><x-input type="number" id="coop" name="coop" x-model="coop" /> x $100</span>
+                </x-label>
+                <x-input-error for="coop" />
+                <x-label>
+                    Save-On:
+                    <span><x-input type="number" id="saveon" name="saveon" x-model="saveon" /> x $100</span>
+                </x-label>
+                <x-input-error for="saveon" />
+                <x-label>
+                    <span class="col-span-2"><x-input type="radio" name="ordertype" value="monthly" x-model="ordertype" />
+                    Once a month, starting <span class="font-bold">{{$dates['delivery']}}</span></span>
                 </x-label>
                 <x-label>
-                    <x-input type="radio" name="ordertype" value="onetime" x-model="ordertype" />
-                    Just once, on <span class="font-bold">{{$dates['delivery']}}</span>
+                    <span class="col-span-2"><x-input type="radio" name="ordertype" value="onetime" x-model="ordertype" />
+                    Just once, on <span class="font-bold">{{$dates['delivery']}}</span></span>
                 </x-label>
-                <x-input-error for="schedule" />
+                <x-input-error for="ordertype" />
             </div>
-            <h4>Your Details</h4>
+            <h4 class="text-xl mt-6 mb-1">Your Details</h4>
             <div>
                 <x-label>
                     Name:
@@ -140,15 +137,15 @@
                 <x-input-error for="password_confirmation" />
             </div>
 
-            <h4>Payment</h4>
+            <h4 class="text-xl mt-6 mb-1">Payment</h4>
             <span class="help-block info">You will be charged 2 business days before delivery.</span>
             <div x-data="{payment:'debit'}">
                 <x-input-error for="payment" />
                 <x-label>
-                    <x-input type="radio" name="payment" value="debit" :checked="old('payment') ==  'debit'" x-model="payment" />
-                    Debit (we make more money with debit)
+                    <span class="col-span-2"><x-input type="radio" name="payment" value="debit" :checked="old('payment') ==  'debit'" x-model="payment" />
+                    Debit (we make more money with debit)</span>
                 </x-label>
-                <div x-show="payment == 'debit'">
+                <div x-show="payment == 'debit'" class="px-8 py-4">
                     <img src="images/void_cheque.gif" alt="Void Cheque showing location of branch, institution, and account numbers" />
                     <x-label>
                         Branch Number:
@@ -166,16 +163,16 @@
                     </x-label>
                     <x-input-error for="debit-account" />
                     <x-label>
-                        <x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
-                        I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link>
+                        <span class="col-span-2"><x-input type="checkbox" name="debit-terms" value="1" :checked="old('debit-terms') == 1" />
+                        I have read and agree to the <x-link @click.prevent="document.querySelector('dialog#debit-terms-dialog').showModal()" href="#">terms of the Payor's Personal Pre-Authorized Debit (PAD) Agreement</x-link></span>
                     </x-label>
                     <x-input-error for="debit-terms" />
                 </div>
                 <x-label>
-                    <x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
-                    Credit Card
+                    <span class="col-span-2"><x-input type="radio" name="payment" value="credit" :checked="old('payment') == 'credit'" x-model="payment" />
+                    Credit Card</span>
                 </x-label>
-                <div x-show="payment == 'credit'">
+                <div x-show="payment == 'credit'" class="px-8 py-4">
                     <p class="text-sm text-red-600 dark:text-red-400" x-ref="payment_error" id="payment_error"></p>
                     <div>
                         <x-label>
@@ -212,14 +209,14 @@
                 </div>
             </div>
 
-            <h4>Choose Delivery</h4>
+            <h4 class="text-xl mt-6 mb-1">Delivery</h4>
             <div x-data="{delivery:'{{old('deliverymethod','pickup')}}'}">
                 <x-label>
-                    <x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
-                    Pickup at the Nelson Waldorf School
+                    <span class="col-span-2"><x-input type="radio" name="deliverymethod" value="pickup" x-model="delivery" />
+                    Pickup at the Nelson Waldorf School</span>
                 </x-label>
                 <x-input-error for="deliverymethod" />
-                <div x-cloak x-show="delivery == 'pickup'">
+                <div x-cloak x-show="delivery == 'pickup'" class="px-8 py-4">
                     You'll have to sign for your cards. If someone else can sign for them, enter their name here.
                     <x-label>
                         Others who can pick up your cards:
@@ -227,31 +224,31 @@
                     </x-label>
                     <x-input-error for="pickupalt" />
                     <x-label>
-                        <x-input type="checkbox" name="employee" value="1" :checked="old('employee') == 1" />
-                        I or my alternate am employed by the school
+                        <span class="col-span-2"><x-input type="checkbox" name="employee" value="1" :checked="old('employee') == 1" />
+                        I or my alternate am employed by the school</span>
                     </x-label>
                     <x-input-error for="employee" />
                 </div>
                 <x-label>
-                    <x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
-                    Mail to the address above
+                    <span class="col-span-2"><x-input type="radio" name="deliverymethod" value="mail" x-model="delivery" />
+                    Mail to the address above</span>
                 </x-label>
                 <x-input-error for="deliverymethod" />
-                    <div x-cloak x-show="delivery == 'mail'">
+                    <div x-cloak x-show="delivery == 'mail'" class="px-8 py-4">
                     <x-label>
-                        <x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
-                        I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.
+                        <span class="col-span-2"><x-input type="checkbox" name="mailwaiver" value="1" :checked="old('mailwaiver') == 1" />
+                        I hereby release NWS PAC of any liability regarding sending my ordered grocery cards by regular mail.</span>
                     </x-label>
                     <x-input-error for="mailwaiver" />
                 </div>
             </div>
 
-            <div>
-                <a href="{{ route('login') }}">
+            <div class="py-4">
+                <x-link href="{{ route('login') }}">
                     Already have an account?
-                </a>
+                </x-link>
 
-                <x-button>
+                <x-button class="ml-4">
                     Sign me up!
                 </x-button>
             </div>
