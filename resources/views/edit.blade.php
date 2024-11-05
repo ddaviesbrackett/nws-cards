@@ -56,17 +56,19 @@
                             coop:{{$user->coop_onetime > 0? $user->coop_onetime : $user->coop}}, 
                             saveon:{{$user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon}}, 
                             ordertype:'{{$user->coop_onetime + $user->saveon_onetime > 0 ? 'onetime' : 'monthly'}}'
-                        }"> 
-                <x-label>
-                    Kootenay Co-op:
-                    <span class="text-left"><x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop_onetime > 0? $user->coop_onetime : $user->coop)" x-model="coop"/> x $100</span>
-                </x-label>
-                <x-input-error for="coop" />
-                <x-label>
-                    Save-On:
-                    <span class="text-left"><x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon)" x-model="saveon"/> x $100</span>
-                </x-label>
-                <x-input-error for="saveon" />
+                        }">
+                <div class="px-8 py-4">
+                    <x-label>
+                        Kootenay Co-op:
+                        <span class="text-left"><x-input type="number" id="coop" name="coop" :value="old('coop', $user->coop_onetime > 0? $user->coop_onetime : $user->coop)" x-model="coop"/> x $100</span>
+                    </x-label>
+                    <x-input-error for="coop" />
+                    <x-label>
+                        Save-On:
+                        <span class="text-left"><x-input type="number" id="saveon" name="saveon" :value="old('saveon', $user->saveon_onetime > 0? $user->saveon_onetime : $user->saveon)" x-model="saveon"/> x $100</span>
+                    </x-label>
+                    <x-input-error for="saveon" />
+                </div>
                 <div x-cloak x-show='coop + saveon > 0'>
                     <x-label>
                         <span></span>
@@ -193,7 +195,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="my-6">
                 <x-button>Edit order</x-button>
             </div>
         </form>
