@@ -1,9 +1,11 @@
 <x-guest-layout>
     <x-slot name="nav">
+        <x-nav-link href="#dates">Dates</x-nav-link>
         <x-nav-link href="#about">About</x-nav-link>
         <x-nav-link href="#faq">FAQ</x-nav-link>
         <x-nav-link href="#contact">Contact</x-nav-link>
         <x-slot:responsive>
+            <x-responsive-nav-link href="#dates">Dates</x-responsive-nav-link>
             <x-responsive-nav-link href="#about">About</x-responsive-nav-link>
             <x-responsive-nav-link href="#faq">FAQ</x-responsive-nav-link>
             <x-responsive-nav-link href="#contact">Contact</x-responsive-nav-link>
@@ -32,6 +34,23 @@
         @endif 
         
     </div>
+    <a name="dates"></a>
+    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Upcoming Dates</h2>
+    <table class="mb-4">
+        <tr>
+            <th class="p-4">Order Deadline</th>
+            <th class="p-4">Charge Day</th>
+            <th class="p-4">Pickup/Mailing Day</th>
+        </tr>
+        @foreach($cutoffs as $cutoff)
+            <tr>
+                <td class="px-4 py-2">{{$cutoff['cutoff']}}</td>
+                <td class="px-4 py-2">{{$cutoff['charge']}}</td>
+                <td class="px-4 py-2">{{$cutoff['delivery']}}</td>
+            </tr>
+        @endforeach
+    </table>
+
     <a name="about"></a>
     <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">All School Support and Enhancement</h2>
     <p>
