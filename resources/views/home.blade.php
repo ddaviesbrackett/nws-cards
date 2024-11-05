@@ -65,14 +65,14 @@
     <p>
         When you purchase a grocery card through the Nelson Waldorf Parent Council, the store donates 7% of the card value to us. 
         So on each $100 card you buy, we make $7 if you pay by direct debit, and about $4.5 if you pay by credit card...
-        We raise money and it doesn’t cost you a cent – the money comes out of the store’s pocket.
+        We raise money and it doesn't cost you a cent - the money comes out of the store's pocket.
     </p>
     <a name="faq"></a>
     <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Frequently Asked Questions</h2>
     <div class="px-8 py-4">
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">Where does the money go?</h3>
         <p>
-            The funds are being distributed between the classes (70%) and all school support and enhancement (30%) which is administered by Parent Council.  All of the profits will be held and managed by the Parent Council until donated to the school or distributed to an individual class.
+        The funds are being distributed between the classes (70%) and all school support and enhancement (30%) which is administered by Parent Council.  The kindergarten and daycare programs are supported through the all school fund.  All of the profits will be held and managed by the Parent Council until donated to the school or distributed to an individual class.
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">What stores can I buy cards from?</h3>
         <p>
@@ -81,7 +81,7 @@
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">How can I pay?</h3>
         <p>
             You can pay by direct debit or credit card. However because of the fees associated with using a credit card, we do not receive the full amount of what you are charged. This means your order raises less money than the same order paid with direct debit.
-            But that doesn’t mean it’s always better to pay with debit. If paying by credit card allows you to make a larger order, then credit card is better. The larger the order, the more money is raised.
+            But that doesn't mean it's always better to pay with debit. If paying by credit card allows you to make a larger order, then credit card is better. The larger the order, the more money is raised.
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">When do I get charged?</h3>
         <p>
@@ -98,7 +98,7 @@
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">Can someone else pick up my cards for me?</h3>
         <p>
-            Yep. Just let us know who the other authorized person is by putting their name in the box that appears when you select ‘pick up’ on the order form.
+            Yep. Just let us know who the other authorized person is by putting their name in the box that appears when you select 'pick up' on the order form.
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">When do I order?</h3>
         <p>
@@ -110,7 +110,7 @@
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">How long is my order good for?</h3>
         <p>
-            Your order is good for the whole school year. We’ll take a break over the summer holidays - so you’ll get no cards in July and August. With the start of the new school year your order will resume automatically with the amounts you’ve ordered - so you’ll get your ordered cards again in September.
+            Your order is good for the whole school year. We'll take a break over the summer holidays - so you'll get no cards in July and August. With the start of the new school year your order will resume automatically with the amounts you’ve ordered - so you’ll get your ordered cards again in September.
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">Do I have to make an order - can I just buy cards when I need them?</h3>
         <p>
@@ -118,7 +118,7 @@
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">How does the class get the money they have raised?</h3>
         <p>
-            Your class teacher and class rep can request money from us when it’s needed. Requests can be made using <x-link href="#contact">this form</x-link>. Completed forms can be left at the School office or handed to one of the Grocery Card fairies (at pick-up-Wednesday).
+            Your class teacher and class rep can request money from us when it's needed. Requests can be made using <x-link href="https://drive.google.com/file/d/0B2sI4qt1poXCOERSNnZnbFpEWms/view?usp=sharing_eil&resourcekey=0-Kpx7F2y9Dl-Y6PzTTaUFuw&invite=CNeen9UJ&ts=672a67a7&sh=T9Q_3JDCAV_jD7DG&ca=1&exids=71471476,71471470">this form</x-link>. Completed forms can be left at the School office or handed to one of the Grocery Card fairies (at pick-up-Wednesday).
             Because this fundraiser requires a large amount of cash to float each purchase of cards, all the money raised will be held by the Parent Council and used for that purpose until the class needs it.
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">How do we know how much money the class has raised?</h3>
@@ -135,7 +135,7 @@
         </p>
         <h3 class="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">Can I just donate?</h3>
         <p>
-            Sure. You can make a tax-deductible donation to the Nelson Waldorf School – <x-link href="http://www.canadahelps.org/CharityProfilePage.aspx?CharityID=d39625">click here to donate through CanadaHelps.org</x-link>.
+            Sure. You can make a tax-deductible donation to the Nelson Waldorf School - <x-link href="http://www.canadahelps.org/CharityProfilePage.aspx?CharityID=d39625">click here to donate through CanadaHelps.org</x-link>.
         </p>
     </div>
     <a name="contact"></a>
@@ -163,7 +163,7 @@
             </x-label>
             <x-button type="submit">Send</x-button>
         </form>
-        <p>    We will get back to you as soon as possible – usually the same day, but definitely within two business days.</p>
+        <p>    We will get back to you as soon as possible - usually the same day, but definitely within two business days.</p>
         <p>
             Please do not phone the Nelson Waldorf School unless it has been much longer than that. 
             This fundraiser is being run by the Parent Council, not the school administration.
