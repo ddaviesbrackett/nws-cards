@@ -173,7 +173,7 @@
                         </div>
                         <x-input-error for="deliverymethod" />
                         <div x-cloak x-show="delivery == 'pickup'" class="px-8 py-4">
-                            You'll have to sign for your cards. If someone else can sign for them, enter their name here.
+                            You'll have to pick up your cards. If someone else can pick them up, enter their name here.
                             <x-label>
                                 Others who can pick up your cards:
                                 <x-input type="text" name="pickupalt" :value="old('pickupalt', $user->pickupalt)" />

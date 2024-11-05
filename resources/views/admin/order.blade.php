@@ -1,49 +1,46 @@
 <x-app-layout>
 
-    <h1>Card Pickup Sheet for {{$date}}</h1>
+    <h1 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Card Pickup Sheet for {{$date}}</h1>
 
-    <table>
+    <table class="ml-10 mr-6">
         <tr>
-            <th style="width:45%;">Name <br />(Alternate)</th>
-            <th style="width:12%;">Save-On</th>
-            <th style="width:12%;">Co-op</th>
-            <th style="width:31%;">Signature</th>
+            <th class="px-2 text-left">Name (Alternate)</th>
+            <th class="px-2 text-right">Save-On</th>
+            <th class="px-2 text-right">Co-op</th>
+            <th class="px-2 w-10"></th>
         </tr>
         @foreach($pickup as $order)
             <tr>
-                <td>
-                    {{$order->user->name}} - {{$order->user->getPhone()}}<br />
-                    
+                <td class="px-2">
+                    {{$order->user->name}} - {{$order->user->getPhone()}}
                     @if(!empty($order->user->pickupalt))
                         ({{$order->user->pickupalt}})
-                    @else
-                        -
                     @endif
                 </td>
-                <td>{{$order->saveon + $order->saveon_onetime}}</td>
-                <td>{{$order->coop + $order->coop_onetime}}</td>
-                <td style="border-bottom:1px solid #000;"></td>
+                <td class="px-2 text-right">{{$order->saveon + $order->saveon_onetime}}</td>
+                <td class="px-2 text-right">{{$order->coop + $order->coop_onetime}}</td>
+                <td class="px-2"></td>
             </tr>
         @endforeach
     </table>
 
     <div style="page-break-before:always;">
-        <h1>Card Mailing Sheet for {{$date}}</h1>
+        <h1 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Card Mailing Sheet for {{$date}}</h1>
     </div>
 
-    <table class='table'>
+    <table class="ml-10 mr-6">
         <tr>
-            <th style="width:25%;">Name</th>
-            <th style="width:51%;">Address</th>
-            <th style="width:12%;">Save-On</th>
-            <th style="width:12%;">Co-op</th>
+            <th class="px-2 text-left" style="width:25%;">Name</th>
+            <th class="px-2 text-left" style="width:51%;">Address</th>
+            <th class="px-2 text-right" style="width:12%;">Save-On</th>
+            <th class="px-2 text-right" style="width:12%;">Co-op</th>
         </tr>
         @foreach($mail as $order)
             <tr>
-                <td>{{$order->user->name}} - ({{$order->user->getPhone()}})</td>
-                <td>{{$order->user->address()}}</td>
-                <td>{{$order->saveon + $order->saveon_onetime}}</td>
-                <td>{{$order->coop + $order->coop_onetime}}</td>
+                <td class="px-2">{{$order->user->name}} - ({{$order->user->getPhone()}})</td>
+                <td class="px-2">{{$order->user->address()}}</td>
+                <td class="px-2 text-right">{{$order->saveon + $order->saveon_onetime}}</td>
+                <td class="px-2 text-right">{{$order->coop + $order->coop_onetime}}</td>
             </tr>
         @endforeach
     </table>
