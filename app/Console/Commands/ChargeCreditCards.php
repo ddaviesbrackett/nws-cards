@@ -30,7 +30,7 @@ class ChargeCreditCards extends Command
      */
     public function handle(StripeClient $stripe)
     {
-        $cutoff = CutoffDate::where('charge', '=', $this->argument('date'))->first();
+        $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $this->argument('date') . '\'')->first();
         if(!isset($cutoff)){
             return;
         }

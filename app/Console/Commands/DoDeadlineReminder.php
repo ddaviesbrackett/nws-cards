@@ -33,7 +33,7 @@ class DoDeadlineReminder extends Command
     public function handle()
     {
         $date = (new Carbon($this->argument('date')))->addDays(2);
-        $cutoff = CutoffDate::where('cutoff', $date)->orderby('cutoff', 'desc')->first();
+        $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $date->format('Y-m-d') . '\'')->first();
         if (!isset($cutoff)) return;
 
         //remind people with orders of the deadline to change their order

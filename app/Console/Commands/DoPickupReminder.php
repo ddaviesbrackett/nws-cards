@@ -30,7 +30,7 @@ class DoPickupReminder extends Command
     public function handle()
     {
         $date = (new Carbon($this->argument('date')))->addDays(2);
-        $cutoff = CutoffDate::where('delivery', $date)->orderby('delivery', 'desc')->first();
+        $cutoff = CutoffDate::whereRaw('cast(delivery as date) = \'' . $date->format('Y-m-d') . '\'')->first();
         if (!isset($cutoff)) return;
 
         foreach($cutoff->orders as $order) {

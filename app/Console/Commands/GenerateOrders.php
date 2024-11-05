@@ -33,7 +33,7 @@ class GenerateOrders extends Command
      */
     public function handle(StripeClient $stripe)
     {
-        $cutoff = CutoffDate::where('cutoff', '=', $this->argument('date'))->first();
+        $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $this->argument('date') . '\'')->first();
         
         if(! isset($cutoff)) return;
         if(! $cutoff->orders->isEmpty()) return 'orders already generated for this date';
