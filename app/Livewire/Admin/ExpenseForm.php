@@ -38,7 +38,7 @@ class ExpenseForm extends Component
             unset($this->expense_date);
             unset($this->description);
             unset($this->amount);
-            unset($this->class_id);
+            $this->class_id = 1; //default
         }
     }
 
