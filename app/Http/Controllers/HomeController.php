@@ -25,7 +25,7 @@ class HomeController extends Controller
                             ->where('cutoff', '>', $startOfThisYear)
                             ->get()
                             ->map(fn (CutoffDate $cu) => [
-                                'cutoff'=>$cu->cutoffdate()->format('l, F jS'),
+                                'cutoff'=>$cu->cutoffdate()->addDays(-1)->format('l, F jS'),  //minus one because the time is midnight
                                 'charge'=>$cu->chargedate()->format('l, F jS'),
                                 'delivery'=>$cu->deliverydate()->format('l, F jS'),
                             ]);
