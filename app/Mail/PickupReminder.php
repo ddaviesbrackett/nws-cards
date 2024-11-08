@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,7 +18,7 @@ class PickupReminder extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user)
+    public function __construct(public User $user, public Carbon $date)
     {
         //
     }
@@ -28,7 +29,7 @@ class PickupReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Grocery Cards will be ready to be picked up',
+            subject: sprintf('Remember to pick up your grocery cards %s', $this->date->format('l')),
         );
     }
 

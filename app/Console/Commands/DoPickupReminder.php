@@ -37,7 +37,7 @@ class DoPickupReminder extends Command
             $user = $order->user;
             if(!$user->isMail)
             {
-                Mail::to($user->email, $user->name)->send(new PickupReminder($user));
+                Mail::to($user->email, $user->name)->send(new PickupReminder($user, $date));
             }
         }
     }

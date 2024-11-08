@@ -29,7 +29,7 @@ class OrderBeg extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Need more grocery cards? the deadline is approaching!',
+            subject: 'Need more grocery cards? Deadline is tomorrow at midnight',
         );
     }
 

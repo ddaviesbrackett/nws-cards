@@ -29,7 +29,7 @@ class DeadlineReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Grocery Card deadline is approaching!',
+            subject: 'Need to change your grocery card order? Deadline is tomorrow at midnight',
         );
     }
 
