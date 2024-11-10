@@ -7,6 +7,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
@@ -78,6 +79,8 @@ Route::middleware([
                     Route::delete('{id}/delete', 'deleteExpense')->name('deleteexpense');
                 });
             
+            if(App::environment('local'))
+            {
             Route::controller(EmailPreviewController::class)
                 ->prefix('/emailPreview')
                 ->group(function(){
@@ -90,6 +93,7 @@ Route::middleware([
                     Route::get('/pickupReminder/{id?}', 'pickupReminder');
                     Route::get('/suspend/{id?}', 'suspend');
                 });
+            }
 
             Route::get('/caftfile/{cutoffId}', [CAFTGenerationController::class, 'result'])->name('getcaftfile');
 
