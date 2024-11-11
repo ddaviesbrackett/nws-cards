@@ -31,10 +31,13 @@ class ChargeCreditCards extends Command
     public function handle(StripeClient $stripe)
     {
         $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $this->argument('date') . '\'')->first();
-        if(!isset($cutoff)){
+        
+        if (!isset($cutoff)) {
+            $this->warn('no charge date on this date');
             return;
         }
 
+        $charged = 0;
         foreach($cutoff->orders as $order)
         {
             $cardcount = $order->saveon_onetime +
@@ -56,7 +59,9 @@ class ChargeCreditCards extends Command
                 }
                 $order->paid = true;
                 $order->save();
+                $charged += 1;
             }
         }
+        $this->info('charged ' . $charged . ' users');
     }
 }

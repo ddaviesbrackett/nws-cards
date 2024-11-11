@@ -15,7 +15,7 @@ class DoPickupReminder extends Command
      *
      * @var string
      */
-    protected $signature = 'app:do-pickup-reminder';
+    protected $signature = 'app:do-pickup-reminder {date}';
 
     /**
      * The console command description.
@@ -31,14 +31,22 @@ class DoPickupReminder extends Command
     {
         $date = (new Carbon($this->argument('date')))->addDays(2);
         $cutoff = CutoffDate::whereRaw('cast(delivery as date) = \'' . $date->format('Y-m-d') . '\'')->first();
-        if (!isset($cutoff)) return;
+        
+        if (!isset($cutoff)) {
+            $this->warn('no delivery 2 days after given date');
+            return;
+        }
 
+        $sent = 0;
         foreach($cutoff->orders as $order) {
             $user = $order->user;
-            if(!$user->isMail)
+            if(!$user->isMail())
             {
                 Mail::to($user->email, $user->name)->send(new PickupReminder($user, $date));
+                $sent += 1;
             }
         }
+
+        $this->info('pickup reminders sent to ' . $sent . ' users');
     }
 }

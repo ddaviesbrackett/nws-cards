@@ -18,7 +18,7 @@ class DoDeadlineReminder extends Command
      *
      * @var string
      */
-    protected $signature = 'app:do-deadline-reminder';
+    protected $signature = 'app:do-deadline-reminder {date}';
 
     /**
      * The console command description.
@@ -34,7 +34,11 @@ class DoDeadlineReminder extends Command
     {
         $date = (new Carbon($this->argument('date')))->addDays(2);
         $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $date->format('Y-m-d') . '\'')->first();
-        if (!isset($cutoff)) return;
+
+        if (!isset($cutoff)) {
+            $this->warn('no cutoff 2 days after given date');
+            return;
+        }
 
         //remind people with orders of the deadline to change their order
         $users = User::where('stripe_active', 1)
@@ -45,6 +49,8 @@ class DoDeadlineReminder extends Command
             Mail::to($user->email, $user->name)->send(new DeadlineReminder($user, $cutoff));
         }
 
+        $this->info('sent reminders to ' . $users->count() . ' users');
+
         //politely beg users without orders to make one
         $usersToBeg = User::where('stripe_active', 1)
             ->whereRaw('coop + saveon + coop_onetime + saveon_onetime = 0')
@@ -54,5 +60,7 @@ class DoDeadlineReminder extends Command
         foreach($usersToBeg as $user) {
             Mail::to($user->email, $user->name)->send(new OrderBeg($user, $cutoff));
         }
+        
+        $this->info('sent polite requests to ' . $usersToBeg->count() . ' users');
     }
 }

@@ -31,7 +31,7 @@ On {{{$cutoff->deliverydate()->format('l, F jS')}}}, your cards will be
 <b>mailed to you</b> at<br>
 {{{$user->name}}}<br>
 {{{$user->address1}}}<br>
-{{{$user->address2?$user->address2 + '<br>':''}}}
+{{{$user->address2?$user->address2 . '<br>':''}}}
 {{{$user->city}}},
 {{{$user->province}}}<br>
 {{{$user->postal_code}}}

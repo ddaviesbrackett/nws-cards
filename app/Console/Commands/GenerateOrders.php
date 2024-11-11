@@ -35,8 +35,15 @@ class GenerateOrders extends Command
     {
         $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $this->argument('date') . '\'')->first();
         
-        if(! isset($cutoff)) return;
-        if(! $cutoff->orders->isEmpty()) return 'orders already generated for this date';
+        if (!isset($cutoff)) {
+            $this->warn('no cutoff date on this date');
+            return;
+        }
+
+        if (! $cutoff->orders->isEmpty()) {
+            $this->warn('orders already generated for this date');
+            return;
+        }
 
         $users = User::where('stripe_active', '=', 1)
             ->whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
@@ -65,6 +72,6 @@ class GenerateOrders extends Command
             Mail::to($user->email, $user->name)->send(new ChargeReminder($user, $order));
 
         }
-        return 'orders generated for ' . $this->argument('date');
+        $this->info('orders generated for ' . $this->argument('date'));
     }
 }
