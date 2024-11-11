@@ -10,33 +10,34 @@
     @push('scripts')
     <script src="https://js.stripe.com/v2/" async defer></script>
     <script>
-        const stripeResponseHandler = function(status, response) {
-            const f = document.forms[0];
-            if (response.error) {
-                f.querySelector('#payment_error').textContent = response.error.message;
-                f.querySelector('button[type="submit"]').disabled = false;
-            } else {
-                // response contains id and card, which contains additional card details
-                var token = response.id;
+        const makeStripeResponseHandler = function(f){
+            return function(status, response) {
+                if (response.error) {
+                    f.querySelector('#payment_error').textContent = response.error.message;
+                    f.querySelector('button[type="submit"]').disabled = false;
+                } else {
+                    // response contains id and card, which contains additional card details
+                    var token = response.id;
 
-                // Insert the token into the form so it gets submitted to the server
-                const tokenInput = document.createElement('input');
-                tokenInput.type = "hidden";
-                tokenInput.name = "stripeToken";
-                tokenInput.value = token;
+                    // Insert the token into the form so it gets submitted to the server
+                    const tokenInput = document.createElement('input');
+                    tokenInput.type = "hidden";
+                    tokenInput.name = "stripeToken";
+                    tokenInput.value = token;
 
-                f.appendChild(tokenInput);
-                // and submit
-                f.submit();
-            }
+                    f.appendChild(tokenInput);
+                    // and submit
+                    f.submit();
+                }
+            };
         };
         const formSubmit = function(ev) {
-            const f = document.forms[0];
+            const f = ev.target;
             Stripe.setPublishableKey('{{config("app.stripe_key")}}');
             f.querySelector('#payment_error').textContent = '';
             f.querySelector('button[type="submit"]').disabled = true;
             if (f.querySelector('input[name="payment"][value="credit"]').checked) {
-                Stripe.card.createToken(f, stripeResponseHandler);
+                Stripe.card.createToken(f, makeStripeResponseHandler(f));
                 ev.preventDefault();
             }
         }

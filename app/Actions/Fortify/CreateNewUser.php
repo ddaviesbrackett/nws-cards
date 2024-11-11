@@ -129,7 +129,6 @@ class CreateNewUser implements CreatesNewUsers
             $customer = $this->stripe->customers->create($stripeCustomerAttributes);
             if (isset($cardToken)) {
                 $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
-                $customer->default_source = $card;
                 $user->last_four = $card->last4;
             }
 

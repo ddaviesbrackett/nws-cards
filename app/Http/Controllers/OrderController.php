@@ -140,7 +140,6 @@ class OrderController extends Controller implements HasMiddleware
                 $customer = $this->stripe->customers->update($user->stripe_id, $stripeCustomerAttributes);
                 if (isset($cardToken)) {
                     $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
-                    $customer->default_source = $card;
                     $user->last_four = $card->last4;
                 }
             }
