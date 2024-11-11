@@ -45,8 +45,7 @@ class GenerateOrders extends Command
             return;
         }
 
-        $users = User::where('stripe_active', '=', 1)
-            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
+        $users = User::whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
             ->get();
 
         foreach($users as $user){

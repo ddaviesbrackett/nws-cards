@@ -41,8 +41,7 @@ class DoDeadlineReminder extends Command
         }
 
         //remind people with orders of the deadline to change their order
-        $users = User::where('stripe_active', 1)
-            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
+        $users = User::whereRaw('coop + saveon + coop_onetime + saveon_onetime > 0')
             ->get();
         
         foreach($users as $user) {
@@ -52,8 +51,7 @@ class DoDeadlineReminder extends Command
         $this->info('sent reminders to ' . $users->count() . ' users');
 
         //politely beg users without orders to make one
-        $usersToBeg = User::where('stripe_active', 1)
-            ->whereRaw('coop + saveon + coop_onetime + saveon_onetime = 0')
+        $usersToBeg = User::whereRaw('coop + saveon + coop_onetime + saveon_onetime = 0')
             ->where('no_beg', '<>', 1)
             ->get();
 
