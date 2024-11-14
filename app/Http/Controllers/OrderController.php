@@ -74,6 +74,7 @@ class OrderController extends Controller implements HasMiddleware
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
             'ordertype' => 'required|in:monthly,onetime',
+            'stripeToken' => 'required_if:payment,credit',
         ], [
             'debit-transit.required_if' => 'Branch number is required.',
             'debit-institution.required_if' => 'Institution is required.',
@@ -83,6 +84,7 @@ class OrderController extends Controller implements HasMiddleware
             'coop.required' => 'Please order at least one card.',
             'saveon.min' => 'Please order at least one card.',
             'coop.min' => 'Please order at least one card.',
+            'stripeToken.required_if' => 'No Stripe token provided despite choosing credit payment',
         ]);
 
         //order amounts can't both be zero

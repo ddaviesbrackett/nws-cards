@@ -46,6 +46,7 @@ class CreateNewUser implements CreatesNewUsers
             'mailwaiver'    => 'required_if:deliverymethod,mail',
             'deliverymethod' => 'required',
             'ordertype' => 'required|in:monthly,onetime',
+            'stripeToken' => 'required_if:payment,credit',
         ], [
             'phone' => 'Please enter a valid phone number.',
             'debit-transit.required_if' => 'branch number is required.',
@@ -56,7 +57,8 @@ class CreateNewUser implements CreatesNewUsers
             'coop.required' => 'You need to order at least one card.',
             'saveon.min' => 'You need to order at least one card.',
             'coop.min' => 'You need to order at least one card.',
-            'mailwaiver.required_if' => 'Please release PAC of liability for mailing your order.'
+            'mailwaiver.required_if' => 'Please release PAC of liability for mailing your order.',
+            'stripeToken.required_if' => 'No Stripe token provided despite choosing credit payment',
         ]);
 
         //bail if we are in blackout
