@@ -46,7 +46,7 @@ class CAFTGenerationController extends Controller implements HasMiddleware
             $filenumber = sprintf('%04.4d', request('filenum'));
             $originatorinfo = $originatorID . $filenumber;
             //caft magic
-            $content = 'A000000001' . $originatorinfo . Carbon::now('America/Los_Angeles')->format('0%y%j') . '86900' . $this->spaces(20) . 'CAD' . $this->spaces(1406);
+            $content = 'A000000001' . $originatorinfo . Carbon::now('America/Los_Angeles')->format('0yj') . '86900' . $this->spaces(20) . 'CAD' . $this->spaces(1406);
             $total = 0;
             $skipped = 0;
 
@@ -71,7 +71,7 @@ class CAFTGenerationController extends Controller implements HasMiddleware
 
                     $content .= '450'; //transaction type code
                     $content .=  sprintf('%010.10d', $orderAmount); //amount
-                    $content .=  $cutoff->chargedate()->format('0%y%j'); //due date
+                    $content .=  $cutoff->chargedate()->format('0yj'); //due date
                     $content .=  '0' . sprintf('%03.3d', $institution) . sprintf('%05.5d', $transit);
                     $content .= sprintf('%-12.12s', $acct);
                     $content .=  $this->spaces(22); //internal use
