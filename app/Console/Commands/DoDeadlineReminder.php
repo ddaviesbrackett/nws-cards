@@ -35,7 +35,7 @@ class DoDeadlineReminder extends Command
         $date = (new Carbon($this->argument('date')))->addDays(2);
         $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $date->format('Y-m-d') . '\'')->first();
 
-        if (!isset($cutoff)) {
+        if (!isset($cutoff) && $this->argument('date') != 'now') {
             $this->warn('no cutoff 2 days after given date');
             return;
         }

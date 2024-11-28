@@ -32,7 +32,7 @@ class ChargeCreditCards extends Command
     {
         $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $this->argument('date') . '\'')->first();
         
-        if (!isset($cutoff)) {
+        if (!isset($cutoff) && $this->argument('date') != 'now') {
             $this->warn('no charge date on this date');
             return;
         }

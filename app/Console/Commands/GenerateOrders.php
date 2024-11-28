@@ -35,7 +35,7 @@ class GenerateOrders extends Command
     {
         $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $this->argument('date') . '\'')->first();
         
-        if (!isset($cutoff)) {
+        if (!isset($cutoff) && $this->argument('date') != 'now') {
             $this->warn('no cutoff date on this date');
             return;
         }
