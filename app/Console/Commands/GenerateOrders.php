@@ -37,8 +37,8 @@ class GenerateOrders extends Command
         $dt = (new Carbon($this->argument('date')))->format('Y-m-d');
         $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $dt . '\'')->first();
         
-        if (empty($cutoff) && $this->argument('date') != 'now') {
-            $this->warn('no cutoff date on this date');
+        if (empty($cutoff)) {
+            if($this->argument('date') != 'now') $this->warn('no cutoff date on this date');
             return;
         }
 

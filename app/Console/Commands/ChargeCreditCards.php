@@ -33,8 +33,8 @@ class ChargeCreditCards extends Command
         $dt = (new Carbon($this->argument('date')))->format('Y-m-d');
         $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $dt . '\'')->first();
         
-        if (empty($cutoff) && $this->argument('date') != 'now') {
-            $this->warn('no charge date on this date');
+        if (empty($cutoff)) {
+            if($this->argument('date') != 'now') $this->warn('no charge date on this date');
             return;
         }
 

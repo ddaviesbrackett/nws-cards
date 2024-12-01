@@ -32,8 +32,8 @@ class DoPickupReminder extends Command
         $date = (new Carbon($this->argument('date')))->addDays(2);
         $cutoff = CutoffDate::whereRaw('cast(delivery as date) = \'' . $date->format('Y-m-d') . '\'')->first();
         
-        if (empty($cutoff) && $this->argument('date') != 'now') {
-            $this->warn('no delivery 2 days after given date');
+        if (empty($cutoff)) {
+            if($this->argument('date') != 'now') $this->warn('no delivery 2 days after given date');
             return;
         }
 
