@@ -7,6 +7,7 @@ use App\Models\CutoffDate;
 use App\Models\Order;
 use App\Models\SchoolClass;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
@@ -33,9 +34,10 @@ class GenerateOrders extends Command
      */
     public function handle(StripeClient $stripe)
     {
-        $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $this->argument('date') . '\'')->first();
+        $dt = (new Carbon($this->argument('date')))->format('Y-m-d');
+        $cutoff = CutoffDate::whereRaw('cast(cutoff as date) = \'' . $dt . '\'')->first();
         
-        if (!isset($cutoff) && $this->argument('date') != 'now') {
+        if (empty($cutoff) && $this->argument('date') != 'now') {
             $this->warn('no cutoff date on this date');
             return;
         }

@@ -30,9 +30,10 @@ class ChargeCreditCards extends Command
      */
     public function handle(StripeClient $stripe)
     {
-        $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $this->argument('date') . '\'')->first();
+        $dt = (new Carbon($this->argument('date')))->format('Y-m-d');
+        $cutoff = CutoffDate::whereRaw('cast(charge as date) = \'' . $dt . '\'')->first();
         
-        if (!isset($cutoff) && $this->argument('date') != 'now') {
+        if (empty($cutoff) && $this->argument('date') != 'now') {
             $this->warn('no charge date on this date');
             return;
         }
