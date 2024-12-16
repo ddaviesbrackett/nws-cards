@@ -49,6 +49,10 @@ class DoDeadlineReminder extends Command
         }
 
         $this->info('sent reminders to ' . $users->count() . ' users');
+        
+        /*
+
+        beg emails disabled 2024 at Myra's request
 
         //politely beg users without orders to make one
         $usersToBeg = User::whereRaw('coop + saveon + coop_onetime + saveon_onetime = 0')
@@ -60,5 +64,6 @@ class DoDeadlineReminder extends Command
         }
         
         $this->info('sent polite requests to ' . $usersToBeg->count() . ' users');
+        */
     }
 }

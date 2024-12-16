@@ -11,6 +11,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ *  DEPRECATED FUNCTIONALITY: order beg emails are disabled entirely, by PAC request.
+*/
 class OrderBeg extends Mailable
 {
     use Queueable, SerializesModels;
