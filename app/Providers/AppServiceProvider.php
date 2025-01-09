@@ -14,11 +14,15 @@ class AppServiceProvider extends ServiceProvider
     /*
     * cutoff dates are the last day on which we can accept an order.
     */
-    private function getDates()
+    private function getDates() : Array
     {
         $target = (new \Carbon\Carbon('America/Los_Angeles'))->format('Y-m-d');
 
         $upcoming = CutoffDate::where('cutoff', '>=', $target)->orderBy('cutoff', 'asc')->first();
+        if(!isset($upcoming)) //fallback: when there isn't a future cutoff, don't error
+        {
+            return ['cutoff'=>'', 'charge'=>'', 'delivery'=>''];
+        }
         return array_map(fn ($d) => $d->format('l, F jS'), $upcoming->dates());
     }
 
