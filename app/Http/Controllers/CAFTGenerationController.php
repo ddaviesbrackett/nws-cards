@@ -38,6 +38,12 @@ class CAFTGenerationController extends Controller implements HasMiddleware
         return trim(preg_replace("/[^\d]*/", "", $stringOfNumbers));
     }
 
+    private function caftDateFormat(Carbon $date)
+    {
+        //leading 0, two-digit year, left-zero-padded three-digit day of year
+        return sprintf('0%1$2d%2$03d', $date->year % 100, $date->dayOfYear());
+    }
+
     public function result(StripeClient $stripeClient, int $cutoffId)
     {
         $cutoff = CutoffDate::find($cutoffId);
@@ -46,7 +52,7 @@ class CAFTGenerationController extends Controller implements HasMiddleware
             $filenumber = sprintf('%04.4d', request('filenum'));
             $originatorinfo = $originatorID . $filenumber;
             //caft magic
-            $content = 'A000000001' . $originatorinfo . Carbon::now('America/Los_Angeles')->format('0yz') . '86900' . $this->spaces(20) . 'CAD' . $this->spaces(1406);
+            $content = 'A000000001' . $originatorinfo . $this->caftDateFormat(Carbon::now('America/Los_Angeles')) . '86900' . $this->spaces(20) . 'CAD' . $this->spaces(1406);
             $total = 0;
             $skipped = 0;
 
@@ -71,7 +77,7 @@ class CAFTGenerationController extends Controller implements HasMiddleware
 
                     $content .= '450'; //transaction type code
                     $content .=  sprintf('%010.10d', $orderAmount); //amount
-                    $content .=  $cutoff->chargedate()->format('0yz'); //due date
+                    $content .=  $this->caftDateFormat($cutoff->chargedate()); //due date
                     $content .=  '0' . sprintf('%03.3d', $institution) . sprintf('%05.5d', $transit);
                     $content .= sprintf('%-12.12s', $acct);
                     $content .=  $this->spaces(22); //internal use
