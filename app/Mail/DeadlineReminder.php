@@ -9,9 +9,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class DeadlineReminder extends Mailable
+class DeadlineReminder extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -22,6 +23,11 @@ class DeadlineReminder extends Mailable
     {
         //
     }
+    
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
 
     /**
      * Get the message envelope.
@@ -30,6 +36,7 @@ class DeadlineReminder extends Mailable
     {
         return new Envelope(
             subject: 'Need to change your grocery card order? Deadline is tomorrow at midnight',
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 

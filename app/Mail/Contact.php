@@ -8,9 +8,10 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class Contact extends Mailable
+class Contact extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public string $em;
@@ -26,6 +27,11 @@ class Contact extends Mailable
         $this->nm = $name;
         $this->msg = $msg;
     }
+    
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
 
     /**
      * Get the message envelope.
@@ -35,7 +41,7 @@ class Contact extends Mailable
         return new Envelope(
             subject: 'Home Page contact request',
             to: ["nwsgrocerycards@gmail.com"],
-            from: new Address($this->em, $this->nm),
+            replyTo: [new Address($this->em, $this->nm)],
         );
     }
 

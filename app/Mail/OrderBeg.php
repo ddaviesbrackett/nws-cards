@@ -9,12 +9,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
 /**
  *  DEPRECATED FUNCTIONALITY: order beg emails are disabled entirely, by PAC request.
 */
-class OrderBeg extends Mailable
+class OrderBeg extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -25,6 +26,11 @@ class OrderBeg extends Mailable
     {
         //
     }
+    
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
 
     /**
      * Get the message envelope.
@@ -33,6 +39,7 @@ class OrderBeg extends Mailable
     {
         return new Envelope(
             subject: 'Need more grocery cards? Deadline is tomorrow at midnight',
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 

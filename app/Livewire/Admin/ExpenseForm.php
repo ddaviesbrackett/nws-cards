@@ -24,7 +24,7 @@ class ExpenseForm extends Component
     }
 
     #[On('populate')]
-    public function load(int $id = null)
+    public function load(?int $id = null)
     {
         if (!is_null($id)) {
             $exp = Expense::find($id);

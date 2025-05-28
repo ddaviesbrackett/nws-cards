@@ -7,9 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class Nightly extends Mailable
+class Nightly extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -21,6 +22,11 @@ class Nightly extends Mailable
         //
     }
 
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
+    
     /**
      * Get the message envelope.
      */
@@ -28,6 +34,7 @@ class Nightly extends Mailable
     {
         return new Envelope(
             subject: 'Nightly',
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 

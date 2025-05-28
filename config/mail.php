@@ -94,7 +94,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'nwsgrocerycards@gmail.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'nwsgrocerycards@grocerycards.nelsonwaldorf.org'),
         'name' => env('MAIL_FROM_NAME', 'Nelson Waldorf Grocery Cards'),
     ],
 

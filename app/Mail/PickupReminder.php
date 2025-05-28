@@ -9,9 +9,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class PickupReminder extends Mailable
+class PickupReminder extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -23,6 +24,11 @@ class PickupReminder extends Mailable
         //
     }
 
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
+
     /**
      * Get the message envelope.
      */
@@ -30,6 +36,7 @@ class PickupReminder extends Mailable
     {
         return new Envelope(
             subject: sprintf('Remember to pick up your grocery cards %s', $this->date->format('l')),
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 

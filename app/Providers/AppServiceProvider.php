@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\CutoffDate;
 use App\Utilities\OrderUtilities;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -55,5 +57,10 @@ class AppServiceProvider extends ServiceProvider
                 session()->put('password_hash_sanctum', $event->impersonator->getAuthPassword());
             }
         );
+
+        //define a rate limiter for Resend queued emails
+        RateLimiter::for('resend-emails', function (object $job) {
+            return Limit::perSecond(2);
+        });
     }
 }

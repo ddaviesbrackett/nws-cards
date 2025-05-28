@@ -8,9 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class Suspend extends Mailable
+class Suspend extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -22,6 +23,11 @@ class Suspend extends Mailable
         //
     }
 
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
+
     /**
      * Get the message envelope.
      */
@@ -29,6 +35,7 @@ class Suspend extends Mailable
     {
         return new Envelope(
             subject: 'Suspend',
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 

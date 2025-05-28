@@ -10,10 +10,11 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\View;
 
-class NewConfirmation extends Mailable
+class NewConfirmation extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -24,6 +25,11 @@ class NewConfirmation extends Mailable
     {
         //
     }
+    
+    public function middleware(): array
+    {
+        return [new RateLimited('resend-emails')];
+    }
 
     /**
      * Get the message envelope.
@@ -32,6 +38,7 @@ class NewConfirmation extends Mailable
     {
         return new Envelope(
             subject: 'Your Nelson Waldorf School Grocery card order',
+            replyTo: 'nwsgrocerycards@gmail.com',
         );
     }
 
