@@ -1,0 +1,8 @@
+- class edit form 
+- adding orders
+- list of current subscribers
+- one-off email blast?
+- document everything
+- nix the pickup reminder in favour of a calendar reminder
+- stripe: delete old payment methods when a new one gets created
+- stripe: do new cards get set as the default?
