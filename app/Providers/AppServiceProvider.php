@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
 
         //define a rate limiter for Resend queued emails
         RateLimiter::for('resend-emails', function (object $job) {
-            return Limit::perSecond(2);
+            return Limit::perSecond(1);
         });
     }
 }
