@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CAFTGenerationController;
-use App\Http\Controllers\EmailPreviewController;
-use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CAFTGenerationController;
+use App\Http\Controllers\Admin\EmailPreviewController;
+use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
