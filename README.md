@@ -26,6 +26,25 @@ These instructions work on my windows laptop in WSL2 Ubuntu, if you're using som
 
 ## Details 
 
+## Workflow and Operation
+
 TODO insert diagram(s) here describing process flows, data flows
-TODO describe fortify, jetstream, stripe integrations.
-TODO describe console commands and major routes.
+
+### Controllers and Commands
+
+The site has four commands that are scheduled to run nightly. Each takes care of a different aspect of the order processing flow. 
+
+The site responds to unauthenticated requests via HomeController and TrackingController, authenticated user requests via OrderController, and authenticated administrative requests via the controllers in Controllers/Admin.
+
+### Third Parties
+
+At run-time, the primary third parties are the payment things. For credit cards, that's Stripe, via the Stripe API rather than Laravel Cashier; for debit, that's both Stripe (for storing account details) and the CAFT file-based API (for actually submitting the charges). There's also Resend for sending email.
+
+In the code, the third parties are: 
+
+* Laravel itself
+* Laravel Fortify for user authentication
+* Laravel Jetstream for authorisation
+* Stripe API for charging credit cards and storing 
+* Resend for sending email
+* lab404/laravel-impersonate to allow admins to impersonate other users
