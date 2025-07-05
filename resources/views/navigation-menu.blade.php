@@ -65,6 +65,9 @@
                             <x-dropdown-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
                                 Expenses
                             </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin-classes') }}" :active="request()->routeIs('admin-classes')">
+                                Classes
+                            </x-dropdown-link>
                             {{--
                                 a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.
                                 <x-dropdown-link href="{{ route('admin-newsale') }}" :active="request()->routeIs('admin-newsale')">
@@ -139,6 +142,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('admin-expenses') }}" :active="request()->routeIs('admin-expenses')">
                 Expenses
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('admin-classes') }}" :active="request()->routeIs('admin-classes')">
+                Classes
             </x-responsive-nav-link>
             {{--
                 a vestigial feature. Allowed for tracking of speculatively-bought cards at the school gate; no longer done.

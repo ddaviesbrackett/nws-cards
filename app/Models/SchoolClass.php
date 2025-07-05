@@ -17,6 +17,9 @@ class SchoolClass extends Model
     protected $fillable = [
         'name',
         'bucketname',
+        'current',
+        'displayorder',
+        'enrolment',
     ];
 
     public static function current() : Collection

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CAFTGenerationController;
 use App\Http\Controllers\Admin\EmailPreviewController;
 use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
@@ -77,6 +78,13 @@ Route::middleware([
                     //expense add/edit done with a livewire component
                     
                     Route::delete('{id}/delete', 'deleteExpense')->name('deleteexpense');
+                });
+
+            Route::controller(ClassController::class)
+                ->prefix('/classes')
+                ->group(function(){
+                    Route::get('/', 'classes')->name('classes');
+                    //class add/edit done with a livewire component
                 });
             
             if(App::environment('local'))
