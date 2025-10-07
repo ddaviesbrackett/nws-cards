@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -27,6 +28,11 @@ class PickupReminder extends Mailable implements ShouldQueue
     public function middleware(): array
     {
         return [new RateLimited('resend-emails')];
+    }
+
+    public function retryUntil(): DateTime
+    {
+        return now()->addHours(1);
     }
 
     /**

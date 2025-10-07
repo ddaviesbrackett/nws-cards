@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -25,6 +26,11 @@ class Nightly extends Mailable implements ShouldQueue
     public function middleware(): array
     {
         return [new RateLimited('resend-emails')];
+    }
+    
+    public function retryUntil(): DateTime
+    {
+        return now()->addHours(1);
     }
     
     /**
