@@ -22,9 +22,9 @@ class HomeController extends Controller
             CutoffDate::where('cutoff', '>', $startOfThisSchoolYear)
                 ->get()
                 ->map(fn (CutoffDate $cu) => [
-                    'cutoff' => $cu->cutoffdate()->addDays(-1)->format('l, F jS'),  // minus one because the time is midnight
-                    'charge' => $cu->chargedate()->format('l, F jS'),
-                    'delivery' => $cu->deliverydate()->format('l, F jS'),
+                    'cutoff' => $cu->cutoffdate()->addDays(-1)->format('l, F jS, Y'),  // minus one because the time is midnight
+                    'charge' => $cu->chargedate()->format('l, F jS, Y'),
+                    'delivery' => $cu->deliverydate()->format('l, F jS, Y'),
                 ]);
 
         return view('home', [
