@@ -35,7 +35,7 @@
         
     </div>
     <a name="dates"></a>
-    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Upcoming Dates</h2>
+    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">This school year's delivery dates</h2>
     <table class="mb-4">
         <tr>
             <th class="p-4">Order Deadline</th>
