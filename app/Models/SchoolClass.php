@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolClass extends Model
 {
+    use HasFactory;
+
     protected $table = 'classes';
 
     protected $fillable = [
