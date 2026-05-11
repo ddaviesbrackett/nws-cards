@@ -36,6 +36,10 @@ class UserFactory extends Factory
             'employee' => $this->faker->numberBetween(0,1),
             'payment' => $this->faker->numberBetween(0,1),
             'deliverymethod' => $this->faker->numberBetween(0,1),
+            'saveon' => $this->faker->numberBetween(0,4),
+            'coop' => $this->faker->numberBetween(0,4),
+            'saveon_onetime' => 0,
+            'coop_onetime' => 0,
         ];
     }
 

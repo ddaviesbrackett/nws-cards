@@ -23,8 +23,6 @@ class DeleteUser implements DeletesUsers
     public function delete(User $user): void
     {
         DB::transaction(function () use ($user) {
-            $user->deleteProfilePhoto();
-            $user->tokens->each->delete();
             $user->delete();
         });
     }
