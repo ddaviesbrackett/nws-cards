@@ -130,20 +130,23 @@ class OrderController extends Controller implements HasMiddleware
                     'email' => $user->email,
                     'description' => $user->name,
                 ];
+
                 if (!isset($cardToken)) {
                     $stripeCustomerAttributes['metadata'] = [
                         'debit-transit' => $input['debit-transit'],
                         'debit-institution' => $input['debit-institution'],
                         'debit-account' => $input['debit-account'],
                     ];
-                    $user->last_four = substr($input['debit-account'], -4, 4);
                 }
-
+                else {
+                    $stripeCustomerAttributes['source'] = $cardToken;
+                }
                 $customer = $this->stripe->customers->update($user->stripe_id, $stripeCustomerAttributes);
-                if (isset($cardToken)) {
-                    $card = $this->stripe->customers->createSource($customer->id, ['source' => $cardToken]);
-                    $user->last_four = $card->last4;
-                }
+                
+                $user->last_four = !isset($cardToken) ? 
+                    substr($input['debit-account'], -4, 4) : 
+                    $this->stripe->customers->retrieveSource($customer->id, $customer->default_source)->last4;
+
             }
             $user->save();
             return $user;
