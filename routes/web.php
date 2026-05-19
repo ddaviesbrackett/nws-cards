@@ -55,6 +55,7 @@ Route::middleware([
             Route::controller(AdminController::class)->group(function(){
 
                 Route::get('/caft/{id}', 'caft')->name('caft');
+                Route::get('/cc/{id}', 'cc')->name('cc');
                 Route::get('/orders', 'orders')->name('orders');
                 //order profit add/edit done with a livewire component
                 Route::get('/order/{id}', 'order')->name('order');

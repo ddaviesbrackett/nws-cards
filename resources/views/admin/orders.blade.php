@@ -5,26 +5,27 @@
     </dialog>
     <table class='table'>
         <tr>
-            <th></th>
-            <th>Delivery Date</th>
-            <th># Orders</th>
-            <th>Save-On Cards</th>
-            <th>Co-op Cards</th>
-            <th>Save-On Profit</th>
-            <th>Co-op Profit</th>
+            <th class="px-4 text-left"></th>
+            <th class="px-4 text-left">Delivery Date</th>
+            <th class="px-4 text-left"># Orders</th>
+            <th class="px-4 text-left">Save-On Cards</th>
+            <th class="px-4 text-left">Co-op Cards</th>
+            <th class="px-4 text-left">Save-On Profit</th>
+            <th class="px-4 text-left">Co-op Profit</th>
         </tr>
         @foreach($model as $order)
         <tr>
             <td>
                 <x-link href="{{URL::route('admin-order', ['id' => $order['id']])}}">Order Sheet</x-link> &middot;
-                <x-link href="{{URL::route('admin-caft', ['id' => $order['id']])}}">CAFT</x-link>
+                <x-link href="{{URL::route('admin-caft', ['id' => $order['id']])}}">CAFT</x-link> &middot;
+                <x-link href="{{URL::route('admin-cc', ['id' => $order['id']])}}">CC</x-link>
             </td>
-            <td>{{{$order['delivery']}}}</td>
-            <td>{{{$order['orders']}}}</td>
-            <td>{{{$order['saveon']}}}</td>
-            <td>{{{$order['coop']}}}</td>
-            <td><x-button name="edit" data-id="{{$order['id']}}">{{$order['saveon_profit']}}%</x-button></td>
-            <td><x-button name="edit" data-id="{{$order['id']}}">{{$order['coop_profit']}}%</x-button></td>
+            <td class="px-4">{{{$order['delivery']}}}</td>
+            <td class="px-4">{{{$order['orders']}}}</td>
+            <td class="px-4">{{{$order['saveon']}}}</td>
+            <td class="px-4">{{{$order['coop']}}}</td>
+            <td class="px-4"><x-button name="edit" data-id="{{$order['id']}}">{{$order['saveon_profit']}}%</x-button></td>
+            <td class="px-4"><x-button name="edit" data-id="{{$order['id']}}">{{$order['coop_profit']}}%</x-button></td>
         </tr>
         @endforeach
     </table>

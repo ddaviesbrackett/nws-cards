@@ -74,7 +74,7 @@ class AdminController extends Controller implements HasMiddleware
         return view('admin.order', ['pickup'=>$pickup, 'mail'=>$mail, 'date' =>CutoffDate::find($id)->deliverydate()->format('F jS Y')]);
     }
 
-    public function caft(StripeClient $stripeClient, $cutoffId)
+    public function caft(StripeClient $stripeClient, string $cutoffId)
     {
         $orders = Order::join('users as u', 'u.id', '=', 'orders.user_id')
             ->where('orders.cutoff_date_id','=',$cutoffId) //only this cutoff
@@ -113,6 +113,45 @@ class AdminController extends Controller implements HasMiddleware
         }
 
         return view('admin.caft', ['model'=>$viewmodel, 'total' => $total, 'cutoff'=>$cutoffId]); 
+
+    }
+
+    public function cc(StripeClient $stripeClient, string $cutoffId)
+    {
+        $orders = Order::join('users as u', 'u.id', '=', 'orders.user_id')
+            ->where('orders.cutoff_date_id','=',$cutoffId) //only this cutoff
+            ->where('orders.payment', '=', 1) //only credit
+            ->orderby('u.updated_at', 'desc') //sort by date
+            ->select('orders.*') //only select orders, so that the users columns don't confuse eloquent (sigh)
+            ->with('user') //eagerload user
+            ->get();
+        
+
+        $viewmodel = [
+            'New' => [],
+            'Updated' => [],
+            'Unchanged' => [],
+        ];
+        $total = 0;
+
+        foreach($orders as $order) {
+            $user = $order->user;    
+            $stripeCustomer = $stripeClient->customers->retrieve($user->stripe_id);
+            $total += $order->totalCards();
+            if($cutoffId > 2) {
+                $prevcutoff = CutoffDate::find($cutoffId - 1)->cutoffdate()->tz('UTC');
+                $bucket = ($prevcutoff->lt($user->created_at) ? 'New' : ($prevcutoff->lt($user->updated_at) ? 'Updated' : 'Unchanged'));
+            }
+            else {
+                $bucket = 'New';
+            }
+
+            $viewmodel[$bucket][] = [
+                'order' => $order
+            ];
+        }
+
+        return view('admin.cc', ['model'=>$viewmodel, 'total' => $total, 'cutoff'=>$cutoffId]); 
 
     }
 }

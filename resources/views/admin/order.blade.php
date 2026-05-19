@@ -2,7 +2,7 @@
 
     <h1 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Card Pickup Sheet for {{$date}}</h1>
 
-    <table class="ml-10 mr-6">
+    <table class="table ml-10 mr-6">
         <tr>
             <th class="px-2 text-left">Name (Alternate)</th>
             <th class="px-2 text-right">Save-On</th>
@@ -28,7 +28,7 @@
         <h1 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Card Mailing Sheet for {{$date}}</h1>
     </div>
 
-    <table class="ml-10 mr-6">
+    <table class="table ml-10 mr-6">
         <tr>
             <th class="px-2 text-left" style="width:25%;">Name</th>
             <th class="px-2 text-left" style="width:51%;">Address</th>

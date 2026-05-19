@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1>CAFT entry form</h1>
+    <h1>CC entry form</h1>
     @php
         $totalRows = 0;
     @endphp
@@ -10,18 +10,12 @@
         <h2 class="pt-8">{{{$name}}}</h2>
         <table class="table">
             <tr>
-                <th class="px-4 text-left">Account</th>
-                <th class="px-4 text-left">Institution</th>
-                <th class="px-4 text-left">Transit</th>
                 <th class="px-4 text-left">Name</th>
                 <th class="px-4 text-left">Amount</th>
                 <th class="px-4 text-left">Has One-Time Order?</th>
             </tr>
             @foreach($bucket as $info)
                 <tr>
-                    <td class="px-4">{{{$info['acct']}}}</td>
-                    <td class="px-4">{{{$info['institution']}}}</td>
-                    <td class="px-4">{{{$info['transit']}}}</td>
                     <td class="px-4">{{{$info['order']->user->name}}}</td>
                     <td class="px-4">${{{$info['order']->totalCards()}}}00</td>
                     <td class="px-4">{{{$info['order']->hasOnetime()?'YES':''}}}</td>
@@ -34,17 +28,5 @@
     </p>
     <p>
         Total amount: {{{$total}}}00
-    </p>
-    <h3>Download CAFT file for upload to C1</h3>
-    <p>
-    <form method="GET" action="/admin/caftfile/{{$cutoff}}">
-        <label>
-            File Number
-            <x-input name="filenum" type="text" />
-        </label>
-        <x-button type='submit' class='btn btn-danger btn-lg'>
-            Get CAFT File
-        </x-button>
-    </form>
     </p>
 </x-app-layout>
