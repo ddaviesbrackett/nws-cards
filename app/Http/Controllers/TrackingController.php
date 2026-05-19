@@ -20,6 +20,7 @@ class TrackingController extends Controller
     function leaderboard(): View
     {
         $buckets = [];
+        $totalAvailable = 0;
         $nf = new NumberFormatter('en-CA', NumberFormatter::CURRENCY);
 
         //watch this
@@ -50,16 +51,25 @@ class TrackingController extends Controller
                 'spent' => $nf->format($class->expenses),
                 'raised' => $nf->format($class->raised),
                 'available' => $nf->format($class->raised - $class->expenses),
+                'available_num' => $class->raised - $class->expenses,
+                'spent_num' => $class->expenses,
+                'raised_num' => $class->raised,
             ];
+            $totalAvailable += $class->raised - $class->expenses;
         }
+
+        $totals['spent'] = '';
+        $totals['raised'] = '';
+        $totals['available'] = $nf->format($totalAvailable);
 
         return view('tracking.leaderboard', [
             'total' => $nf->format(SchoolClass::profitSince(new Carbon('2010-01-01'))),
-            'buckets' => $buckets
+            'buckets' => $buckets,
+            'totals' => $totals
         ]);
     }
 
-    function bucket($bucketname)
+    function bucket(string $bucketname): RedirectResponse|View
     {
         $sc = SchoolClass::where('bucketname', '=', $bucketname)
             ->with('orders', 'expenses', 'pointsales')

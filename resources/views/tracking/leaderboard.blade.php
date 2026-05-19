@@ -17,5 +17,11 @@
                 <td>{{$vals['available']}}</td>
             </tr>
         @endforeach
+        <tr class="font-bold border-t">
+            <td>Total</td>
+            <td>{{$totals['raised']}}</td>
+            <td>{{$totals['spent']}}</td>
+            <td>{{$totals['available']}}</td>
+        </tr>
     </table>
 </x-guest-layout>
